@@ -1,0 +1,121 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=1in]{geometry}
+\usepackage{enumitem}
+\usepackage{algorithm2e}
+
+\def\COMPLETE{}
+%%%%% Title %%%%%
+\title{\LARGE Active clustering}
+\author{}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{property}[theorem]{Property}
+
+\newcommand{\mc}{\mathcal}
+
+\SetKwInput{KwInput}{Input}
+\SetKwInput{KwOutput}{Output}
+%%%%% Document Body %%%%%
+\begin{document}
+\maketitle
+
+\section{Center Proximity}
+We are given a clustering instance $(\mc X, d)$ in some metric space $M$. A center-based clustering is induced by centers $c_1, \ldots, c_k \in M$ where each point $x \in \mc X$ is assigned to its closest center.
+
+\begin{definition}[$\alpha$-center proximity]
+\label{defn:alphacp}
+Given a clustering instance $(\mc X, d)$ and the number of clusters $k$. We say that a clustering $\mc C_{\mc X} = \{C_1, \ldots, C_k\}$ induced by centers $c_1, \ldots, c_k \in M$ has $\alpha$-center proximity w.r.t $\mc X$ and $k$ if the following holds. For all $x \in C_i$ and $i\neq j$, 
+$$\alpha d(x, c_i) < d(x, c_j)$$
+\end{definition}
+
+\subsection{Goal}
+We are given a dataset $\mc X$. $\mc X$ has a target clustering $\mc C_{\mc X}$ which satisfies $\alpha$-center proximity. Our goal is to recover the target clustering $\mc C_{\mc X}$. There is a catch. Our algorithm has access to an {\it oracle} which can provide answers to membership queries. That is, we can pose the following question to the oracle.
+\begin{center}
+  \begin{tabular}{l}
+	{\it Question:} Does $x \in \mc X$ belong to the $i^{th}$ cluster $C_i$ ? \\
+	{\it Oracle:} Answers `yes' or `no'
+  \end{tabular}
+\end{center}
+
+\noindent Our goal is to design an algorithm which given a set $\mc X$ and an oracle $\mc O$ outputs the target clustering $\mc C_{\mc X}$ while making as few queries to the oracle as possible. Note that it is always possible recover the target clustering by making $n = |\mc X|$ queries to the oracle. Hence, we will require that any algorithm make sub-linear queries to the oracle. 
+
+\subsubsection*{Problem Setting}
+\begin{itemize}[nolistsep, noitemsep]
+\item {\it Steiner} - In this setting, centers $c_1, \ldots, c_k$ can be arbitrary points in the metric space.
+\item {\it Restricted} - The centers are part of the data-set $\mc X$, that is, $c_1, \ldots, c_k \in \mc X$ \\
+\end{itemize}
+We will give algorithms in both the settings. Note that restricted setting is similar to working with $k$-median cost function (if we consider the target clustering to be the optimal $k$-median clustering). Similarly, the optimal $k$-means solution can be thought of as a target in the steiner setting.
+
+\subsection{Related work}
+For $\alpha$-center proximity, the following results are known when no oracle (or queries) is available to the clustering algorithm. In the restricted setting, the algorithm of Balcan and Liang \cite{balcan2012clustering} `recovers' the target clustering (outputs a tree such that the target is a pruning of the tree) when $\alpha > \sqrt{2} + 1$. In this work, we will show that in the presence of queries, we can recover the target clustering as long as $\alpha > 2$. Note that this is still above the NP-Hardness lower bound of $\alpha < 2$ in the restricted setting (\cite{ben2014data}).
+
+In the steiner setting, the algorithm of Awasthi et. al \cite{awasthi2012center} recovers the target clustering when $\alpha > 2+\sqrt{3}$. We show that in the presence of few queries, we can recover the target clustering if $\alpha > 2$. This is much better than the previous known result in the absence of queries. This result also beats the NP-Hardness lower bound of $\alpha < 3$ in the steiner setting (\cite{awasthi2012center}).
+
+\subsection{Algorithm}
+\subsubsection*{Steiner setting}
+We will assume that the target clustering $\mc C_{\mc X} = \{C_1, \ldots, C_k\}$ induced by centers $c_1, \ldots, c_k$ has the following property. For all $i$, $c_i$ is the mean of all the points in cluster $C_i$, that is,
+\begin{align}
+c_i = \frac{1}{|C_i|}\sum_{x \in C_i} x \stepcounter{equation}\tag{P\theequation} \label{property:targetClust}
+\end{align}
+
+Note that the optimal solution to the $k$-means cost function has this property. Our algorithm is more general and works for any target clustering which has the above property (\ref{property:targetClust}).
+
+Intuitively, our algorithm (Alg. \ref{alg:steinerQueryPositive}) does the following. In the first phase, it randomly queries points from $\mc X$ till it has a sufficient number of points from one one cluster (say $C_p$). It uses the mean of these points to approximate the cluster center. In the second phase, the algorithm makes use of the following property. 
+\begin{property}[$R(x)$ given $\mc X$ and $c$]
+\label{property:R}
+Given a clustering instance $(\mc X, d)$ from a metric space $M$ and $c \in M$. For all $x \in \mc X$, we say that
+\begin{center}
+$R_{c}^{\mc X}(x)$ is true $\iff$ for all $y \in \mc X \setminus B(c, d(x, c))$, we have that $d(x, y) > d(x, c)$
+\end{center}
+\end{property} 
+\noindent The algorithm constructs a list of all the points which satisfy the property $R$ w.r.t to the current set $S_i$ and the approximated center $c_p'$. It then uses to binary search to find the point $b_{idx}$ in $C_p$ which is at maximum distance from $c_p'$ and has the property $R$. Now, starting from $b_{idx}$ and proceeding in decreasing order of distance $d(x, c_p')$, the algorithm deletes all points from $S_i$ which satisfy the property $R$. We will show that this process guarantees that (as long as $c_p'$ is a good approximation of the actual center $c_p$) all the points from $C_p$ are now recovered. We then repeat this process $k$ times to recover all the clusters.
+
+We will now prove that for $\alpha > 2$
+
+\RestyleAlgo{boxruled} 
+\SetAlgoNoLine
+\begin{algorithm}[H]
+ \KwInput{Clustering instance $\mc X$, oracle $\mc O$, the number of clusters $k$ and parameters $\epsilon, \delta \in (0, 1)$}
+ \KwOutput{A clustering $\mc C$ of the set $\mc X$}
+
+ \vspace{0.5em} $\mc C = \{\}$\\ 
+ $\mc S_{k} = \mc X$\\
+ $\gamma = c\frac{\log k + \log(1/\delta)}{\epsilon^2}$\\
+ \For{$i = k$ to $1$}{
+ 	\vspace{0.7em}\textbf{Phase 1}\\
+ 	$l = k \gamma + 1$\;
+	Query the label of $l$ points (uniformly at random) from $\mc S_i$. Let $\mc A$ be the set of those points.\\
+	For $1 \le t \le i$, let $A_t \subseteq \mc A$ be the set of points with label $i$. That is, \begin{center}$A_t = \{x \in \mc A : x \in C_t\}.$\end{center} 
+	Choose any $A_p$ such that $|A_p| > \gamma$.\\
+	$c_p' := \frac{1}{|A_p|}\sum_{x \in A_p} x$.\\
+	\vspace{1.5em}\textbf{Phase 2}\\
+	Let $B = \Phi$\\
+	For all $x \in \mc S_i$ in increasing order of $d(x, c_p')$. If $R_{c_p'}^{\mc S_i}(x)$ is true,\\
+	\hspace{0.3in}$B = x \cup B$.\\
+	Binary search over $B$, to find an index $idx$ such that $b_{idx} \in C_p$ and $b_{idx+1} \not\in C_p$. We will later prove that $d(b_{idx}, c_p') = \max_{x \in C_p}d(x, c_p')$.\\
+	$C_p' = \Phi$\\
+	Initialize $x = b_{idx}$. For all $x \in S_i$ in decreasing order of $d(x, c_p')$. If $R_{c_p'}^{\mc S_i}(x)$ is true,\\
+	\hspace{0.3in}Delete $x$ from $S_i$.\\
+	\hspace{0.3in} $C_p' = x \cup C_p'$\\
+	$S_{i-1} = S_i$.\\
+	$\mc C = \mc C \cup C_p'$
+ }
+ Output $\mc C$.
+ \label{alg:steinerQueryPositive}
+ \caption{Algorithm for $\alpha > 2$, center proximity instances with queries}
+\end{algorithm}
+\bibliographystyle{alpha}
+\bibliography{activeClustering} 
+
+\appendix
+\section{Concentration inequalities}
+\label{section:conIneq}
+
+\begin{theorem}[Generalized Hoeffding's Inequality \cite{ashtiani2015dimension}]
+Let $X_1, \ldots. X_n$ be i.i.d random vectors in some Hilbert space such that for all $i$, $\|X_i\|_2 \le R$ and $E[X_i] = M$. If $n > c\frac{\log(1/\delta)}{\epsilon^2}$, then with probability atleast $1-\delta$, we have that
+$$\Big\|M - \frac{1}{n}\sum X_i\Big\|_2^2 \le R\epsilon$$ 
+\end{theorem}
+\end{document}
+
