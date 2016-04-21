@@ -14,6 +14,7 @@
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem{property}[theorem]{Property}
 \newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
 
 \newcommand{\mc}{\mathcal}
 
@@ -52,9 +53,10 @@ We are given a dataset $\mc X$. $\mc X$ has a target clustering $\mc C_{\mc X}$ 
 We will give algorithms in both the settings. Note that restricted setting is similar to working with $k$-median cost function (if we consider the target clustering to be the optimal $k$-median clustering). Similarly, the optimal $k$-means solution can be thought of as a target in the steiner setting.
 
 \subsection{Related work}
+\label{section:relatedwork}
 For $\alpha$-center proximity, the following results are known when no oracle (or queries) is available to the clustering algorithm. In the restricted setting, the algorithm of Balcan and Liang \cite{balcan2012clustering} `recovers' the target clustering (outputs a tree such that the target is a pruning of the tree) when $\alpha > \sqrt{2} + 1$. In this work, we will show that in the presence of queries, we can recover the target clustering as long as $\alpha > 2$. Note that this is still above the NP-Hardness lower bound of $\alpha < 2$ in the restricted setting (\cite{ben2014data}).
 
-In the steiner setting, the algorithm of Awasthi et. al \cite{awasthi2012center} recovers the target clustering when $\alpha > 2+\sqrt{3}$. We show that in the presence of few queries, we can recover the target clustering if $\alpha > 2$. This is much better than the previous known result in the absence of queries. This result also beats the NP-Hardness lower bound of $\alpha < 3$ in the steiner setting (\cite{awasthi2012center}).
+In the steiner setting, the algorithm of Awasthi et. al \cite{awasthi2012center} recovers the target clustering when $\alpha > 2+\sqrt{3}$. We show that in the presence of few queries, we can recover the target clustering if $\alpha > \sqrt{2}+1$. This is much better than the previous known result in the absence of queries. This result also beats the NP-Hardness lower bound of $\alpha < 3$ in the steiner setting (\cite{awasthi2012center}).
 
 \subsection{Algorithm}
 \subsubsection*{Steiner setting}
@@ -84,9 +86,9 @@ The details of our approach is stated precisely in Alg. \ref{alg:steinerQueryPos
  \KwOutput{A clustering $\mc C$ of the set $\mc X$}
 
  \vspace{0.5em} $\mc C = \{\}$\\ 
- $\mc S_{k} = \mc X$\\
+ $\mc S_{1} = \mc X$\\
  $\gamma = c\frac{\log k + \log(1/\delta)}{\epsilon^2}$\\
- \For{$i = k$ to $1$}{
+ \For{$i = 1$ to $k$}{
  	\vspace{0.7em}\textbf{Phase 1}\\
  	$l = k \gamma + 1$\;
 	Query the label of $l$ points (uniformly at random) from $\mc S_i$. Let $\mc A$ be the set of those points.\\
@@ -102,18 +104,18 @@ The details of our approach is stated precisely in Alg. \ref{alg:steinerQueryPos
 	Initialize $x = b_{idx}$. For all $x \in S_i$ in decreasing order of $d(x, c_p')$.\\ %If $R_{c_p'}^{\mc S_i}(x)$ is true,\\
 	\hspace{0.3in}Delete $x$ from $S_i$.\\
 	\hspace{0.3in} $C_p' = x \cup C_p'$\\
-	$S_{i-1} = S_i$.\\
+	$S_{i+1} = S_{i}$.\\
 	$\mc C = \mc C \cup C_p'$
  }
  Output $\mc C$.
  \label{alg:steinerQueryPositive}
- \caption{Algorithm for $\alpha > 2$, center proximity instances with queries}
+ \caption{Algorithm for $\alpha > \sqrt{2} + 1$, center proximity instances with queries}
 \end{algorithm}
 
 
 \begin{lemma}
 \label{lemma:hasCenterProximity}
-Given a clustering instance $(\mc X, d)$ in some metric space $M$. Let $\mc C_{\mc X} = \{C_1, \ldots, C_k\}$ be a clustering of $\mc X$ induced by centers $c_1, \ldots, c_k \in M$ which satisfies $\alpha$-center proximity. Let $c_i' \in M$ such that $d(c_i, c_i') \le r(C_i)\epsilon$. If $\alpha \ge \sqrt{2} + 1 + 9\epsilon$, then for all $x \in C_i$ and for all $y \in C_j$
+Given a clustering instance $(\mc X, d)$ in some metric space $M$. Let $\mc C_{\mc X} = \{C_1, \ldots, C_k\}$ be a clustering of $\mc X$ induced by centers $c_1, \ldots, c_k \in M$ which satisfies $\alpha$-center proximity and $c_i$ is the mean of points in $C_i$. Let $c_i' \in M$ such that $d(c_i, c_i') \le r(C_i)\epsilon$. If $\alpha \ge \sqrt{2} + 1 + 9\epsilon$, then for all $x \in C_i$ and for all $y \in C_j$
 $$(\sqrt{2}+1)d(x, c_i') < d(x, c_j)$$  
 \end{lemma}
 
@@ -136,6 +138,7 @@ Also, $\alpha > \sqrt{2}+1 + 9\epsilon \implies \frac{\alpha}{1+\epsilon} > \sqr
 \end{proof}
 
 \begin{lemma}
+\label{lemma:maxHasR}
 Let the framework be exactly the same as in Lemma \ref{lemma:hasCenterProximity}. In addition, let $x^* = \argmax_{x \in C_i}  d(x, c_i')$ and $R = \max_{x \in C_i} d(x, c_i')$. Let $B = B(c_i', R)$. For notational convenience, denote by $\mc R(x) := \mc R_{c_i'}^{\mc X}(x)$. Then, 
 \begin{itemize}[nolistsep,noitemsep]
 \item $\mc R(x^*)$ is true.
@@ -144,17 +147,87 @@ Let the framework be exactly the same as in Lemma \ref{lemma:hasCenterProximity}
 \end{lemma}
 
 \begin{proof}
-
+From Corollary $2.3$ in \cite{awasthi2012center}, we know that for all $x \in C_i$ and $y \in C_j$, $d(x, c_i) < \frac{d(x, y)}{\alpha-1}$. Hence, it is easy to see that $\mc R(x^*)$ is true. To prove the second item, first observe that from Lemma \ref{lemma:hasCenterProximity} we know that $\alpha d(x, c_i') < d(x, c_j)$ where $\alpha = \sqrt{2}+1$. To complete our proof, we will show that for all $y \in C_j, d(y, c_i') > R$. This result appeared in \cite{balcan2012clustering} but we prove it here for completeness. Observe that $d(x^*, c_i') < \frac{d(c_i', c_j)}{(\alpha-1)}$ and $d(c_i' , c_j) < \frac{\alpha+1}{\alpha}d(y, c_i')$. $\alpha = \sqrt{2}+1 \implies \alpha(\alpha-1) = \alpha+1$.
 \end{proof}
+
+\begin{corollary}
+\label{cor:phase2}
+Let the framework be as in Lemma \ref{lemma:hasCenterProximity}. Let $t$ be the current loop and $\mc S_t$ be as defined in Alg. \ref{alg:steinerQueryPositive}. Let $\mc S_t = \{C_{1}, \ldots, C_{k-t+1}\}$ where each $C_{i} \in \mc C_{\mc X}$ (this is necessarily true when $t = 1$). Let $c_p'$ be as defined in Alg. \ref{alg:steinerQueryPositive}. If $d(c_p', c_p) \le r(C_p)\epsilon$ then after phase two of the Alg. \ref{alg:steinerQueryPositive}, $\mc S_{t+1} = \mc S_t\setminus C_p$. Also, phase two of the algorithm makes atmost $\log n$ queries to the oracle.
+\end{corollary}
+\begin{proof}
+The proof of this corollary follows from Lemma \ref{lemma:hasCenterProximity} and \ref{lemma:maxHasR}. 
+\end{proof}
+
+\noindent Corollary \ref{cor:phase2} says that if the first phase of Alg. \ref{alg:steinerQueryPositive} finds a good approximation $c_p'$ to the the center $c_p$, then the second phase clusters all points of $C_p$ into a single cluster. Next, we will show that the first phase of our algorithm finds a good approximation with high probability.
+
+\begin{lemma}
+\label{lemma:phase1}
+Let the framework be same as before. Let $A_p \subseteq C_p$ be such that $|A_p| > \gamma$. Let $c_p = \frac{1}{|C_p|}\sum_{x \in C_p} x$ and $c_p' = \frac{1}{|A_p|}\sum_{x \in A_p} x$. If $\gamma > c\frac{\log k + \log(1/\delta)}{\epsilon^2}$ then with probability atmost $\delta/k$, $d(c_p, c_p') > r(C_p)\epsilon$.
+\end{lemma}
+\begin{proof}
+Define a uniform distribution $U$ over $C_p$. Then the mean of the distribution is $c_p$. Now, using Thm. \ref{thm:genHoeff} from Appendix \ref{appendixsection:conIneq} completes the proof of this theorem.
+\end{proof}
+
+\begin{theorem}
+\label{thm:steinerQueryPositive}
+Given a clustering instance $(\mc X, d)$ in some metric space $M$. Let $\mc C_{\mc X} = \{C_1, \ldots, C_k\}$ be a clustering of $\mc X$ induced by centers $c_1, \ldots, c_k \in M$ which satisfies $\alpha$-center proximity and $c_i$ is the mean of points in $C_i$ (This property is satisfied by the optimal $k$-means clustering). Given $\epsilon, \delta \in (0, 1)$. If $\alpha \ge \sqrt{2}+1 + \epsilon$, then Alg. \ref{alg:steinerQueryPositive}
+\begin{itemize}[nolistsep,noitemsep]
+\item makes $O\big(k\log |\mc X| + \frac{k\log k + k\log (1/\delta)}{\epsilon^2}\big)$ queries to the oracle $\mc O$.
+\item With probability atleast $1-\delta$, outputs a clustering $\mc C$ such that $\mc C = \mc C_{\mc X}$.
+\end{itemize}
+\end{theorem}
+
+\begin{proof}
+During every iteration the algorithm makes $O(k\gamma + \log n)$ queries. choosing $\gamma > c\frac{\log k + \log(1/\delta)}{\epsilon^2}$ gives the required number of queries. Also, observe that the probability of failure at each step is $\delta/k$ and hence the total probability is atmost $\delta$. This follows from Corollary \ref{cor:phase2} and Lemma \ref{lemma:phase1}.  
+\end{proof}
+
+\subsection{Lower bound}
+In the steiner setting, Awasthi et. al \cite{awasthi2012center} showerd that for $\alpha < 3$ it is NP-Hard to find the optimal solution to the $k$-median objective function. Our positive result (Thm. \ref{thm:steinerQueryPositive}) is for the $k$-means optimal clustering. Hence, we would like to prove lower bounds in this setting. We will show that for $\alpha < 3$, it is NP-Hard to approximate the $k$-means cost function as well. The proof uses a simple reduction from the $k$-median instance to the $k$-means instance and is stated below.
+
+\begin{theorem}
+For any $\alpha < 3$, finding the optimal solution to the $k$-means objective function is even when the optimal solution satisfies $\alpha$-center proximity is NP-hard.
+\end{theorem}
+
+\begin{proof}
+We will first state both the $k$-median and the $k$-means optimization problem under $\alpha$-center proximity and then show the reduction.
+
+\vspace{1em}\noindent $k$-media clustering\\
+{\it Input:} A set $\mc X$, integer $k$ and metric $d$. It is known that the desired solution satisfies $\alpha$-center proximity.\\
+{\it Output:} A partition of $\mc X \subseteq M$ into $k$ clusters $C_1, \ldots, C_k$ with a center $c_i \in M$ for each cluster so as to minimize $\sum_{C_i}\sum_{x \in C_i} d(x, c_i)$.  
+
+\vspace{0.5em}\noindent $k$-means clustering\\
+{\it Input:} A set $\mc X$, integer $k$ and metric $d$. It is known that the desired solution satisfies $\alpha$-center proximity.\\
+{\it Output:} A partition of $\mc X \subseteq M$ into $k$ clusters $C_1, \ldots, C_k$ with a center $c_i \in M$ for each cluster so as to minimize $\sum_{C_i}\sum_{x \in C_i} d^2(x, c_i)$.  
+
+\vspace{1em}\noindent Awasthi et. al \cite{awasthi2012center} showed that the $k$-median problem above is NP-Hard. Given an instance of $k$-median problem we construct an instance of $k$-means as follows. We, let $\mc X, k$ be the same. But we use a new metric $\tilde d = \frac{d}{\sqrt{|\mc X|}}$. We will show that if the $k$-median instance has cost $\le A$ if and only if $k$-means instance has cost $\le A^2$. In the proof, we use $c(x)$ to denote the center of $x$. This will prove our desired result.
+
+\noindent$\Rightarrow$ For the forward direction, observe that $\sum_x \tilde d^{2}(x, c_i) \le\sum_{x}d^2(x, c(x)) \le (\sum_{x} d(x, c_i))^2 \le A^2$.
+
+\noindent$\Leftarrow$ For the reverse direction, observe that $(\sum_{x}d(x, c(x)))^2 \le n\sum_{x} d^2(x, c_i) = \sum_x \tilde d^{2}(x, c_i) \le A^2$.
+\end{proof}
+
+
+
+
+
+
+
 
 \bibliographystyle{alpha}
 \bibliography{activeClustering} 
 
+
+
+
+
+
+
 \appendix
 \section{Concentration inequalities}
-\label{section:conIneq}
+\label{appendixsection:conIneq}
 
 \begin{theorem}[Generalized Hoeffding's Inequality \cite{ashtiani2015dimension}]
+\label{thm:genHoeff}
 Let $X_1, \ldots. X_n$ be i.i.d random vectors in some Hilbert space such that for all $i$, $\|X_i\|_2 \le R$ and $E[X_i] = \mu$. If $n > c\frac{\log(1/\delta)}{\epsilon^2}$, then with probability atleast $1-\delta$, we have that
 $$\Big\|\mu - \frac{1}{n}\sum X_i\Big\|_2^2 \le R\epsilon$$ 
 \end{theorem}
