@@ -1,29 +1,210 @@
-\documentclass[11pt]{article}
-\usepackage{amsmath,amssymb,amsthm}
-\usepackage[margin=1in]{geometry}
-\usepackage{enumitem}
-\usepackage{algorithm2e}
-\usepackage{color}
+\documentclass[orivec]{llncs}
+\usepackage{llncsdoc}
 
 \def\COMPLETE{}
-%%%%% Title %%%%%
-\title{\LARGE Active clustering}
-\author{}
+\usepackage[boxruled]{algorithm2e}
+\usepackage{amsmath,amssymb,amstext}
+\usepackage[margin=1in]{geometry}
 
-\newtheorem{theorem}{Theorem}
-\newtheorem{definition}[theorem]{Definition}
-\newtheorem{property}[theorem]{Property}
-\newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{corollary}[theorem]{Corollary}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage[toc,page]{appendix}
+
+\usepackage{color}
+\usepackage[toc,page]{appendix}
+\usepackage{xspace}
+\usepackage{enumitem}
+\usepackage{times}
+\usepackage{float}
+\usepackage{capt-of}
+
+\usepackage{tikz}
+\usetikzlibrary{shapes, calc, arrows, through, intersections, decorations.pathreplacing, patterns}
 
 \newcommand{\mc}{\mathcal}
+\newcommand{\mb}{\mathbf}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator{\vcdim}{VC-Dim}
+\DeclareMathOperator{\vol}{vol}
 
-\DeclareMathOperator{\argmax}{argmax} 
-\SetKwInput{KwInput}{Input}
-\SetKwInput{KwOutput}{Output}
+\renewcommand{\qed}{\hfill\ensuremath{\blacksquare}}
+\renewcommand\labelitemi{$\bullet$}
+
+\makeatletter  %% this is crucial
+\renewcommand\subsubsection{\@startsection{subsubsection}{3}{\z@}%
+   {-18\p@ \@plus -4\p@ \@minus -4\p@}%
+   {8\p@ \@plus 4\p@ \@minus 4\p@}%     <-- this
+   {\normalfont\normalsize\bfseries\boldmath
+   \rightskip=\z@ \@plus 8em \pretolerance=10000}}
+\makeatother   %% this is crucial
+\setcounter{secnumdepth}{3}
+
+
+\newcommand{\todo}{\textcolor{blue}{[TODO]}\xspace}
+\newcommand{\complete}{\textcolor{red}{[TO BE COMPLETED]}\xspace}
+\newcommand{\wip}{\textcolor{red}{[Work in progress]}\xspace}
+\newcommand{\multlinecomment}[1]{\directlua{-- #1}}
+
+
+
+
+\newcommand{\fix}{\textcolor{blue}{[FIX]}\xspace}
+\newcommand{\q}{\textcolor{blue}{[?]}\xspace}
+
+\title{Active clustering}
+\author{Student submission}
+%\institute{School of Computer Science\\University of Waterloo\\ Waterloo, ON, N2L 3G1 \\CANADA \\ \email{\{skushagr@,shai@cs.\}uwaterloo.ca}}
+
+
 %%%%% Document Body %%%%%
 \begin{document}
 \maketitle
+
+\begin{abstract}
+We should write a good abstract here.
+\end{abstract}
+
+\section{Introduction}
+We should introduce stuff here.
+
+\subsection{Related work}
+We should discuss related work here.
+
+
+\section{Problem formulation}
+
+\subsection{Center-based clustering}
+\begin{itemize}[nolistsep]
+\item Center-of-mass + EU + Steiner (our focus is natural).
+\item complexity of algorithm (run-time polynomial in $n$ and $k$).
+\end{itemize}
+
+\subsection{Clustering with query}
+\begin{itemize}[nolistsep]
+\item Complexity (membership) query
+\item Algorithm solves it with query complexity $q(n, k)$ and time complexity $t(n, k)$.
+\item Other forms of query (in Appendix \ref{appendix:diffQueryModels})
+\end{itemize}
+
+\subsection{Clustering under niceness assumption}
+\begin{definition}[$\gamma$-margin]
+\label{defn:alphacp}
+Given a clustering instance $(\mc X, d)$ from some metric space $M$ and the number of clusters $k$. We say that a clustering $\mc C_{\mc X} = \{C_1, \ldots, C_k\}$ induced by centers $\mu_1, \ldots, \mu_k \in M$ has $\gamma$-margin w.r.t $\mc X$ and $k$ if the following holds. For all $x \in C_i$ and $y \in C_j$, 
+$$\gamma d(x, c_i) < d(y, c_i)$$
+\end{definition}
+
+\noindent We will assume that the target clustering has $\gamma$-margin. In section \ref{section:clusteringWithQuery}, we will give algorithms (using queries) which recover the target clustering when $\gamma > 1$. In section \ref{section:lowerBounds}, we give lower bounds under $\gamma$-margin assumption.  
+
+In literature, similar assumptions have been considered before. One of them is $\alpha$-center proximity \cite{citeStuff}. Comparison of our notion of margin against center proximity is orthogonal to the problem being addressed in this paper. Hence, all these details have been moved to appendix \ref{appendix:gammaMrginVsAlphaCenter}. However, an important point to note from the discussion in the appendix is that the results (both upper and lower bounds) that have been obtained under $\alpha$-center proximity can also be obtained under $\gamma$-margin for `reasonably small' values of $\gamma$. 
+
+\section{Clustering with queries}
+\label{section:clusteringWithQuery}
+
+We will assume that the target clustering $\mc C_{\mc X} = \{C_1, \ldots, C_k\}$ induced by centers $\mu_1, \ldots, \mu_k$ has the following property. For all $i$, $\mu_i$ is the mean of all the points in cluster $C_i$, that is,
+\begin{align}
+\mu_i = \frac{1}{|C_i|}\sum_{x \in C_i} x \stepcounter{equation}\tag{P\theequation} \label{property:targetClust}
+\end{align}
+Note that the optimal solution to the euclidean $k$-means cost has this property. Our algorithm is more general and works for any target clustering which has the above property (\ref{property:targetClust}).
+
+Intuitively, our algorithm (Alg. \ref{alg:steinerQueryPositive}) does the following. In the first phase, it randomly queries points from $\mc X$ till it has a sufficient number of points from one one cluster (say $C_p$). It uses the mean of these points to approximate the cluster center. In the second phase, the algorithm binary searches for a point $b_{idx}$ in $C_p$ which is at maximum distance from $\mu_p'$. Then, it clusters and deletes all points whose distance is $\le d(b_{idx}, \mu_p')$. We will show that this process guarantees that (as long as $\mu_p'$ is a good approximation of the actual center $\mu_p$) and $\gamma > 1$, all the points from $C_p$ are now recovered. We then repeat this process $k$ times to recover all the clusters.
+
+The details of our approach is stated precisely in Alg. \ref{alg:steinerQueryPositive}. Thm. \ref{thm:steinerQueryPositive} shows that if $\gamma > 1$ then our algorithm recovers the target clustering with high probability. Next, we give bounds on the time and query complexity of our algorithm. Thm. \ref{thm:steinerQueryPositiveComplexity} shows that our approach needs $O(k\log n)$ queries and runs in $O(kn\log n)$ times. 
+
+\RestyleAlgo{boxruled} 
+\SetAlgoNoLine
+\begin{algorithm}[h]
+ \KwIn{Clustering instance $\mc X$, oracle $\mc O$, the number of clusters $k$ and parameters $\epsilon, \delta \in (0, 1)$}
+ \KwOut{A clustering $\mc C$ of the set $\mc X$}
+
+ \vspace{0.5em} $\mc C = \{\}$\\ 
+ $\mc S_{1} = \mc X$\\
+ $\eta = c\frac{\log k + \log(1/\delta)}{\epsilon^4}$\\
+ \For{$i = 1$ to $k$}{
+ 	\vspace{0.7em}\textbf{Phase 1}\\
+ 	$l = k \eta + 1$\;
+	Query the label of $l$ points (uniformly at random) from $\mc S_i$. Let $\mc A$ be the set of those points.\\
+	For $1 \le t \le i$, let $A_t \subseteq \mc A$ be the set of points with label $i$. That is, \begin{center}$A_t = \{x \in \mc A : x \in C_t\}.$\end{center} 
+	Choose any $A_p$ such that $|A_p| > \eta$.\\
+	$\mu_p' := \frac{1}{|A_p|}\sum_{x \in A_p} x$.\\
+	\vspace{1.5em}\textbf{Phase 2}\\
+	Sort $x \in \mc S_i$ in increasing order of $d(x, \mu_p')$.\\
+	Binary search over $\mc S_i$, to find an index $idx$ such that $b_{idx} \in C_p$ and $b_{idx+1} \not\in C_p$. (This step involves making queries to the oracle $\mc O$).\\ %We will later prove that $d(b_{idx}, c_p') = \max_{x \in C_p}d(x, c_p')$.
+	$C_p' = \{x \in \mc S_i: d(x, \mu_p') \le d(b_{idx}, \mu_p')\}$.\\
+	$S_{i+1} = S_{i}\setminus C_p'$.\\
+	$\mc C = \mc C \cup C_p'$
+ }
+ Output $\mc C$.
+ \label{alg:steinerQueryPositive}
+ \caption{Algorithm for $\gamma(> 1)$-margin instances with queries}
+\end{algorithm}
+
+
+\begin{lemma}
+\label{lemma:hasGammaMargin}
+Given a clustering instance $(\mc X, d)$ in some metric space $M$. Let $\mc C_{\mc X} = \{C_1, \ldots, C_k\}$ be a clustering of $\mc X$ induced by centers $\mu_1, \ldots, \mu_k \in M$ which satisfies $\gamma$-margin and $\mu_i$ is the mean of points in $C_i$. Let $\mu_i' \in M$ such that $d(\mu_i, \mu_i') \le r(C_i)\epsilon$. If $\gamma \ge 1 + 2\epsilon$, then for all $x \in C_i$ and for all $y \in C_j$
+$$d(x, \mu_i') < d(y, \mu_i')$$  
+\end{lemma}
+
+\begin{proof}
+Fix any $x \in C_i$ and $y \in C_j$. $d(x, \mu_i') \le d(x, \mu_i)+d(\mu_i, \mu_i') \le r(C_i) (1+\epsilon)$. Similarly, $d(y, \mu_i') \ge d(y, \mu_i) - d(\mu_i, \mu_i') > (\gamma -\epsilon)r(C_i)$. Combining the two, we get that $d(x, \mu_i') < \frac{1+\epsilon}{\gamma-\epsilon}d(y, \mu_i')$. 
+\qed
+\end{proof}
+
+\begin{lemma}
+\label{lemma:phase1}
+Let the framework be as in Lemma \ref{lemma:hasGammaMargin}. Let $A_p, C_p, \mu_p$ and $\mu_p', \eta$ be as defined is Alg. \ref{alg:steinerQueryPositive}. If $|A_p| > \eta$ then with probability atmost $\delta/k$, $d(\mu_p, \mu_p') > r(C_p)\epsilon$.
+\end{lemma}
+\begin{proof}
+Define a uniform distribution $U$ over $C_p$. Then the mean of the distribution is $\mu_p$. Now, using Thm. \ref{thm:genHoeff} from Appendix \ref{appendixsection:conIneq} completes the proof.
+\qed
+\end{proof}
+
+\begin{theorem}
+\label{thm:steinerQueryPositive}
+Given a clustering instance $(\mc X, d)$ in some metric space $M$. Let $\mc C_{\mc X} = \{C_1, \ldots, C_k\}$ be a clustering of $\mc X$ induced by centers $\mu_1, \ldots, \mu_k \in M$ which satisfies $\gamma$-margin and $\mu_i$ is the mean of points in $C_i$. Given $\epsilon, \delta \in (0, 1)$. If $\gamma \ge 1 + 2\epsilon$ then with probability atleast $1-\delta$, Alg. \ref{alg:steinerQueryPositive} outputs a clustering $\mc C$ such that $\mc C = \mc C_{\mc X}$.
+\end{theorem}
+
+\begin{proof}
+Using Lemma \ref{lemma:phase1}, we get that with probability atleast $1-\delta/k$, phase one chooses a center $\mu_p'$ such that $d(\mu_p, \mu_p') \le r(C_p)\epsilon$. Lemma \ref{lemma:hasGammaMargin} then implies that $d(x, \mu_p') < d(y, \mu_p')$ for all $x \in C_p$ and $y \not\in C_p$. Hence, $b_{idx}$ in phase two of Alg. \ref{alg:steinerQueryPositive} is such that $b_{idx} = \argmax\limits_{x \in C_p} d(x, \mu_p')$. This implies that $C_p'$ (found in phase two) equals $C_p$. Hence, with probability atleast $1-\delta/k$ one iteration of the algorithm successfully finds all the points in a cluster $C_p$. Using union bound, we get that with probability atleast $1-k\delta/k = 1-\delta$, the algorithm recovers the target clustering.
+\qed 
+\end{proof}
+
+\begin{theorem}
+\label{thm:steinerQueryPositiveComplexity}
+Let the framework be as in Thm. \ref{thm:steinerQueryPositive}. Then Alg. \ref{alg:steinerQueryPositive} 
+\begin{itemize}[nolistsep,noitemsep]
+\item makes $O\big(k\log |\mc X| + k^2\frac{\log k + \log (1/\delta)}{\epsilon^4}\big)$ queries to the oracle $\mc O$.
+\item runs in $O\big(k|\mc X|\log |\mc X| + k^2\frac{\log k + \log (1/\delta)}{\epsilon^4}\big)$ time.
+\end{itemize}
+\end{theorem}
+
+\begin{proof}
+The first phase of the algorithm takes $O(k\eta)$ time and makes $k\eta+1$ queries to the oracle. The second phase takes $O(n\log n)$ times and makes $O(\log n)$ queries to the oracle. Hence, in total the algorithm takes $O(kn\log n + k^2\eta)$ time and makes $O(k\log n + k^2\eta)$ queries. Substituting $\eta = c\frac{\log k + \log(1/\delta)}{\epsilon^4}$ gives the desired result.
+\qed
+\end{proof}
+
+\section{Lower Bounds}
+\label{section:lowerBounds}
+\subsection{Lower bounds without query}
+Use a variant of Vattani proof.
+\subsection{Lower bound with sub-logarithmic queries}
+Proof as simulation.
+
+
+\section{Discussion and conclusion}
+Other related works and conclusion.
+
+\bibliographystyle{alpha}
+\bibliography{activeClustering}
+
+\appendix
+\section{Relationship between two different query models}
+\label{appendix:diffQueryModels}
+
+\section{Comparison of $\gamma$-margin and $\alpha$-center proximity}
+\label{appendix:gammaMrginVsAlphaCenter}
+
 
 \section{Center Proximity}
 We are given a clustering instance $(\mc X, d)$ in some metric space $M$. A center-based clustering is induced by centers $c_1, \ldots, c_k \in M$ where each point $x \in \mc X$ is assigned to its closest center.
@@ -59,127 +240,7 @@ For $\alpha$-center proximity, the following results are known when no oracle (o
 In the steiner setting, the algorithm of Awasthi et. al \cite{awasthi2012center} recovers the target clustering when $\alpha > 2+\sqrt{3}$. We show that in the presence of few queries, we can recover the target clustering if $\alpha > \sqrt{2}+1$. This is much better than the previous known result in the absence of queries. This result also beats the NP-Hardness lower bound of $\alpha < 3$ in the steiner setting (\cite{awasthi2012center}).
 
 \subsection{Algorithm}
-\subsubsection*{Steiner setting}
-We will assume that the target clustering $\mc C_{\mc X} = \{C_1, \ldots, C_k\}$ induced by centers $c_1, \ldots, c_k$ has the following property. For all $i$, $c_i$ is the mean of all the points in cluster $C_i$, that is,
-\begin{align}
-c_i = \frac{1}{|C_i|}\sum_{x \in C_i} x \stepcounter{equation}\tag{P\theequation} \label{property:targetClust}
-\end{align}
 
-Note that the optimal solution to the $k$-means cost function has this property. Our algorithm is more general and works for any target clustering which has the above property (\ref{property:targetClust}).
-
-Intuitively, our algorithm (Alg. \ref{alg:steinerQueryPositive}) does the following. In the first phase, it randomly queries points from $\mc X$ till it has a sufficient number of points from one one cluster (say $C_p$). It uses the mean of these points to approximate the cluster center. In the second phase, the algorithm makes use of the following property. 
-\begin{property}[$R(x)$ given $\mc X$ and $c$]
-\label{property:R}
-Given a clustering instance $(\mc X, d)$ from a metric space $M$, $c \in M$ and $\alpha > 1$. For all $x \in \mc X$, we say that
-\begin{center}
-$R_{c}^{\mc X}(x)$ is true $\iff$ for all $y \in \mc X \setminus B(c, d(x, c))$, we have that $d(x, y) > (\alpha-1)d(x, c)$
-\end{center}
-\end{property} 
-\noindent The algorithm constructs a list of all the points which satisfy the property $R$ w.r.t to the current set $S_i$ and the approximated center $c_p'$. It then uses to binary search to find the point $b_{idx}$ in $C_p$ which is at maximum distance from $c_p'$ and has the property $R$. Now, starting from $b_{idx}$ and proceeding in decreasing order of distance $d(x, c_p')$, the algorithm deletes all points from $S_i$ which satisfy the property $R$. We will show that this process guarantees that (as long as $c_p'$ is a good approximation of the actual center $c_p$) all the points from $C_p$ are now recovered. We then repeat this process $k$ times to recover all the clusters.
-
-The details of our approach is stated precisely in Alg. \ref{alg:steinerQueryPositive}. Now, we will formally prove that for $\alpha > \sqrt{2} + 1$, Alg. \ref{alg:steinerQueryPositive} outputs the target clustering with high probability. Before that, we will need the following lemmas. Our result is stated in Theorem {\color{red} fixme}
-
-\RestyleAlgo{boxruled} 
-\SetAlgoNoLine
-\begin{algorithm}[h]
- \KwInput{Clustering instance $\mc X$, oracle $\mc O$, the number of clusters $k$ and parameters $\epsilon, \delta \in (0, 1)$}
- \KwOutput{A clustering $\mc C$ of the set $\mc X$}
-
- \vspace{0.5em} $\mc C = \{\}$\\ 
- $\mc S_{1} = \mc X$\\
- $\gamma = c\frac{\log k + \log(1/\delta)}{\epsilon^2}$\\
- \For{$i = 1$ to $k$}{
- 	\vspace{0.7em}\textbf{Phase 1}\\
- 	$l = k \gamma + 1$\;
-	Query the label of $l$ points (uniformly at random) from $\mc S_i$. Let $\mc A$ be the set of those points.\\
-	For $1 \le t \le i$, let $A_t \subseteq \mc A$ be the set of points with label $i$. That is, \begin{center}$A_t = \{x \in \mc A : x \in C_t\}.$\end{center} 
-	Choose any $A_p$ such that $|A_p| > \gamma$.\\
-	$c_p' := \frac{1}{|A_p|}\sum_{x \in A_p} x$.\\
-	\vspace{1.5em}\textbf{Phase 2}\\
-	Let $B = \Phi$\\
-	For all $x \in \mc S_i$ in increasing order of $d(x, c_p')$. If $R_{c_p'}^{\mc S_i}(x)$ is true,\\
-	\hspace{0.3in}$B = x \cup B$.\\
-	Binary search over $B$, to find an index $idx$ such that $b_{idx} \in C_p$ and $b_{idx+1} \not\in C_p$. (This step involves making queries to the oracle $\mc O$).\\ %We will later prove that $d(b_{idx}, c_p') = \max_{x \in C_p}d(x, c_p')$.
-	$C_p' = \Phi$\\
-	Initialize $x = b_{idx}$. For all $x \in S_i$ in decreasing order of $d(x, c_p')$.\\ %If $R_{c_p'}^{\mc S_i}(x)$ is true,\\
-	\hspace{0.3in}Delete $x$ from $S_i$.\\
-	\hspace{0.3in} $C_p' = x \cup C_p'$\\
-	$S_{i+1} = S_{i}$.\\
-	$\mc C = \mc C \cup C_p'$
- }
- Output $\mc C$.
- \label{alg:steinerQueryPositive}
- \caption{Algorithm for $\alpha > \sqrt{2} + 1$, center proximity instances with queries}
-\end{algorithm}
-
-
-\begin{lemma}
-\label{lemma:hasCenterProximity}
-Given a clustering instance $(\mc X, d)$ in some metric space $M$. Let $\mc C_{\mc X} = \{C_1, \ldots, C_k\}$ be a clustering of $\mc X$ induced by centers $c_1, \ldots, c_k \in M$ which satisfies $\alpha$-center proximity and $c_i$ is the mean of points in $C_i$. Let $c_i' \in M$ such that $d(c_i, c_i') \le r(C_i)\epsilon$. If $\alpha \ge \sqrt{2} + 1 + 9\epsilon$, then for all $x \in C_i$ and for all $y \in C_j$
-$$(\sqrt{2}+1)d(x, c_i') < d(x, c_j)$$  
-\end{lemma}
-
-\begin{proof}
-Fix any $x \in C_i$ and $y \in C_j$. Let $c_i, c_i'$ and $c_j$ be as defined in the statement of the lemma. Let $x^*$ be such that $d(x^*, c_i) = r(C_i)$. The proof of our lemma will follow from the following two properties of $\alpha$-center proximity instances.
-\begin{enumerate}[nolistsep,noitemsep]
-\item $r(C_i) < \frac{1}{\alpha-1}d(c_i, c_j)$.
-\begin{flalign*}
-&(\alpha-1) r(C_i) = \alpha d(x^*, c_i) - d(x^*, c_i) < d(x^*, c_j) - d(x^*, c_i) \le d(c_i, c_j)&
-\end{flalign*}
-\item $d(c_i, c_j) < \frac{\alpha+1}{\alpha}d(x, c_j)$\\
-It is easy to observe that this follows from the triangle inequality and property of $\alpha$-center proximity.
-\end{enumerate}
-\begin{flalign*}
-&\text{Now to prove the lemma, observe that
-}&\\
-&d(x, c_i') \le d(c_i, c_i') + d(x, c_i) < \frac{d(x, c_j)}{\alpha} + \epsilon r(C_i) \le \bigg[ \frac{1}{\alpha} + \frac{\epsilon(\alpha+1)}{\alpha(\alpha-1)}\bigg]d(x, c_j) < \frac{(1+3\epsilon)}{\alpha}d(x, y)&
-\end{flalign*}
-Also, $\alpha > \sqrt{2}+1 + 9\epsilon \implies \frac{\alpha}{1+\epsilon} > \sqrt{2}+1$ which completes the proof of the lemma.
-\end{proof}
-
-\begin{lemma}
-\label{lemma:maxHasR}
-Let the framework be exactly the same as in Lemma \ref{lemma:hasCenterProximity}. In addition, let $x^* = \argmax_{x \in C_i}  d(x, c_i')$ and $R = \max_{x \in C_i} d(x, c_i')$. Let $B = B(c_i', R)$. For notational convenience, denote by $\mc R(x) := \mc R_{c_i'}^{\mc X}(x)$. Then, 
-\begin{itemize}[nolistsep,noitemsep]
-\item $\mc R(x^*)$ is true.
-\item If $\mc R(x)$ is true and $d(x, c_i') < R$, then $x \in C_i$.
-\end{itemize}
-\end{lemma}
-
-\begin{proof}
-From Corollary $2.3$ in \cite{awasthi2012center}, we know that for all $x \in C_i$ and $y \in C_j$, $d(x, c_i) < \frac{d(x, y)}{\alpha-1}$. Hence, it is easy to see that $\mc R(x^*)$ is true. To prove the second item, first observe that from Lemma \ref{lemma:hasCenterProximity} we know that $\alpha d(x, c_i') < d(x, c_j)$ where $\alpha = \sqrt{2}+1$. To complete our proof, we will show that for all $y \in C_j, d(y, c_i') > R$. This result appeared in \cite{balcan2012clustering} but we prove it here for completeness. Observe that $d(x^*, c_i') < \frac{d(c_i', c_j)}{(\alpha-1)}$ and $d(c_i' , c_j) < \frac{\alpha+1}{\alpha}d(y, c_i')$. $\alpha = \sqrt{2}+1 \implies \alpha(\alpha-1) = \alpha+1$.
-\end{proof}
-
-\begin{corollary}
-\label{cor:phase2}
-Let the framework be as in Lemma \ref{lemma:hasCenterProximity}. Let $t$ be the current loop and $\mc S_t$ be as defined in Alg. \ref{alg:steinerQueryPositive}. Let $\mc S_t = \{C_{1}, \ldots, C_{k-t+1}\}$ where each $C_{i} \in \mc C_{\mc X}$ (this is necessarily true when $t = 1$). Let $c_p'$ be as defined in Alg. \ref{alg:steinerQueryPositive}. If $d(c_p', c_p) \le r(C_p)\epsilon$ then after phase two of the Alg. \ref{alg:steinerQueryPositive}, $\mc S_{t+1} = \mc S_t\setminus C_p$. Also, phase two of the algorithm makes atmost $\log n$ queries to the oracle.
-\end{corollary}
-\begin{proof}
-The proof of this corollary follows from Lemma \ref{lemma:hasCenterProximity} and \ref{lemma:maxHasR}. 
-\end{proof}
-
-\noindent Corollary \ref{cor:phase2} says that if the first phase of Alg. \ref{alg:steinerQueryPositive} finds a good approximation $c_p'$ to the the center $c_p$, then the second phase clusters all points of $C_p$ into a single cluster. Next, we will show that the first phase of our algorithm finds a good approximation with high probability.
-
-\begin{lemma}
-\label{lemma:phase1}
-Let the framework be same as before. Let $A_p \subseteq C_p$ be such that $|A_p| > \gamma$. Let $c_p = \frac{1}{|C_p|}\sum_{x \in C_p} x$ and $c_p' = \frac{1}{|A_p|}\sum_{x \in A_p} x$. If $\gamma > c\frac{\log k + \log(1/\delta)}{\epsilon^2}$ then with probability atmost $\delta/k$, $d(c_p, c_p') > r(C_p)\epsilon$.
-\end{lemma}
-\begin{proof}
-Define a uniform distribution $U$ over $C_p$. Then the mean of the distribution is $c_p$. Now, using Thm. \ref{thm:genHoeff} from Appendix \ref{appendixsection:conIneq} completes the proof of this theorem.
-\end{proof}
-
-\begin{theorem}
-\label{thm:steinerQueryPositive}
-Given a clustering instance $(\mc X, d)$ in some metric space $M$. Let $\mc C_{\mc X} = \{C_1, \ldots, C_k\}$ be a clustering of $\mc X$ induced by centers $c_1, \ldots, c_k \in M$ which satisfies $\alpha$-center proximity and $c_i$ is the mean of points in $C_i$ (This property is satisfied by the optimal $k$-means clustering). Given $\epsilon, \delta \in (0, 1)$. If $\alpha \ge \sqrt{2}+1 + \epsilon$, then Alg. \ref{alg:steinerQueryPositive}
-\begin{itemize}[nolistsep,noitemsep]
-\item makes $O\big(k\log |\mc X| + \frac{k\log k + k\log (1/\delta)}{\epsilon^2}\big)$ queries to the oracle $\mc O$.
-\item With probability atleast $1-\delta$, outputs a clustering $\mc C$ such that $\mc C = \mc C_{\mc X}$.
-\end{itemize}
-\end{theorem}
-
-\begin{proof}
-During every iteration the algorithm makes $O(k\gamma + \log n)$ queries. choosing $\gamma > c\frac{\log k + \log(1/\delta)}{\epsilon^2}$ gives the required number of queries. Also, observe that the probability of failure at each step is $\delta/k$ and hence the total probability is atmost $\delta$. This follows from Corollary \ref{cor:phase2} and Lemma \ref{lemma:phase1}.  
-\end{proof}
 
 \subsection{Lower bound}
 In the steiner setting, Awasthi et. al \cite{awasthi2012center} showerd that for $\alpha < 3$ it is NP-Hard to find the optimal solution to the $k$-median objective function. Our positive result (Thm. \ref{thm:steinerQueryPositive}) is for the $k$-means optimal clustering. Hence, we would like to prove lower bounds in this setting. We will show that for $\alpha < 3$, it is NP-Hard to approximate the $k$-means cost function as well. The proof uses a simple reduction from the $k$-median instance to the $k$-means instance and is stated below.
@@ -213,23 +274,13 @@ We will first state both the $k$-median and the $k$-means optimization problem u
 
 
 
-\bibliographystyle{alpha}
-\bibliography{activeClustering} 
-
-
-
-
-
-
-
-\appendix
 \section{Concentration inequalities}
 \label{appendixsection:conIneq}
 
 \begin{theorem}[Generalized Hoeffding's Inequality \cite{ashtiani2015dimension}]
 \label{thm:genHoeff}
 Let $X_1, \ldots. X_n$ be i.i.d random vectors in some Hilbert space such that for all $i$, $\|X_i\|_2 \le R$ and $E[X_i] = \mu$. If $n > c\frac{\log(1/\delta)}{\epsilon^2}$, then with probability atleast $1-\delta$, we have that
-$$\Big\|\mu - \frac{1}{n}\sum X_i\Big\|_2^2 \le R\epsilon$$ 
+$$\Big\|\mu - \frac{1}{n}\sum X_i\Big\|_2^2 \le R^2\epsilon$$ 
 \end{theorem}
 
 \section{Some properties of Center Proximity (maybe useful later)}
