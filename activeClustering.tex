@@ -186,8 +186,36 @@ The first phase of the algorithm takes $O(k\eta)$ time and makes $k\eta+1$ queri
 
 \section{Lower Bounds}
 \label{section:lowerBounds}
+In section \ref{section:clusteringWithQuery}, we proposed an algorithm which for $\gamma > 1$, makes $O(k\log n)$ queries and in polynomial time finds the target clustering with very high probability. In this section, we want to give a lower bound for our problem setting. We will show that if $\gamma < 1.4$ then finding the optimal euclidean $k$-means clustering is NP-Hard without queries. Note that Thms. \ref{thm:steinerQueryPositive} and \ref{thm:steinerQueryPositiveComplexity} shows that we can overcome this lower bound using queries. Next, we also give a lower bound on the number of queries needed. We show that making `too few' (sublogarithmic in $k$) queries also doesn't help and the problem remains NP-Hard.
+
 \subsection{Lower bounds without query}
+Given a clustering instance $(\mc X, d)$ in euclidean space and the number of clusters $k$. The $k$-means tries to find a clustering $\mc C = \{C_1, \ldots, C_k\}$ which minimizes the following objective function. $\sum\limits_{C_i}\frac{1}{|C_i|} \sum_{x, y \in C_i} d^2(x, y)$. \cite{vattani2009hardness} considered the weighted version of this problem where every point $x$ has a weight $w(x)$. $$\sum\limits_{C_i}\frac{1}{\sum_{x \in C_i}w(x)} \sum_{x, y \in {C_i \choose 2}} w(x)w(y)d^2(x, y).$$ Vattani showed that finding the optimal solution to the weighted $k$-means objective is NP-Hard even in Euclidean plane. We will use the same reduction technique and ideas as Vattani's proof to get our lower bound. However to prove the lower bound under gamma margin, we need to modify the author's original proof and argue more carefully.
+
+\begin{theorem}
+For any $\gamma < 1.4$, finding the optimal solution to the $k$-means objective function is NP-Hard even when the optimal satisfies $\gamma$-margin.
+\end{theorem}
+To prove the theorem, we will reduce an instance of exact cover by 3-sets (X3C) to the decision version of weighted $k$-means (which asks for a clustering with cost $\le L$).
+\begin{definition}[X3C]
+Given a set $X$ containing exactly $3n$ elements and a collection $\mc S = \{S_1, \ldots, S_l\}$ of subsets of $X$ such that each $S_i$ contains exactly three elements. Does there exist $n$ elements in $\mc S$ such that their union is $X$? 
+\end{definition}
+
+\subsubsection{Component design}
+We will now describe the reduction from X3C to the $k$-means problem. We use the same reduction that was used by \cite{vattani2009hardness}. 
+
+The component and its parameters are described in Fig. \ref{fig:lowerBoundComponent}. The row $R_i$ is composed of $6n + 3$ points $\{s_i, r_{i, 1}, \ldots, r_{i, 6n+1}, f_i\}$. All these points have weight $w$. Row $M_i$ is composed of $3n$ points $\{m_{i,1}, \ldots, m_{i, 3n}\}$ of weight $w^2$. The distances between the points are shown in Fig. \ref{fig:lowerBoundComponent}. We choose $k = (l-1)3n + l(3n+2)$. 
+
+We choose the following values of the parameters. $h = 3, d = 2\sqrt{\frac{w+1}{w}}, \epsilon = \frac{1}{w^2}$ and $\alpha = .$ The most crucial choice is that of parameter $h$ which will determine the lower bound on $\gamma$.
+
+\begin{definition}[$A$ and $B$ clustering of $R_i$ \cite{vattani2009hardness}]
+
+\noindent $A$ - For $1 \le j \le 3n$, $R_i$ has clusters $\{r_{2j-1}, r_{2j}\}$. Also, it has clusters $\{s_i\}, \{r_{i, 6n+1}, f_i\}$\\
+\noindent $B$ - For $1 \le j \le 3n$, $R_i$ has clusters $\{r_{2j}, r_{2j+1}\}$. Also, it has clusters $\{s_i, r_{i, 1}\}, \{f_i\}$
+\end{definition}
+A row grouped in a $A$ clustering costs $(6n+4)w-\alpha$ while a row in $B$ clustering costs $(6n+4)w$. Hence, the clustering with the rows $R_i$ grouped in a $A$ or $B$ clustering and the rows $M_i$ in single clusters is a $k$-clustering and costs atmost $L_1 := (6n+4)lw$. We will call such a clustering `{\it nice}'.
+\subsubsection{Proof}
+
 Use a variant of Vattani proof.
+
 \subsection{Lower bound with sub-logarithmic queries}
 Proof as simulation.
 
