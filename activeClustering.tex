@@ -196,23 +196,51 @@ For any $\gamma < 1.4$, finding the optimal solution to the $k$-means objective 
 \end{theorem}
 To prove the theorem, we will reduce an instance of exact cover by 3-sets (X3C) to the decision version of weighted $k$-means (which asks for a clustering with cost $\le L$).
 \begin{definition}[X3C]
-Given a set $X$ containing exactly $3n$ elements and a collection $\mc S = \{S_1, \ldots, S_l\}$ of subsets of $X$ such that each $S_i$ contains exactly three elements. Does there exist $n$ elements in $\mc S$ such that their union is $X$? 
+Given a set $U$ containing exactly $3n$ elements and a collection $\mc S = \{S_1, \ldots, S_l\}$ of subsets of $X$ such that each $S_i$ contains exactly three elements. Does there exist $n$ elements in $\mc S$ such that their union is $U$? 
 \end{definition}
 
 \subsubsection{Component design}
 We will now describe the reduction from X3C to the $k$-means problem. We use the same reduction that was used by \cite{vattani2009hardness}. 
 
-The component and its parameters are described in Fig. \ref{fig:lowerBoundComponent}. The row $R_i$ is composed of $6n + 3$ points $\{s_i, r_{i, 1}, \ldots, r_{i, 6n+1}, f_i\}$. All these points have weight $w$. Row $M_i$ is composed of $3n$ points $\{m_{i,1}, \ldots, m_{i, 3n}\}$ of weight $w^2$. The distances between the points are shown in Fig. \ref{fig:lowerBoundComponent}. We choose $k = (l-1)3n + l(3n+2)$. 
+The component $H_{l,n}$ and its parameters are described in Fig. \ref{fig:lowerBoundComponent}. The row $R_i$ is composed of $6n + 3$ points $\{s_i, r_{i, 1}, \ldots, r_{i, 6n+1}, f_i\}$. The points $r_{i, j}$ have weight $w$ and points $s_i$ and $f_i$ have weight $2w$. Row $M_i$ is composed of $3n$ points $\{m_{i,1}, \ldots, m_{i, 3n}\}$ of weight $2w$. The distances between the points are shown in Fig. \ref{fig:lowerBoundComponent}. We choose $k = (l-1)3n + l(3n+2)$. 
 
-We choose the following values of the parameters. $h = 3, d = 2\sqrt{\frac{w+1}{w}}, \epsilon = \frac{1}{w^2}$ and $\alpha = .$ The most crucial choice is that of parameter $h$ which will determine the lower bound on $\gamma$.
+We choose the following values of the parameters. $h = \sqrt{2}, d = \sqrt{4.5}, \epsilon = \frac{1}{w^2}$ and $\alpha = \frac{d}{w}-\frac{1}{2w^3}.$
 
 \begin{definition}[$A$ and $B$ clustering of $R_i$ \cite{vattani2009hardness}]
 
 \noindent $A$ - For $1 \le j \le 3n$, $R_i$ has clusters $\{r_{2j-1}, r_{2j}\}$. Also, it has clusters $\{s_i\}, \{r_{i, 6n+1}, f_i\}$\\
 \noindent $B$ - For $1 \le j \le 3n$, $R_i$ has clusters $\{r_{2j}, r_{2j+1}\}$. Also, it has clusters $\{s_i, r_{i, 1}\}, \{f_i\}$
 \end{definition}
-A row grouped in a $A$ clustering costs $(6n+4)w-\alpha$ while a row in $B$ clustering costs $(6n+4)w$. Hence, the clustering with the rows $R_i$ grouped in a $A$ or $B$ clustering and the rows $M_i$ in single clusters is a $k$-clustering and costs atmost $L_1 := (6n+4)lw$. We will call such a clustering `{\it nice}'.
-\subsubsection{Proof}
+A row grouped in a $A$ clustering costs $(6n+3)w-\alpha$ while a row in $B$ clustering costs $(6n+3)w$. Hence, the clustering with the rows $R_i$ grouped in a $A$ or $B$ clustering and the rows $M_i$ in single clusters is a $k$-clustering and costs atmost $L_1 := (6n+3)lw$. We will call such a clustering `{\it nice}'.
+
+\begin{lemma}[Similar to Lemma 7 in \cite{vattani2009hardness}]
+Any non-nice clustering of $H_{l, n}$ costs atleast $> L_1 + \frac{7}{8}w$ where $w = poly(l, n)$
+\end{lemma}
+
+\begin{proof}
+Any non-nice clustering $C$ can be of the following different forms.
+\begin{itemize}[nolistsep]
+\item Contains $m_{i, j}, m_{i,j+1}$ in the same cluster - $C$ must have either of the following. (1) $r_{i, j}$ and $r_{i,j+1}$ as a singleton. In this case, the new cost is atleast $L_1 + 8w - 2w = L_1+6w$. (2) $s_i$ and $r_{i,1}$ as singleton. In this case, the difference of cost is atleast $8w - 3w = 5w$. (3) $f_i$ and $r_{i,6n+1}$ as singleton. In this case, the difference of cost is atleast $8w - (3w-\alpha) = 5w+\alpha$. Note that having multiple $m_{i, j}$'s in the same cluster or having multiple clusters which contain $m_{i, j}, m_{i,j+1}$ will bring the cost up even furthur.
+\item Contains $r_{i, 2j}, m_{i, j}$ in the same cluster - $C$ must have either of the following. (1) $r_{i, j'}$ as a singleton. In this case, the cost difference is atleast $ \frac{2w}{3}(\sqrt2+1)^2 - 2w > \frac{15}{8}w$. (2) $s_i$ and $r_{i,1}$ as singleton. In this case, the difference of cost is atleast $\frac{2w}{3}(\sqrt2+1)^2 - 3w > \frac{7}{8}w$. (3) $f_i$ and $r_{i,6n+1}$ as singleton. In this case, the difference of cost is atleast $\frac{2w}{3}(\sqrt2+1)^2 - (3w-\alpha) > \frac{7}{8}w+\alpha$. Note that having multiple clusters which contain $m_{i, j}, r_{i',j'}$ will bring the cost up even furthur.
+\item Contains $r_{i,j}$ as singleton - $C$ must contain both $\{s_i, r_{i,1}\}$ and $\{r_{i,6n+1}, f_i\}$. Hence the increase in cost is atleast $3w - 2w = w$.
+\item Contains multiple $\{r_{i,j}\}$ in the same cluster - Assume the cluster has cardinality $m > 2$. Using simple counting argument (as has also been shown in  \cite{vattani2009hardness}), this cluster costs atleast $\frac{w}{3}m(m^2-1)$. A nice clustering would cost atmost $w(m + \lceil{\frac{m}{2}}\rceil - 2) + 3w = w(m + \lceil{\frac{m}{2}}\rceil + 1)$. Hence, the difference in cost is atleast $2w$.
+\end{itemize}
+\qed
+\end{proof}
+
+\subsubsection{Reduction and proof}
+Given an instance of X3C, that is, given elements $U = \{1, \ldots, 3n\}$ and collection $\mc S$, we construct an instance $X$ of $k$-means as follows. $X = H_{l,n} \cup (\cup_{i=1}^l Z_i)$ where $Z_i$ depends on the set $S_i$. 
+
+The set $Z_i$ is shown in Fig. \ref{fig:setZDescription}. The construction is same as \cite{vattani2009hardness}. For every $j\in U$, there are four possible locations $x_{i, j}, x_{i,j'}, y_{i,j}$ and $y_{i, j}'$. One of $x_{i,j}$ and $x_{i,j}'$ will be occupied and one of $y_{i,j}$ and $y_{i,j}'$ will be occupied. Each point has weight $\frac{w}{2}$.
+\begin{itemize}[nolistsep,noitemsep]
+\item $j \in S_i \iff x_{i,j}' \in Z_i$
+\item $j \not\in S_i \iff x_{i,j} \in Z_i$
+\item $j \in S_{i+1} \iff y_{i,j}' \in Z_i$
+\item $j \not\in S_{i+1} \iff y_{i,j} \in Z_i$
+\end{itemize}
+
+Hence, our clustering instance $X = H_{l,n} \cup Z$. The number of clusters $k = (l-1)3n + l(3n+2)$ and the cost $L = L_1 + L_2 -n\alpha$. We choose $L_2 = 6n(l-1)\frac{2w\frac{w}{2}}{2w+\frac{w}{2}}h^2 = 6n(l-1)$.
+
 
 Use a variant of Vattani proof.
 
