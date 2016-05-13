@@ -55,7 +55,7 @@
 \newcommand{\fix}{\textcolor{blue}{[FIX]}\xspace}
 \newcommand{\q}{\textcolor{blue}{[?]}\xspace}
 
-\title{Active Clustering with Oracles}
+\title{Clustering with Oracles}
 \author{Student submission}
 %\institute{School of Computer Science\\University of Waterloo\\ Waterloo, ON, N2L 3G1 \\CANADA \\ \email{\{skushagr@,shai@cs.\}uwaterloo.ca}}
 
@@ -92,7 +92,7 @@ balcan active split/merge
 
 \subsection{Clustering with Query}
 
-Let $\mc X$ be domain set and $d:(\mc X, \mc X) \rightarrow \mc R $ be a distance function over its elements. Let $\mc C_{\mc X} = \{C_1, \ldots, C_k\}$ be a clustering (i.e., a partitioning) of $\mc X$. We say $x_1 \overset{C_{\mc X}}{\sim} x_2$ if $x_1$ and $x_2$ belong to the same cluster according to $C_{\mc X}$. We further denote by $n$ the number of instance ($|{\mc X}|$) and by $k$ the number of clusters.
+Let $\mc X$ be domain set and $d:(\mc X, \mc X) \rightarrow \mc R $ be a distance function over its elements. Let $\mc C_{\mc X} = \{C_1, \ldots, C_k\}$ be a clustering (i.e., a partitioning) of $\mc X$. We say $x_1 \overset{C_{\mc X}}{\sim} x_2$ if $x_1$ and $x_2$ belong to the same cluster according to $C_{\mc X}$. We further denote by $n$ the number of instances ($|{\mc X}|$) and by $k$ the number of clusters.
 
 We assume that an oracle $\mc O$ has a clustering $C^*_{\mc X}=\{ C^*_1, \ldots C^*_k\}$ in his mind. The clustering algorithm then tries to recover $C^*_{\mc X}$ by querying the oracle. The following notions of query are natural for clustering tasks.
 
@@ -116,11 +116,12 @@ A membership query asks the cluster index that an instance $x$ belongs to. In ot
 %\right. $$
 \end{definition}
 
-While equivalence queries seem to be more natural for clustering tasks, we will see that membership queries make the analysis easier and more transparent. In appendix \ref{appendix:diffQueryModels} we show that these two notions are related, in the sense that they give relatively the same power to the clustering algorithm. In the following, we assume that the queries are in the form of equivalence queries.
+Equivalence queries seem to be more natural for clustering tasks, as the oracle (or the domain expert) will only need to respond to binary equivalence questions. In appendix \ref{appendix:diffQueryModels} we show that these two notions of query are related, in the sense that they give relatively the same power to the clustering algorithm. This is useful for some of our proofs, because using membership queries makes the analysis more transparent.
 
 An active clustering instance is determined by the tuple $(\mc X, d, C^*)$. A clustering algorithm $\mc A$ is called a $q$-solver of this instance if it can recover $C^*$ by having access to $(\mc X, d)$ and making at most $q$ queries. This algorithm is further called a polynomial $q$-solver if its time-complexity is polynomial in $|\mc X|$ and $|C^*|$.
 
 \begin{definition}[Query Complexity]
+\label{definition:QueryComplexity}
 Let $G$ be a set of clustering instances. We say $G$ admits an $O(q)$ query complexity if there exists an algorithm $\mc A$ that is a polynomial $q$-solver for every clustering instance in $G$.
 \end{definition}
 
@@ -128,9 +129,9 @@ Let $G$ be a set of clustering instances. We say $G$ admits an $O(q)$ query comp
 
 The framework inroduced in the previous section is general and can be used in different settings. In this section, we make more assumptions about the problem setting in order to make it concrete.
 
-We say that a clustering $\mc C_{\mc X}$ is \emph{center-based} if there exists a set of corresponding centers $\mc \mu = \{\mu_1, \ldots, \mu_k\}$ such that the elements of each cluster are closer to their center than any other center. More formally, for every element $x$ in $\mc X$ we should have $x\in C_i \Leftrightarrow i=\argmin_j d(x,\mu_j)$. A clustering instance $(\mc X, d, C^*)$ is center-based if $C^*$ is a center-based clustering of $\mc X$.
+We say that a clustering $C_{\mc X}$ is \emph{center-based} if there exists a set of corresponding centers $\mc \mu = \{\mu_1, \ldots, \mu_k\}$ such that the elements of each cluster are closer to their center than any other center. More formally, for every element $x$ in $\mc X$ we should have $x\in C_i \Leftrightarrow i=\argmin_j d(x,\mu_j)$. A clustering instance $(\mc X, d, C^*)$ is center-based if $C^*$ is a center-based clustering of $\mc X$.
 
-Some of the most-used clustering methods (e.g., k-means and k-median clustering) are center-based. However, clustering is genrally computationally hard in these settings. Therefore, some notions of \emph{niceness} of the clustering instance (under which clustering becomes \emph{easy}) have been considered. In the following we introduce a related notion of niceness.
+Some of the most-used clustering methods (e.g., k-means and k-median clustering) are center-based. However, clustering is genrally computationally hard in these settings. Therefore, some notions of \emph{niceness} of the clustering instance (under which clustering becomes \emph{easy}) have been considered in literature. In the following we introduce a related notion of niceness.
 
 \begin{definition}[$\gamma$-Margin Property]
 \label{defn:alphacp}
@@ -151,14 +152,14 @@ where $\mu_i$ is the center corresponding to $C_i$.
 %$$\gamma d(x, \mu_i) < d(y, \mu_i)$$
 %\end{definition}
 
-In clustering literature, similar notions have been considered before. One of these notions is $\alpha$-center proximity [??????]. Comparison of our notion of margin against center proximity is orthogonal to the problem being addressed in this paper, and is provided in appendix \ref{appendix:gammaMrginVsAlphaCenter}. \footnote{We just mention here that the results (both upper and lower bounds) obtained under $\alpha$-center proximity can also be obtained under $\gamma$-margin for `reasonably small' values of $\gamma$.}
-
-Throughout the next sections, we assume that the instaces are in a Euclidean metric space (i.e., $\mc X\subset \mathbb{R}^d$). Furthermore, we assume that the clustering instance $(\mc X, d, C^*)$ is center-based and admits a $\gamma$-margin property\footnote{Naturally, the larger the value of $\gamma$, the stronger this assumtion is.}. Finally, we assume that the centers $\mu$ corresponding to $C^*$ are the centers of mass of the corresponding clusters. In other words, $\mu_i=\frac{1}{|C_i|}\sum_{x\in C_i} x$. Note that this is the case for example when the oracle's clustering is the optimal solution to the Euclidean k-means clustering problem.
+In clustering literature, similar notions have been considered before. One of these notions is $\alpha$-center proximity [??????]. Comparison of our notion of margin against center proximity is orthogonal to the problem being addressed in this paper, and is provided in appendix \ref{appendix:gammaMrginVsAlphaCenter}. We just mention here that the results (both upper and lower bounds) obtained under $\alpha$-center proximity can also be obtained under $\gamma$-margin for `reasonably small' values of $\gamma$.
+ 
+Throughout the next sections, we assume that the instaces are in a Euclidean metric space (i.e., $\mc X\subset \mathbb{R}^d$). Furthermore, we assume that the clustering instance $(\mc X, d, C^*)$ is center-based and admits a $\gamma$-margin property\footnote{Naturally, the larger the value of $\gamma$, the stronger this assumtion is.}. Finally, we assume that the centers $\mu^*$ corresponding to $C^*$ are the centers of mass of the corresponding clusters. In other words, $\mu^*_i=\frac{1}{|C_i|}\sum_{x\in C^*_i} x$. Note that this is the case for example when the oracle's clustering is the optimal solution to the Euclidean k-means clustering problem.
 
 \section{An Algorithm for Clustering with Query}
 \label{section:clusteringWithQuery}
 
-In this section we provide an efficient algorithm for clustering with queries. The setting is the one described in the previous section. In particular, it is assumed that the oracle has a $\gamma$-margin center-based clustering in his mind. The space is Euclidean and the center of each cluster is the center of mass of the instances in that cluster. The algorithm makes membership queires to the oracle. 
+In this section we provide an efficient algorithm for clustering with queries. The setting is the one described in the previous section. In particular, it is assumed that the oracle has a $\gamma$-margin center-based clustering in his mind. The space is Euclidean and the center of each cluster is the center of mass of the instances in that cluster. The algorithm makes membership queires to the oracle, but this can be translated to binary equivalence queries (see appendix \ref{appendix:diffQueryModels}). 
 
 %We will assume that the target clustering $\mc C_{\mc X} = \{C_1, \ldots, C_k\}$ induced by centers $\mu_1, \ldots, \mu_k$ has the following property. For all $i$, $\mu_i$ is the mean of all the points in cluster $C_i$, that is,
 %\begin{align}
@@ -166,17 +167,15 @@ In this section we provide an efficient algorithm for clustering with queries. T
 %\end{align}
 %Note that the optimal solution to the euclidean $k$-means cost has this property. Our algorithm is more general and works for any target clustering which has the above property (\ref{property:targetClust}).
 
-Intuitively, our algorithm (Algorithm  \ref{alg:steinerQueryPositive}) does the following. In the first phase, it tries to approximate the center of on of the clusters. It does this by querying points from $\mc X$ uniformly at random until it has a sufficient number of points from at least one cluster (say $C_p$). It uses the mean of these points, $\mu_p'$, to approximate the cluster center. 
+Intuitively, our algorithm (Algorithm  \ref{alg:steinerQueryPositive}) does the following. In the first phase, it tries to approximate the center of on of the clusters. It does this by querying points from $\mc X$ uniformly at random until it has a sufficient number of points from at least one cluster (say $C_p$). It uses the mean of these points, $\mu_p^\prime$, to approximate the cluster center. 
 
-In the second phase, the algorithm recovers all of the instances belonging to $C_p$. In order to do that, it first sorts all of the instances based on their distance to $\mu_p\prime$. By showing that all of the points in $C_p$ lie inside a sphere centered at $\mu_p\prime$ (which does not include points from any other cluster), it tries to find the radius of this sphere by doing binary search using membership queries. After that, the elements in $C_p$ will be located and can be removed from the data set.
-
-The algorithm repeats this process $k$ times to recover all of the clusters.
+In the second phase, the algorithm recovers all of the instances belonging to $C_p$. In order to do that, it first sorts all of the instances based on their distance to $\mu_p^\prime$. By showing that all of the points in $C_p$ lie inside a sphere centered at $\mu_p^\prime$ (which does not include points from any other cluster), it tries to find the radius of this sphere by doing binary search using membership queries. After that, the elements in $C_p$ will be located and can be removed from the data set. The algorithm repeats this process $k$ times to recover all of the clusters.
 
 %After finding the point in $C_p$ with the maximum distance to $\mu_p\prime$ (we call this point $b_{idx}$), it puts all of the points in the sphere
 
 %$\mu_p'$. Then, it clusters and deletes all points whose distance is $\le d(b_{idx}, \mu_p')$. We will show that this process guarantees that (as long as $\mu_p'$ is a good approximation of the actual center $\mu_p$) and $\gamma > 1$, all the points from $C_p$ are now recovered. We then repeat this process $k$ times to recover all the clusters.
 
-The details of our approach is stated precisely in Alg. \ref{alg:steinerQueryPositive}. Note that $\beta$ is a small constant\footnote{It corresponds to the constant appeared in generalized Hoefding inequality bound, discussed in Theorem \ref{thm:genHoeff}}. Theorem \ref{thm:steinerQueryPositive} shows that if $\gamma > 1$ then our algorithm recovers the target clustering with high probability. Next, we give bounds on the time and query complexity of our algorithm. Theorem \ref{thm:steinerQueryPositiveComplexity} shows that our approach needs $O(k\log n)$ queries and runs with time complexity $O(kn\log n)$.
+The details of our approach is stated precisely in Algorithm \ref{alg:steinerQueryPositive}. Note that $\beta$ is a small constant\footnote{It corresponds to the constant appeared in generalized Hoefding inequality bound, discussed in Theorem \ref{thm:genHoeff}}. Theorem \ref{thm:steinerQueryPositive} shows that if $\gamma > 1$ then our algorithm recovers the target clustering with high probability. Next, we give bounds on the time and query complexity of our algorithm. Theorem \ref{thm:steinerQueryPositiveComplexity} shows that our approach needs $O(k\log n)$ queries and runs with time complexity $O(kn\log n)$.
 
 \RestyleAlgo{boxruled} 
 \SetAlgoNoLine
@@ -190,7 +189,7 @@ The details of our approach is stated precisely in Alg. \ref{alg:steinerQueryPos
  \For{$i = 1$ to $k$}{
  	\vspace{0.7em}\textbf{Phase 1}\\
  	$l = k \eta + 1$\;
-	$Z \sim U^l[\mc S_i]$    \mbox{       } //   Selects $l$ independent points from $\mc S_i$ uniformly at random\\
+	$Z \sim U^l[\mc S_i]$    \mbox{       } //   Draws $l$ independent elements from $\mc S_i$ uniformly at random\\
 	For $1 \le t \le i$,\\
              \mbox{            } $Z_t = \{x \in Z : {\mc O}(x)= t\}.$ \mbox{    } //Queries the oracle about the members of $Z$\\
     % let $Z_t \subseteq \mc Z$ be the set of points with label $i$. That is, \begin{center}$A_t = \{x \in \mc Z : x \in C_t\}.$\end{center} 
@@ -199,7 +198,7 @@ $p = \argmax_t |Z_t|$\\
 	$\mu_p' := \frac{1}{|Z_p|}\sum_{x \in Z_p} x$.\\
 
 	\vspace{1.5em}\textbf{Phase 2}\\
-    // We know that there exists $r_i$ such that $\forall x\in {\mc S_i}$, $x\in C_i \Leftrightarrow d(x, \mu\prime_i)< r_i$.\\ 
+    // We know that there exists $r_i$ such that $\forall x\in {\mc S_i}$, $x\in C_i \Leftrightarrow d(x, \mu^\prime_i)< r_i$.\\ 
     // Therefore, $r_i$ can be found by simple binary search\\
     
 	$\widehat{\mc S_i}$ = Sorted$(\{\mc S_i\})$ \mbox{       }// Sorts elements of $\{x: x\in \mc S_i\}$ in increasing order of $d(x, \mu_p')$.\\    
@@ -219,7 +218,7 @@ $p = \argmax_t |Z_t|$\\
 
 \begin{lemma}
 \label{lemma:hasGammaMargin}
-Let $(\mc X, d, C)$ be a clustering instane, where $C^*$ is center-based and satisfies $\gamma$-margin property. Let $\mu$ be the set of centers corresponding to the centers of mass of $C^*$. Let $\mu_i'$ be such that $d(\mu_i, \mu_i') \le r(C_i)\epsilon$, where $r(C_i) = \max_{x\in C_i}d(x, \mu_i)$ . Then $\gamma \ge 1 + 2\epsilon$ implies that 
+Let $(\mc X, d, C)$ be a clustering instane, where $C$ is center-based and satisfies $\gamma$-margin property. Let $\mu$ be the set of centers corresponding to the centers of mass of $C$. Let $\mu_i'$ be such that $d(\mu_i, \mu_i') \le r(C_i)\epsilon$, where $r(C_i) = \max_{x\in C_i}d(x, \mu_i)$ . Then $\gamma \ge 1 + 2\epsilon$ implies that 
 
 $$\forall x \in C_i, \forall y \in {\mc X} \setminus C_i \Rightarrow d(x, \mu_i') < d(y, \mu_i')$$  
 \end{lemma}
@@ -237,18 +236,18 @@ Fix any $x \in C_i$ and $y \in C_j$. $d(x, \mu_i') \le d(x, \mu_i)+d(\mu_i, \mu_
 
 \begin{lemma}
 \label{lemma:phase1}
-Let the framework be as in Lemma \ref{lemma:hasGammaMargin}. Let $Z_p, C_p, \mu_p$ and $\mu_p', \eta$ be as defined is Alg. \ref{alg:steinerQueryPositive}, and $\epsilon = \frac{\gamma - 1}{2}$. If $|Z_p| > \eta$, then the probability that $d(\mu_p, \mu_p') > r(C_p)\epsilon$ is at most $\frac{\delta}{k}$.
+Let the framework be as in Lemma \ref{lemma:hasGammaMargin}. Let $Z_p, C_p, \mu_p$, $\mu_p^\prime$ and $\eta$ be defined as in Algorhtm \ref{alg:steinerQueryPositive}, and $\epsilon = \frac{\gamma - 1}{2}$. If $|Z_p| > \eta$, then the probability that $d(\mu_p, \mu_p^\prime) > r(C_p)\epsilon$ is at most $\frac{\delta}{k}$.
 \end{lemma}
 \begin{proof}
-Define a uniform distribution $U$ over $C_p$. Then $\mu_p$ is the mean of this distribution, and $\mu_p\prime$ is the empirical mean. Now, we only need to use a concentration inequality to show that the empirical means is close to the true mean. Therefore, using Thm. \ref{thm:genHoeff} from Appendix \ref{appendixsection:conIneq} completes the proof.
+Define a uniform distribution $U$ over $C_p$. Then $\mu_p$ is the mean of this distribution, and $\mu_p^\prime$ is the empirical mean. Now, we only need to use a concentration inequality to show that the empirical means is close to the true mean. Therefore, using Thm. \ref{thm:genHoeff} from Appendix \ref{appendixsection:conIneq} completes the proof.
 \qed
 \end{proof}
 
 \begin{theorem}
 \label{thm:steinerQueryPositive}
-Let $(\mc X, d, C)$ be a clustering instane, where $C^*$ is center-based and satisfies $\gamma$-margin property. Let $\mu$ be the set of centers corresponding to the centers of mass of $C^*$.
+Let $(\mc X, d, C)$ be a clustering instane, where $C$ is center-based and satisfies $\gamma$-margin property. Let $\mu_i$ be the center corresponding to the center of mass of $C_i$.
 %Given a clustering instance $(\mc X, d)$ in some metric space $M$. Let $\mc C_{\mc X} = \{C_1, \ldots, C_k\}$ be a clustering of $\mc X$ induced by centers $\mu_1, \ldots, \mu_k \in M$ which satisfies $\gamma$-margin and $\mu_i$ is the mean of points in $C_i$. 
-Assume $\delta \in (0, 1)$ and $\gamma > 1$. Then with probability at least $1-\delta$, Alg. \ref{alg:steinerQueryPositive} outputs $C^*$.
+Assume $\delta \in (0, 1)$ and $\gamma > 1$. Then with probability at least $1-\delta$, Algorithm \ref{alg:steinerQueryPositive} outputs $C^*$.
 \end{theorem}
 
 \begin{proof}
@@ -258,7 +257,7 @@ In the first phase of the algorithm we are making $l>k\eta$ queries. Therefore, 
 
 \begin{theorem}
 \label{thm:steinerQueryPositiveComplexity}
-Let the framework be as in Thm. \ref{thm:steinerQueryPositive}. Then Alg. \ref{alg:steinerQueryPositive} 
+Let the framework be as in theorem \ref{thm:steinerQueryPositive}. Then Algorithm \ref{alg:steinerQueryPositive} 
 \begin{itemize}[nolistsep,noitemsep]
 \item Makes $O\big(k^2\log |\mc X| + k^3\frac{\log k + \log (1/\delta)}{(\gamma - 1)^4}\big)$ equivalence queries to the oracle $\mc O$.
 \item Runs in $O\big(k|\mc X|\log |\mc X| + k^2\frac{\log k + \log (1/\delta)}{(\gamma - 1)^4}\big)$ time.
@@ -266,16 +265,38 @@ Let the framework be as in Thm. \ref{thm:steinerQueryPositive}. Then Alg. \ref{a
 \end{theorem}
 
 \begin{proof}
-The first phase of the algorithm takes $O(k\eta)$ time and makes $k\eta+1$ membership queries to the oracle. The second phase takes $O(n\log n)$ times and makes $O(\log n)$ membership queries to the oracle. Hence, in total the algorithm takes $O(kn\log n + k^2\eta)$ time and makes $O(k\log n + k^2\eta)$ membership queries. Substituting $\eta = c\frac{\log k + \log(1/\delta)}{\epsilon^4}$ and using the fact that each membership query can be substituted by $k$ equivalence queries (see appendix \ref{appendix:diffQueryModels}) finishes the proof.
+The first phase of the algorithm takes $O(k\eta)$ time and makes $k\eta+1$ membership queries to the oracle. The second phase takes $O(n\log n)$ times and makes $O(\log n)$ membership queries to the oracle. Hence, in total the algorithm takes $O(kn\log n + k^2\eta)$ time and makes $O(k\log n + k^2\eta)$ membership queries. Substituting $\eta = \beta\frac{\log k + \log(1/\delta)}{(\eta-1)^4}$ and using the fact that each membership query can be substituted by $k$ equivalence queries (see appendix \ref{appendix:diffQueryModels}) finishes the proof\footnote{It is actually possible to improve the $k^3$ term in query complexity to $k^2$, by noting that in the second phase of the algorithm we only need to use equivalence queries rather than membership queries.}.
 \qed
 \end{proof}
 
+\begin{corollary}
+The set of Euclidean clustering instances that satisfy $\gamma$-margin property for some $\gamma > 1$ admits query complexity $O\big(k^2\log |\mc X| + k^3\frac{\log k + \log (1/\delta)}{(\gamma - 1)^4}\big)$. 
+\begin{proof}
+The corollary is the immediate result of theorem \ref{thm:steinerQueryPositiveComplexity} and definition \ref{definition:QueryComplexity}
+\end{proof}
+
+\end{corollary}
+
 \section{Lower Bounds}
 \label{section:lowerBounds}
-In section \ref{section:clusteringWithQuery}, we proposed an algorithm which for $\gamma > 1$, makes $O(k\log n)$ queries and in polynomial time finds the target clustering with very high probability. In this section, we want to give a lower bound for our problem setting. We will show that if $\gamma < 1.4$ then finding the optimal euclidean $k$-means clustering is NP-Hard without queries. Note that Thms. \ref{thm:steinerQueryPositive} and \ref{thm:steinerQueryPositiveComplexity} shows that we can overcome this lower bound using queries. Next, we also give a lower bound on the number of queries needed. We show that making `too few' (sublogarithmic in $k$) queries also doesn't help and the problem remains NP-Hard.
+In section \ref{section:clusteringWithQuery}, we proposed an algorithm that could recover the true clustering with high probability, assuming that it has the $\gamma$-margin property for $\gamma>1$. A first challenge that comes to mind is that whether we can provide lower bounds for the number required queries.
 
-\subsection{Lower bounds without query}
-Given a clustering instance $(\mc X, d)$ in euclidean space and the number of clusters $k$. The $k$-means tries to find a clustering $\mc C = \{C_1, \ldots, C_k\}$ which minimizes the following objective function. $\sum\limits_{C_i}\frac{1}{|C_i|} \sum_{x, y \in C_i} d^2(x, y)$. \cite{vattani2009hardness} considered the weighted version of this problem where every point $x$ has a weight $w(x)$. $$\sum\limits_{C_i}\frac{1}{\sum_{x \in C_i}w(x)} \sum_{x, y \in {C_i \choose 2}} w(x)w(y)d^2(x, y).$$ Vattani showed that finding the optimal solution to the weighted $k$-means objective is NP-Hard even in Euclidean plane. We will use the same reduction technique and ideas as Vattani's proof to get our lower bound. However to prove the lower bound under gamma margin, we need to modify the author's original proof and argue more carefully.
+A more interesting but subtle challenge is revealed by noting that the `clustering with query' model can be contrasted to the usual unsupervised clustering. Assume that the oracle has the optimal $k$-means clustering in its mind. Finding the $k$-means solution without the help of the oracle is generaly computationally hard. Therefore, one may ask whether under $\gamma$-margin assumption one can provide a polynomial time algorithm that does not make any queries. In the next section we show a negative answer: for $\gamma < 1.5$ finding the solution to $k$-means clustering is computationally hard. This together with Theorem \ref{thm:steinerQueryPositive} and \ref{thm:steinerQueryPositiveComplexity} shows that for $1<\gamma<1.5$, having access to queries makes the computationally hard problem of $k$-means clustering efficiently solvable\footnote{To be precise, note that the algorithm used for clustering with queries is probabilistic. However, the lower bound that we provide is for deterministic algorithms. However, this means a lower bound for randomized algorithms as well unless $BPP\neq P$}.
+
+Next, we also give a lower bound on the number of queries needed. We show that with making `too few' queries the problem is still hard.
+
+%which for , makes  queries and in polynomial time finds the target clustering with very high probability. In this section, we want to give a lower bound for our problem setting. We will show that if $\gamma < 1.4$ then finding the optimal euclidean $k$-means clustering is NP-Hard without queries. Note that Thms. \ref{thm:steinerQueryPositive} and \ref{thm:steinerQueryPositiveComplexity} shows that we can overcome this lower bound using queries. Next, we also give a lower bound on the number of queries needed. We show that making `too few' (sublogarithmic in $k$) queries also doesn't help and the problem remains NP-Hard.
+
+\subsection{Lower Bound $k$-Means Clustering without Query}
+Given a set of instances $\mc X \subset \mb R ^d$, the $k$-means clustering finds a clustering $\mc C = \{C_1, \ldots, C_k\}$ which minimizes the following objective function
+
+$$\sum\limits_{C_i}\frac{1}{|C_i|} \sum_{x, y \in C_i} d^2(x, y)$$.
+
+One can also consider a weighted version of the problem \cite{vattani2009hardness} where every point $x$ has a weight $w(x)$. 
+
+$$\sum\limits_{C_i}\frac{1}{\sum_{x \in C_i}w(x)} \sum_{x, y \in {C_i \choose 2}} w(x)w(y)d^2(x, y).$$ 
+
+Vattani showed \cite{vattani2009hardness} that finding the optimal solution to the weighted $k$-means objective is NP-Hard even in Euclidean plane. We will also use similar ideas and reduction technique to get our lower bound. However, Vattani's proof does not imply hardness under $\gamma$-margin assumption. Therefore, we have to modify the proof by setting up the construction more carefully.
 
 \begin{theorem}
 \label{thm:gammaLower}
@@ -356,18 +377,30 @@ Any clustering of cost $\le L$ has the following different types of clusters. (1
 \qed
 \end{proof}
 Lemmas \ref{lemma:kmeansEquivalenceX3C} and \ref{lemma:gammaLower} complete the proof of the main result (Thm. \ref{thm:gammaLower}). 
-\subsection{Lower bound with sub-logarithmic queries}
-Proof as simulation.
+
+\subsection{Lower Bound on the Number of Queries}
+
+In the previous section we showed that $k$-means clustering is NP-hard even under $\gamma$-margin assumption (for $\gamma < 1.5$). On the other hand, in Section \ref{section:clusteringWithQuery} we showed that this is not the case if the algorithm has access to an oracle. In particular, the algorithm asks $O\big(k^2\log |\mc X| + k^3\frac{\log k + \log (1/\delta)}{(\gamma - 1)^4}\big)$ equivalence queries\footnote{If the algorithm uses membership queries this number reduces by a factor of $k$}. Therefore, a natural follow-up question is that whether there is a polynomial-time algorithm for clustering that uses less number of queries. In this section, we take a first step in this direction and show a lower bound on the number of queries needed to provide a polynomial-time algorithm for $k$-means clustering under margin assumption.
+
+\begin{theorem}
+\label{thm:queryLower}
+For any $\gamma \le 1.5$, finding the optimal solution to the $k$-means objective function is NP-Hard even when the optimal clustering satisfies $\gamma$-margin and the algorithm can ask $O(\log k + \log |\mc X|)$ equivalence queries.
+\end{theorem}
+\begin{proof}
+Proof by contradiction: assume that there is polynomial-time algorithm $\mc A$ that makes $O(\log k + \log |\mc X|)$ equivalence queries to the oracle. Then, we show there exists another algorithm $\mc A^\prime$ for the same problem that is still polynomial but uses no queries. However, this will be a contradiction to Theorem \ref{thm:gammaLower}, which will prove the result.
+
+In order to prove that such $\mc A^\prime$ exists, we use a `simulation' technique. Note that $\mc A$ makes only $q<\beta(\log k + \log |\mc X|)$ binary queries, where $\beta$ is a constant. The oracle therefore can respond to these queries in maximum $2^{q} < k^\beta|\mc X|^\beta$ different ways. Now the algorithm $\mc A^\prime$ can try to simulate all of $k^\beta|\mc X|^\beta$ possible responses by the oracle and output the solution with minimum $k$-means clustering cost. Therefore, $\mc A^\prime$ runs in polynomial-time and is equivalent to $\mc A$.
+\end{proof}
 
 
-\section{Discussion and conclusion}
+\section{Discussion and Conclusions}
 Other related works and conclusion.
 
 \bibliographystyle{alpha}
 \bibliography{activeClustering}
 
 \appendix
-\section{Relationship Query Models}
+\section{Relationships Between Query Models}
 \label{appendix:diffQueryModels}
 
 \begin{proposition}
@@ -385,7 +418,7 @@ If the clustering algorithm has access to an instance from each of $k$ clusters 
 \end{proof}
 
 
-\section{Comparison of $\gamma$-margin and $\alpha$-center proximity}
+\section{Comparison of $\gamma$-Margin and $\alpha$-Center Proximity}
 \label{appendix:gammaMrginVsAlphaCenter}
 
 
