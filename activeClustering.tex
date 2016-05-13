@@ -91,13 +91,13 @@ balcan active split/merge
 
 \subsection{Clustering with Query}
 
-Let $\mc X$ be domain set and $d:(X, X) \rightarrow \mc R $ be a distance function over its elements. Let $\mc C_{\mc X} = \{C_1, \ldots, C_k\}$ be a clustering (i.e., a partitioning) of $\mc X$. We say $x_1 \overset{C_{\mc X}}{\sim} x_2$ if $x_1$ and $x_2$ belong to the same cluster according to $C_{\mc X}$. We further denote by $n$ the number of instance ($|{\mc X}|$) and by $k$ the number of clusters.
+Let $\mc X$ be domain set and $d:(\mc X, \mc X) \rightarrow \mc R $ be a distance function over its elements. Let $\mc C_{\mc X} = \{C_1, \ldots, C_k\}$ be a clustering (i.e., a partitioning) of $\mc X$. We say $x_1 \overset{C_{\mc X}}{\sim} x_2$ if $x_1$ and $x_2$ belong to the same cluster according to $C_{\mc X}$. We further denote by $n$ the number of instance ($|{\mc X}|$) and by $k$ the number of clusters.
 
 We assume that an oracle $\mc O$ has a clustering $C^*_{\mc X}=\{ C^*_1, \ldots C^*_k\}$ in his mind. The clustering algorithm then tries to recover $C^*_{\mc X}$ by querying the oracle. The following notions of query are natural for clustering tasks.
 
 \begin{definition}[Equivalence Query]
 An equivalence query asks whether two instances $x_1$ and $x_2$ belong to the same cluster, i.e., 
-$$Q(x_1, x_2) = \left\{
+$${\mc O}(x_1, x_2) = \left\{
 	\begin{array}{ll}
 		\mbox{true }  & \mbox{if } x_1 \overset{C^*_{\mc X}}{\sim} x_2   \\
 		\mbox{false } & o.w. 
@@ -106,7 +106,7 @@ $$Q(x_1, x_2) = \left\{
 \end{definition}
 
 \begin{definition}[Membership Query]
-A membership query asks the cluster index that an instance $x$ belongs to. In other words $Q(x) = i$ if and only if $x \in C^*_i$.
+A membership query asks the cluster index that an instance $x$ belongs to. In other words ${\mc O}(x) = i$ if and only if $x \in C^*_i$.
 %$$Q(x, i) = \left\{
 %	\begin{array}{ll}
 %		\mbox{true }  & \mbox{if } x \in C^*_i   \\
@@ -135,7 +135,7 @@ Some of the most-used clustering methods (e.g., k-means and k-median clustering)
 \label{defn:alphacp}
 We say that a center-based clustering instance $(\mc X, d, C^*)$ has $\gamma$-margin property if for every $C_i$ in $C^*$ the following holds
 
-$$\forall x\in C_i, y \notin C_i, \gamma d(x, \mu_i) < d(y, \mu_i)$$
+$$\forall x\in C^*_i, y \notin C^*_i, \gamma d(x, \mu_i) < d(y, \mu_i)$$
 
 where $\mu_i$ is the center corresponding to $C_i$.
 
@@ -175,30 +175,40 @@ The algorithm repeats this process $k$ times to recover all of the clusters.
 
 %$\mu_p'$. Then, it clusters and deletes all points whose distance is $\le d(b_{idx}, \mu_p')$. We will show that this process guarantees that (as long as $\mu_p'$ is a good approximation of the actual center $\mu_p$) and $\gamma > 1$, all the points from $C_p$ are now recovered. We then repeat this process $k$ times to recover all the clusters.
 
-The details of our approach is stated precisely in Alg. \ref{alg:steinerQueryPositive}. Thm. \ref{thm:steinerQueryPositive} shows that if $\gamma > 1$ then our algorithm recovers the target clustering with high probability. Next, we give bounds on the time and query complexity of our algorithm. Thm. \ref{thm:steinerQueryPositiveComplexity} shows that our approach needs $O(k\log n)$ queries and runs with time complexity $O(kn\log n)$ . 
+The details of our approach is stated precisely in Alg. \ref{alg:steinerQueryPositive}. Note that $\beta$ is a small constant\footnote{It corresponds to the constant appeared in generalized Hoefding inequality bound, discussed in Theorem \ref{thm:genHoeff}}. Theorem \ref{thm:steinerQueryPositive} shows that if $\gamma > 1$ then our algorithm recovers the target clustering with high probability. Next, we give bounds on the time and query complexity of our algorithm. Theorem \ref{thm:steinerQueryPositiveComplexity} shows that our approach needs $O(k\log n)$ queries and runs with time complexity $O(kn\log n)$.
 
 \RestyleAlgo{boxruled} 
 \SetAlgoNoLine
 \begin{algorithm}[h]
- \KwIn{Clustering instance $\mc X$, oracle $\mc O$, the number of clusters $k$ and parameters $\epsilon, \delta \in (0, 1)$}
+ \KwIn{Clustering instance $\mc X$, oracle $\mc O$, the number of clusters $k$ and parameter $\delta \in (0, 1)$}
  \KwOut{A clustering $\mc C$ of the set $\mc X$}
 
  \vspace{0.5em} $\mc C = \{\}$\\ 
  $\mc S_{1} = \mc X$\\
- $\eta = c\frac{\log k + \log(1/\delta)}{\epsilon^4}$\\
+ $\eta = \beta \frac{\log k + \log(1/\delta)}{(\eta-1)^4}$\\
  \For{$i = 1$ to $k$}{
  	\vspace{0.7em}\textbf{Phase 1}\\
  	$l = k \eta + 1$\;
-	Query the label of $l$ points (uniformly at random) from $\mc S_i$. Let $\mc A$ be the set of those points.\\
-	For $1 \le t \le i$, let $A_t \subseteq \mc A$ be the set of points with label $i$. That is, \begin{center}$A_t = \{x \in \mc A : x \in C_t\}.$\end{center} 
-	Choose any $A_p$ such that $|A_p| > \eta$.\\
-	$\mu_p' := \frac{1}{|A_p|}\sum_{x \in A_p} x$.\\
+	$Z \sim U^l[\mc S_i]$    \mbox{       } //   Selects $l$ independent points from $\mc S_i$ uniformly at random\\
+	For $1 \le t \le i$,\\
+             \mbox{            } $Z_t = \{x \in Z : {\mc O}(x)= t\}.$ \mbox{    } //Queries the oracle about the members of $Z$\\
+    % let $Z_t \subseteq \mc Z$ be the set of points with label $i$. That is, \begin{center}$A_t = \{x \in \mc Z : x \in C_t\}.$\end{center} 
+%	Choose any $Z_p$ such that $|Z_p| > \eta$.\\
+$p = \argmax_t |Z_t|$\\
+	$\mu_p' := \frac{1}{|Z_p|}\sum_{x \in Z_p} x$.\\
+
 	\vspace{1.5em}\textbf{Phase 2}\\
-	Sort $x \in \mc S_i$ in increasing order of $d(x, \mu_p')$.\\
-	Binary search over $\mc S_i$, to find an index $idx$ such that $b_{idx} \in C_p$ and $b_{idx+1} \not\in C_p$. (This step involves making queries to the oracle $\mc O$).\\ %We will later prove that $d(b_{idx}, c_p') = \max_{x \in C_p}d(x, c_p')$.
-	$C_p' = \{x \in \mc S_i: d(x, \mu_p') \le d(b_{idx}, \mu_p')\}$.\\
+    // We know that there exists $r_i$ such that $\forall x\in {\mc S_i}$, $x\in C_i \Leftrightarrow d(x, \mu\prime_i)< r_i$.\\ 
+    // Therefore, $r_i$ can be found by simple binary search\\
+    
+	$\widehat{\mc S_i}$ = Sorted$(\{\mc S_i\})$ \mbox{       }// Sorts elements of $\{x: x\in \mc S_i\}$ in increasing order of $d(x, \mu_p')$.\\    
+	 $r_i = $ BinarySearch$(\widehat{\mc S_i})$ \mbox{      } //This step takes up to $O(\log|{\mc S_i}|)$ queries\\
+
+
+%Binary search over $\widehat{\mc S_i}$, to find an index $idx$ such that $b_{idx} \in C_p$ and $b_{idx+1} \not\in C_p$. (This step involves making queries to the oracle $\mc O$).\\ %We will later prove that $d(b_{idx}, c_p') = \max_{x \in C_p}d(x, c_p')$.
+	$C_p' = \{x \in \mc S_i: d(x, \mu_p') \le r_i\}$.\\
 	$S_{i+1} = S_{i}\setminus C_p'$.\\
-	$\mc C = \mc C \cup C_p'$
+	$\mc C = \mc C \cup \{C_p'\}$
  }
  Output $\mc C$.
  \label{alg:steinerQueryPositive}
@@ -208,7 +218,7 @@ The details of our approach is stated precisely in Alg. \ref{alg:steinerQueryPos
 
 \begin{lemma}
 \label{lemma:hasGammaMargin}
-Let $(\mc X, d, C^*)$ be a clustering instane, where $C^*$ is center-based and satisfies $\gamma$-margin property. Let $\mu$ be the set of centers corresponding to the centers of mass of $C^*$. Let $\mu_i'$ be such that $d(\mu_i, \mu_i') \le r(C_i)\epsilon$, where $r(C_i) = \max_{x\in C_i}d(x, \mu_i)$ . Then $\gamma \ge 1 + 2\epsilon$ implies that 
+Let $(\mc X, d, C)$ be a clustering instane, where $C^*$ is center-based and satisfies $\gamma$-margin property. Let $\mu$ be the set of centers corresponding to the centers of mass of $C^*$. Let $\mu_i'$ be such that $d(\mu_i, \mu_i') \le r(C_i)\epsilon$, where $r(C_i) = \max_{x\in C_i}d(x, \mu_i)$ . Then $\gamma \ge 1 + 2\epsilon$ implies that 
 
 $$\forall x \in C_i, \forall y \in {\mc X} \setminus C_i \Rightarrow d(x, \mu_i') < d(y, \mu_i')$$  
 \end{lemma}
@@ -226,20 +236,22 @@ Fix any $x \in C_i$ and $y \in C_j$. $d(x, \mu_i') \le d(x, \mu_i)+d(\mu_i, \mu_
 
 \begin{lemma}
 \label{lemma:phase1}
-Let the framework be as in Lemma \ref{lemma:hasGammaMargin}. Let $A_p, C_p, \mu_p$ and $\mu_p', \eta$ be as defined is Alg. \ref{alg:steinerQueryPositive}. If $|A_p| > \eta$ then with probability at most $\delta/k$, $d(\mu_p, \mu_p') > r(C_p)\epsilon$.
+Let the framework be as in Lemma \ref{lemma:hasGammaMargin}. Let $Z_p, C_p, \mu_p$ and $\mu_p', \eta$ be as defined is Alg. \ref{alg:steinerQueryPositive}, and $\epsilon = \frac{\gamma - 1}{2}$. If $|Z_p| > \eta$, then the probability that $d(\mu_p, \mu_p') > r(C_p)\epsilon$ is at most $\frac{\delta}{k}$.
 \end{lemma}
 \begin{proof}
-Define a uniform distribution $U$ over $C_p$. Then the mean of the distribution is $\mu_p$. Now, using Thm. \ref{thm:genHoeff} from Appendix \ref{appendixsection:conIneq} completes the proof.
+Define a uniform distribution $U$ over $C_p$. Then $\mu_p$ is the mean of this distribution, and $\mu_p\prime$ is the empirical mean. Now, we only need to use a concentration inequality to show that the empirical means is close to the true mean. Therefore, using Thm. \ref{thm:genHoeff} from Appendix \ref{appendixsection:conIneq} completes the proof.
 \qed
 \end{proof}
 
 \begin{theorem}
 \label{thm:steinerQueryPositive}
-Given a clustering instance $(\mc X, d)$ in some metric space $M$. Let $\mc C_{\mc X} = \{C_1, \ldots, C_k\}$ be a clustering of $\mc X$ induced by centers $\mu_1, \ldots, \mu_k \in M$ which satisfies $\gamma$-margin and $\mu_i$ is the mean of points in $C_i$. Given $\epsilon, \delta \in (0, 1)$. If $\gamma \ge 1 + 2\epsilon$ then with probability atleast $1-\delta$, Alg. \ref{alg:steinerQueryPositive} outputs a clustering $\mc C$ such that $\mc C = \mc C_{\mc X}$.
+Let $(\mc X, d, C)$ be a clustering instane, where $C^*$ is center-based and satisfies $\gamma$-margin property. Let $\mu$ be the set of centers corresponding to the centers of mass of $C^*$.
+%Given a clustering instance $(\mc X, d)$ in some metric space $M$. Let $\mc C_{\mc X} = \{C_1, \ldots, C_k\}$ be a clustering of $\mc X$ induced by centers $\mu_1, \ldots, \mu_k \in M$ which satisfies $\gamma$-margin and $\mu_i$ is the mean of points in $C_i$. 
+Assume $\delta \in (0, 1)$ and $\gamma > 1$. Then with probability at least $1-\delta$, Alg. \ref{alg:steinerQueryPositive} outputs $C^*$.
 \end{theorem}
 
 \begin{proof}
-Using Lemma \ref{lemma:phase1}, we get that with probability atleast $1-\delta/k$, phase one chooses a center $\mu_p'$ such that $d(\mu_p, \mu_p') \le r(C_p)\epsilon$. Lemma \ref{lemma:hasGammaMargin} then implies that $d(x, \mu_p') < d(y, \mu_p')$ for all $x \in C_p$ and $y \not\in C_p$. Hence, $b_{idx}$ in phase two of Alg. \ref{alg:steinerQueryPositive} is such that $b_{idx} = \argmax\limits_{x \in C_p} d(x, \mu_p')$. This implies that $C_p'$ (found in phase two) equals $C_p$. Hence, with probability atleast $1-\delta/k$ one iteration of the algorithm successfully finds all the points in a cluster $C_p$. Using union bound, we get that with probability atleast $1-k\delta/k = 1-\delta$, the algorithm recovers the target clustering.
+In the first phase of the algorithm we are making $l>k\eta$ queries. Therefore, using the pigeonhole principle, we know that there exists cluster index $p$ such that $|Z_p| > \eta$. Then Lemma \ref{lemma:phase1} implies that the algorithm chooses a center $\mu_p'$ such that with probability at least $1-\frac{\delta}{k}$ we have $d(\mu_p, \mu_p') \le r(C_p)\epsilon$. By Lemma \ref{lemma:hasGammaMargin}, this would mean that $d(x, \mu_p') < d(y, \mu_p')$ for all $x \in C_p$ and $y \not\in C_p$. Hence, the radius $r_i$ found in the phase two of Alg. \ref{alg:steinerQueryPositive} is such that $r_{i} = \max\limits_{x \in C_p} d(x, \mu_p')$. This implies that $C_p'$ (found in phase two) equals to $C_p$. Hence, with probability at least $1-\frac{\delta}{k}$ one iteration of the algorithm successfully finds all the points in a cluster $C_p$. Using union bound, we get that with probability at least $1-k\frac{\delta}{k} = 1-\delta$, the algorithm recovers the target clustering.
 \qed 
 \end{proof}
 
@@ -247,13 +259,13 @@ Using Lemma \ref{lemma:phase1}, we get that with probability atleast $1-\delta/k
 \label{thm:steinerQueryPositiveComplexity}
 Let the framework be as in Thm. \ref{thm:steinerQueryPositive}. Then Alg. \ref{alg:steinerQueryPositive} 
 \begin{itemize}[nolistsep,noitemsep]
-\item makes $O\big(k\log |\mc X| + k^2\frac{\log k + \log (1/\delta)}{\epsilon^4}\big)$ queries to the oracle $\mc O$.
-\item runs in $O\big(k|\mc X|\log |\mc X| + k^2\frac{\log k + \log (1/\delta)}{\epsilon^4}\big)$ time.
+\item Makes $O\big(k^2\log |\mc X| + k^3\frac{\log k + \log (1/\delta)}{(\gamma - 1)^4}\big)$ equivalence queries to the oracle $\mc O$.
+\item Runs in $O\big(k|\mc X|\log |\mc X| + k^2\frac{\log k + \log (1/\delta)}{(\gamma - 1)^4}\big)$ time.
 \end{itemize}
 \end{theorem}
 
 \begin{proof}
-The first phase of the algorithm takes $O(k\eta)$ time and makes $k\eta+1$ queries to the oracle. The second phase takes $O(n\log n)$ times and makes $O(\log n)$ queries to the oracle. Hence, in total the algorithm takes $O(kn\log n + k^2\eta)$ time and makes $O(k\log n + k^2\eta)$ queries. Substituting $\eta = c\frac{\log k + \log(1/\delta)}{\epsilon^4}$ gives the desired result.
+The first phase of the algorithm takes $O(k\eta)$ time and makes $k\eta+1$ membership queries to the oracle. The second phase takes $O(n\log n)$ times and makes $O(\log n)$ membership queries to the oracle. Hence, in total the algorithm takes $O(kn\log n + k^2\eta)$ time and makes $O(k\log n + k^2\eta)$ membership queries. Substituting $\eta = c\frac{\log k + \log(1/\delta)}{\epsilon^4}$ and using the fact that each membership query can be substituted by $k$ equivalence queries (see appendix \ref{appendix:diffQueryModels}) finishes the proof.
 \qed
 \end{proof}
 
@@ -422,7 +434,7 @@ We will first state both the $k$-median and the $k$-means optimization problem u
 \section{Concentration inequalities}
 \label{appendixsection:conIneq}
 
-\begin{theorem}[Generalized Hoeffding's Inequality \cite{ashtiani2015dimension}]
+\begin{theorem}[Generalized Hoeffding's Inequality (e.g., \cite{ashtiani2015dimension})]
 \label{thm:genHoeff}
 Let $X_1, \ldots. X_n$ be i.i.d random vectors in some Hilbert space such that for all $i$, $\|X_i\|_2 \le R$ and $E[X_i] = \mu$. If $n > c\frac{\log(1/\delta)}{\epsilon^2}$, then with probability atleast $1-\delta$, we have that
 $$\Big\|\mu - \frac{1}{n}\sum X_i\Big\|_2^2 \le R^2\epsilon$$ 
