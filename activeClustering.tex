@@ -70,21 +70,53 @@ We should write a good abstract here.
 
 \section{Introduction}
 
-Clustering can be thought as the task of organizing a set of elements into coherent subsets.... %The concrete goal of clustering depends on the task. For instance, a popular paradigm for clustering is to partition the data so as to optimize a certain objective function.
+\begin{itemize}
+\item importance of prior-knowledge/user feed back in clustering
+\item computational difficulties of clustering 
+\item niceness assumptions....still far from being realistic
+\item a new use direction: can feedback from user/oracle help in reducing the computational complexity of the clustering problem. In particular, making NP-hard problems easy?
 
-clustering is ill defined/importance of prior-knowledge or getting feedback from user
-
-computational difficulties in clustering
-
-niceness assumptions,....still far from being realistic
-
-a new use direction: can feedback from user/oracle help in reducing the computational complexity of the clustering problem. In particular, making NP-hard problems easy?
-
+\item how is our setting different with active classification?
+\end{itemize}
 
 \subsection{Contributions}
 
+\begin{itemize}
+\item Notion of clustering with equivalence/membership queries
+\item Notion of $\gamma$-margin niceness property which is related to $\alpha$-center proximity
+\item An poly-time probabilistic (BPP) algorithm (upper bound) for clustering with query (for $\gamma>1$) that
+\begin{itemize}
+\item Makes $O\big(k^2\log |\mc X| + k^3\frac{\log k + \log (1/\delta)}{(\gamma - 1)^4}\big)$ \emph{equivalence queries} to the oracle $\mc O$.
+\item Runs in $O\big(k|\mc X|\log |\mc X| + k^2\frac{\log k + \log (1/\delta)}{(\gamma - 1)^4}\big)$ time.
+\end{itemize}
+
+\item Trade offs between computational complexity and query complexity
+\begin{itemize}
+\item $k$-means clustering is NP-hard even under $\gamma$-margin assumption for $\gamma < 1.5$
+\item If the oracle has the optimal $k$-means solution in its mind and $\gamma > 1$, we would have a poly-time algorithm for $k$-means clustering with query
+\item This shows that for $1<\gamma <1.5$ there is a trade off between query complexity and computatioanl complexity
+\item we further show a lower bound on the number of queries needed to make the problem computationally easy (i.e., polynomial-time)
+
+
+\end{itemize}
+
+\end{itemize}
+
+
 \subsection{Related work}
-balcan active split/merge
+
+Balcan $\alpha$-center proximity
+
+Other niceness assumptions
+
+Hardness of planar $k$-means
+
+Balcan active clustering with split/merge
+
+HassanShai (representation learning for clustering)
+
+
+
 
 \section{Problem Formulation}
 
@@ -247,7 +279,7 @@ Define a uniform distribution $U$ over $C_p$. Then $\mu_p$ is the mean of this d
 \label{thm:steinerQueryPositive}
 Let $(\mc X, d, C)$ be a clustering instane, where $C$ is center-based and satisfies $\gamma$-margin property. Let $\mu_i$ be the center corresponding to the center of mass of $C_i$.
 %Given a clustering instance $(\mc X, d)$ in some metric space $M$. Let $\mc C_{\mc X} = \{C_1, \ldots, C_k\}$ be a clustering of $\mc X$ induced by centers $\mu_1, \ldots, \mu_k \in M$ which satisfies $\gamma$-margin and $\mu_i$ is the mean of points in $C_i$. 
-Assume $\delta \in (0, 1)$ and $\gamma > 1$. Then with probability at least $1-\delta$, Algorithm \ref{alg:steinerQueryPositive} outputs $C^*$.
+Assume $\delta \in (0, 1)$ and $\gamma > 1$. Then with probability at least $1-\delta$, Algorithm \ref{alg:steinerQueryPositive} outputs $C$.
 \end{theorem}
 
 \begin{proof}
