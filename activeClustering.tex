@@ -350,6 +350,7 @@ The set $Z_i$ depends on $S_i$ and is shown in Fig. \ref{fig:setZDescription}.  
 \item $j \not\in S_i \iff x_{i,j} \in Z_i$
 \item $j \in S_{i+1} \iff y_{i,j}' \in Z_i$
 \item $j \not\in S_{i+1} \iff y_{i,j} \in Z_i$
+
 \end{itemize}
 The parameters of the component are defined below. $$k = (l-1)3n + l(3n+2) \text{ and the cost }L = L_1 + L_2 -n\alpha.$$
 $$L_1 = (6n+3)w \text{ and } L_2 = 6n(l-1)\frac{2w\frac{w}{2}}{2w+\frac{w}{2}}h^2 = 6n(l-1)$$
@@ -375,19 +376,24 @@ Hence, the clustering $C$ with the rows $R_i$ grouped in a $A$ or $B$ clustering
 
 \subsubsection{Proof}
 
+
 \begin{lemma}
 Any non-nice clustering of $H_{l, n}$ costs atleast $> L_1 + L_2 - l\alpha + w > L + \frac{7}{8}w$ where $w = poly(l, n)$
 \end{lemma}
 
 \begin{proof}
-Any non-nice $k$-clustering $C$ can take the following form.
+Any non-nice $k$-clustering $C$ can take the following form. 
 \begin{itemize}[nolistsep]
-\item Contains $m_{i, j}, m_{i,j+1}$ in the same cluster\\
+\item All the clusters have cardinality $\le 3$ - In this case the following scenarios can arise.\\
+Contains $m_{i, j}, m_{i,j+1}$ in the same cluster\\
 $C$ must have either of the following. (1) $r_{i, j}$ and $r_{i,j+1}$ as a singleton. In this case, the cost difference is atleast $ \frac{141}{6}w - 2w -\frac{20}{6}w > 14w$. (2) $s_i$ and $r_{i,1}$ as singleton. The difference is atleast $13w$. (3) $f_i$ and $r_{i,6n+1}$ as singleton. Similarly,  the cost difference is atleast $13w+\alpha$. (4) $x_{i,j}$ and $y_{i+1,j}$ as singleton. The cost difference is atleast $16w-\frac{20}{3}w > 9w$. Note that having multiple $m_{i, j}$'s in the same cluster or having multiple clusters which contain $m_{i, j}, m_{i,j+1}$ will bring the cost up even furthur.
-\item $C$ contains $r_{i, 2j}, m_{i, j}$ in the some cluster $C_i$\\
+
+$C$ contains $r_{i, 2j}, m_{i, j}$ in the some cluster $C_i$\\
 This has the following possibilities. (1) $r_{i, j'}$ as a singleton. In this case the smallest cost difference is when $x_{i,j} \in C_i$ which is atleast $ \frac{w}{4}(14+2(\sqrt5+2)^2) - 2w -\frac{10}{3}w > 7w$. (2) $s_i$ and $r_{i,1}$ as singleton. In this case, the In this case the analysis is identical to before. The cost difference is atleast $6w$. (3) $f_i$ and $r_{i,6n+1}$ as singleton. Similar to before, the cost difference is atleast $6w+\alpha$. (4) $x_{i,j}$'s as singleton. In this case, the difference is atleast $ \frac{w}{4}(14+2(\sqrt5+2)^2) + 2w -\frac{10}{3}w > 11w$. Note that having multiple clusters which contain $m_{i, j}, r_{i',j'}$ will bring the cost up even furthur.
-\item Contains $r_{i,j}$ as singleton - $C$ must contain both $\{s_i, r_{i,1}\}$ and $\{r_{i,6n+1}, f_i\}$. Hence the increase in cost is atleast $3w - 2w = w$.
-\item Contains multiple $\{r_{i,j}\}$ in the same cluster - Assume the cluster has cardinality $m > 2$. Using simple counting argument (as has also been shown in  \cite{vattani2009hardness}), this cluster costs atleast $\frac{w}{3}m(m^2-1)$. A nice clustering would cost atmost $w(m + \lceil{\frac{m}{2}}\rceil - 2) + 3w = w(m + \lceil{\frac{m}{2}}\rceil + 1)$. Hence, the difference in cost is atleast $2w$. In this case, adding $x_{i,j}$'s will incease the cost difference even furthur.
+
+Contains $r_{i,j}$ as singleton - $C$ must contain both $\{s_i, r_{i,1}\}$ and $\{r_{i,6n+1}, f_i\}$. Hence the increase in cost is atleast $3w - 2w = w$. We have omitted a few cases for brevity but the analysis is exactly similar. 
+
+\item Contains a cluster of cardinality $m > 4$ - Using a simple counting argument, we can observe that such a clustering costs atleast $\sim 8wm$. A nice clustering however on these points costs atmost $\sim \frac{16w}{6}m$ and uses atmost $m/2$ clusters. Hence, on the $m+m/2$ points, $C$ costs $8wm$ while the nice clustering costs atmost $4mw$. We have omitted the details of the calculations here for brevity. However, note that this follows by observing that in any cluster of size $m > 4$, any point $x$ has atleast $m-4$ at a distance $\ge 4$.
 \end{itemize}
 \qed
 \end{proof}
