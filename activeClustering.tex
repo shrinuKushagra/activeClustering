@@ -70,27 +70,27 @@ We should write a good abstract here.
 
 \section{Introduction}
 
-Clustering is a challenging task particularly because of the following two reasons. The first problem is that the clustering problem for each task is usually \emph{under-specified}. The second one is that performing clustering under many natural models is computationally hard.
+Clustering is a challenging task particularly because of the following two reasons. The first problem is that the clustering task is usually \emph{under-specified}. The second one is that performing clustering under many natural models is computationally hard.
 
 Consider the task of dividing the users of an online shopping service into different groups. The result of this clustering can then be useful for example in suggesting similar products to the users in the same group, or just in organizing data so that it would be easier to read/analyze the monthly purchase reports. In this case, it is clear that one needs to exploit domain knowledge to avoid an ill-defined problem, as there are many different choices for clustering that can give different results. 
 
 Aside from trial and error, a principled way of extracting domain knowledge is to perform clustering using a form of `weak' supervision.  For example, Balcan and Blum \cite{balcan2008clustering} propose to use an interactive framework with 'split/merge' queries for clustering. In another work, Ashtiani and Ben-David \cite{ashtiani2015representation} require the domain expert to provide the clustering of a 'small' subset of data.
 
-At the same time, mitigating the computational problem of clustering is critical. Solving most of the common optimization formulations of clustering is NP hard (in particular, solving the well known $k$-means and $k$-median clustering problems). One approach to address this issues is to exploit the fact that natural data sets usually exhibit some 'nice properties' that enable us to avoid the worst-case scenario and find the optimal solution to clustering efficiently. The quest for searching such notions of niceness is still ongoing, and it should be noted that the niceness properties that are currently analyzed are too strict to happen in real world situations (see \cite{Ben-David15} for a critical survey of work in this direction.
+At the same time, mitigating the computational problem of clustering is critical. Solving most of the common optimization formulations of clustering is NP hard (in particular, solving the well known $k$-means and $k$-median clustering problems). One approach to address this issues is to exploit the fact that natural data sets usually exhibit some 'nice properties' that enable us to avoid the worst-case scenario and find the optimal solution to clustering efficiently. The quest for searching such notions of niceness is still ongoing, and it should be noted that the niceness properties that are currently analyzed are too strict to happen in real world situations (see \cite{Ben-David15} for a critical survey of work in this direction).
 
 In this work, we take a new approach to alleviating the computational problem of clustering. In particular, we ask the following question: can weak supervision (in a natural form of queries) help relaxing the computational burden of clustering? This will add up to the other benefit of supervision: making the clustering problem well-defined by injecting the domain knowledge through supervised feedback.
 
-The general setting considered in this work is the following. Let $X$ be a set of elements that should be clustered. The oracle (e.g., a doamin expert) has some information about a  target clustering $C^*_X$ in mind. The clustering algorithm has access to $X$, and can make queries in order to recover $C^*_X$. The queries are in the form of \emph{equivalence} queries. This means that the algorithm can ask whether two elements belong to the same cluster or not.
+The general setting considered in this work is the following. Let $X$ be a set of elements that should be clustered. The oracle (e.g., a doamin expert) has some information about a  target clustering $C^*_X$ in mind. The clustering algorithm has access to $X$, and can make queries in order to recover $C^*_X$. The queries are in the form of \emph{same-cluster} queries. This means that the algorithm can ask whether two elements belong to the same cluster or not.
 
-We will also consider the case that the oracle has the optimal $k$-means solution in his mind. We then try to find out whether access to a 'reasonable' number of equivalence queries can enable us to provide an efficient algorithm for an otherwise NP-hard problem. 
+We will also consider the case that the oracle answers to the queries conform with some optimal $k$-means solution. We then try to find out whether access to a 'reasonable' number of xxx queries can enable an efficient algorithm for an otherwise NP-hard problem. 
 
 \subsection{Contributions}
 
-We introduce the notions of clustering with equivalence/membership queries. We further define a new notion of niceness of data called $\gamma$-margin property and contrast it to the previously studied notions, showing that this is a cenral notion that has not been studied explicitly. We further show that $\gamma$-margin assumption is not necessarily strong enough to make the problem computationally easy. In particular, we show that $k$-means clustering under $\gamma$-margin assumption is NP-hard for $\gamma < 1.5$.
+We introduce the notions of clustering with same-cluster/cluster-assignment queries. We further define a new notion of niceness of data called $\gamma$-margin property and compare it to the previously studied notions, showing that this is a cenral notion that has not been studied explicitly. We further show that $\gamma$-margin assumption is not necessarily strong enough to make the problem computationally easy without the use of additional informations (such as answers to the queries in the model we propose). In particular, we show that $k$-means clustering under $\gamma$-margin assumption is NP-hard for $\gamma < 1.5$.
 
-In the next step, we provide a probabilistic polynomial time (BPP) algorithm for clustering with queries, under the assumption that $\gamma > 1$. More specifically, this algorithm makes $O\big(k^2\log k\log n)$ equivalence queries to the oracle and runs in $O\big(kn\log n + k^2\log k)$ time, where $k$ is the number of clusters and $n$ is the size of the sample set.
+In the next step, we provide a probabilistic polynomial time (BPP) algorithm for clustering with queries, under the assumption that $\gamma > 1$. More specifically, this algorithm makes $O\big(k^2\log k\log n)$ same-cluster queries to the oracle and runs in $O\big(kn\log n + k^2\log k)$ time, where $k$ is the number of clusters and $n$ is the size of the sample set.
 
-These results when contrasted to each other show an interesting phenomenon. Assume that the oracle has the optimal $k$-means solution in his mind and it satisfies $\gamma$-margin property for $1<\gamma <1.5$. In this case our provided lower bound means that $k$-means clustering is NP-hard without making queries, while the positive result shows that with making a reasonble number of queries the problem becomes efficiently solvable. This indicates a nice trade off between query complexity and computatioanl complexity. We further show a lower bound on the number of queries needed to make the problem efficiently solvable, showing that with access to only $O(\log k + \log n)$ queries the problem remain NP-hard.
+These results, when contrasted to each other, show an interesting phenomenon. Assume the oracle answers conform with some $k$-means optimal solution and it satisfying the $\gamma$-margin property for $1<\gamma <1.5$. In this case our lower bound means that $k$-means clustering is NP-hard without making queries, while the positive result shows that with access to a reasonble number of query answers the problem becomes efficiently solvable. This indicates a novel trade off between query complexity and computatioanl complexity. We further show a lower bound on the number of queries needed to make the problem efficiently solvable, showing that with access to only $O(\log k + \log n)$ queries the problem remain NP-hard.
 
 \subsection{Related Work}
 
@@ -98,22 +98,22 @@ The use of supervision in clustering is not unprecedented. Balcan et. al \cite{b
 
 Another example of the use of supervision in clustering was provided by Ashtiani and Ben-David \cite{ashtiani2015representation}. They assumed that the target clustering can be approximated by first mapping the data points to a new space and then performing $k$-means clustering. The supervised data (i.e., the clustering of a small subset of data) was then used to find such mapping.
 
-The computational complexity of clustering has been extensively studied. Many of these results are negative, showing that clustering is computationally hard. For example, $k$-means clustering is NP-hard even for $k=2$ \cite{dasgupta2008hardness}, or in a 2-dimensional plane \cite{vattani2009hardness,mahajan2009planar}. In order to alleviate the problem of computational complexity, some notions of niceness of data under which the clustering becomes easy have been considered.  
+The computational complexity of clustering has been extensively studied. Many of these results are negative, showing that clustering is computationally hard. For example, $k$-means clustering is NP-hard even for $k=2$ \cite{dasgupta2008hardness}, or in a 2-dimensional plane \cite{vattani2009hardness,mahajan2009planar}. In order to alleviate the problem of computational complexity, some notions of niceness of data under which the clustering becomes easy have been considered \cite{Ben-David15}.
 
-Awasthi et. al \cite{awasthi2012center} introduced the notion of $\alpha$-center proximity. In the case when the centers of the clusters must come from the data set (e.g. the optimal $k$-median solution), their algorithm `recovers' the target clustering (outputs a tree such that the target is a pruning of the tree) for $\alpha > 3$.  Balcan and Liang \cite{balcan2012clustering} improve the constant to $\alpha > \sqrt{2} + 1$. Ben-David and Reyzin \cite{ben2014data} show that this problem is NP-Hard for $\alpha < 2$. For the other case when the centers are unrestricted (e.g. the optimal $k$-means clustering), the algorithm of Awasthi et. al \cite{awasthi2012center} recovers the target clustering when $\alpha > 2+\sqrt{3}$. They also show that the problem is NP-Hard for $\alpha < 3$.
+Awasthi et. al \cite{awasthi2012center} introduced the notion of $\alpha$-center proximity. In the case when the centers of the clusters belong to the data set, their algorithm `recovers' the target clustering (outputs a tree such that the target is a pruning of the tree) for $\alpha > 3$.  Balcan and Liang \cite{balcan2012clustering} improved the constant to $\alpha > \sqrt{2} + 1$. Ben-David and Reyzin \cite{ben2014data} show that this problem is NP-Hard for $\alpha < 2$. For the other case when the centers are not restricted to be from the data set, the algorithm of Awasthi et. al \cite{awasthi2012center} recovers the target clustering when $\alpha > 2+\sqrt{3}$. They also show that the problem is NP-Hard for $\alpha < 3$.
 
 \section{Problem Formulation}
 
 
 
-\subsection{Clustering with Query}
+\subsection{Clustering with Queries}
 
 Let $\mc X$ be domain set and $d:(\mc X, \mc X) \rightarrow \mc R $ be a distance function over its elements. Let $\mc C_{\mc X} = \{C_1, \ldots, C_k\}$ be a clustering (i.e., a partitioning) of $\mc X$. We say $x_1 \overset{C_{\mc X}}{\sim} x_2$ if $x_1$ and $x_2$ belong to the same cluster according to $C_{\mc X}$. We further denote by $n$ the number of instances ($|{\mc X}|$) and by $k$ the number of clusters.
 
 We assume that an oracle $\mc O$ has a clustering $C^*_{\mc X}=\{ C^*_1, \ldots C^*_k\}$ in his mind. The clustering algorithm then tries to recover $C^*_{\mc X}$ by querying the oracle. The following notions of query are natural for clustering tasks.
 
-\begin{definition}[Equivalence Query]
-An equivalence query asks whether two instances $x_1$ and $x_2$ belong to the same cluster, i.e., 
+\begin{definition}[Same-Cluster Query]
+A same-cluster query asks whether two instances $x_1$ and $x_2$ belong to the same cluster, i.e., 
 $${\mc O}(x_1, x_2) = \left\{
 	\begin{array}{ll}
 		\mbox{true }  & \mbox{if } x_1 \overset{C^*_{\mc X}}{\sim} x_2   \\
@@ -122,8 +122,8 @@ $${\mc O}(x_1, x_2) = \left\{
 \right. $$
 \end{definition}
 
-\begin{definition}[Membership Query]
-A membership query asks the cluster index that an instance $x$ belongs to. In other words ${\mc O}(x) = i$ if and only if $x \in C^*_i$.
+\begin{definition}[Cluster-Assignment Query]
+A cluster-assignment query asks the cluster index that an instance $x$ belongs to. In other words ${\mc O}(x) = i$ if and only if $x \in C^*_i$.
 %$$Q(x, i) = \left\{
 %	\begin{array}{ll}
 %		\mbox{true }  & \mbox{if } x \in C^*_i   \\
@@ -132,7 +132,7 @@ A membership query asks the cluster index that an instance $x$ belongs to. In ot
 %\right. $$
 \end{definition}
 
-Equivalence queries seem to be more natural for clustering tasks, as the oracle (or the domain expert) will only need to respond to binary equivalence questions. In appendix \ref{appendix:diffQueryModels} we show that these two notions of query are related, in the sense that they give relatively the same power to the clustering algorithm. This is useful for some of our proofs, because using membership queries makes the analysis more transparent.
+Same-cluster queries seem to be more natural for clustering tasks, as the oracle (or the domain expert) will only need to respond to binary same-cluster questions. In appendix \ref{appendix:diffQueryModels} we show that these two notions of query are related, in the sense that they give relatively the same power to the clustering algorithm. This is useful for some of our proofs, because using cluster-assignment queries makes the analysis more transparent.
 
 An active clustering instance is determined by the tuple $(\mc X, d, C^*)$. A clustering algorithm $\mc A$ is called a $q$-solver of this instance if it can recover $C^*$ by having access to $(\mc X, d)$ and making at most $q$ queries. This algorithm is further called a polynomial $q$-solver if its time-complexity is polynomial in $|\mc X|$ and $|C^*|$.
 
@@ -175,7 +175,7 @@ Throughout the next sections, we assume that the instaces are in a Euclidean met
 \section{An Algorithm for Clustering with Query}
 \label{section:clusteringWithQuery}
 
-In this section we provide an efficient algorithm for clustering with queries. The setting is the one described in the previous section. In particular, it is assumed that the oracle has a $\gamma$-margin center-based clustering in his mind. The space is Euclidean and the center of each cluster is the center of mass of the instances in that cluster. The algorithm makes membership queires to the oracle, but this can be translated to binary equivalence queries (see appendix \ref{appendix:diffQueryModels}). 
+In this section we provide an efficient algorithm for clustering with queries. The setting is the one described in the previous section. In particular, it is assumed that the oracle has a $\gamma$-margin center-based clustering in his mind. The space is Euclidean and the center of each cluster is the center of mass of the instances in that cluster. The algorithm makes Cluster-Assignment queires to the oracle, but this can be translated to binary same-cluster queries (see appendix \ref{appendix:diffQueryModels}). 
 
 %We will assume that the target clustering $\mc C_{\mc X} = \{C_1, \ldots, C_k\}$ induced by centers $\mu_1, \ldots, \mu_k$ has the following property. For all $i$, $\mu_i$ is the mean of all the points in cluster $C_i$, that is,
 %\begin{align}
@@ -183,9 +183,9 @@ In this section we provide an efficient algorithm for clustering with queries. T
 %\end{align}
 %Note that the optimal solution to the euclidean $k$-means cost has this property. Our algorithm is more general and works for any target clustering which has the above property (\ref{property:targetClust}).
 
-Intuitively, our algorithm (Algorithm  \ref{alg:steinerQueryPositive}) does the following. In the first phase, it tries to approximate the center of on of the clusters. It does this by querying points from $\mc X$ uniformly at random until it has a sufficient number of points from at least one cluster (say $C_p$). It uses the mean of these points, $\mu_p^\prime$, to approximate the cluster center. 
+Intuitively, our algorithm (Algorithm \ref{alg:steinerQueryPositive}) does the following. In the first phase, it tries to approximate the center of on of the clusters. It does this by querying points from $\mc X$ uniformly at random until it has a sufficient number of points from at least one cluster (say $C_p$). It uses the mean of these points, $\mu_p^\prime$, to approximate the cluster center. 
 
-In the second phase, the algorithm recovers all of the instances belonging to $C_p$. In order to do that, it first sorts all of the instances based on their distance to $\mu_p^\prime$. By showing that all of the points in $C_p$ lie inside a sphere centered at $\mu_p^\prime$ (which does not include points from any other cluster), it tries to find the radius of this sphere by doing binary search using membership queries. After that, the elements in $C_p$ will be located and can be removed from the data set. The algorithm repeats this process $k$ times to recover all of the clusters.
+In the second phase, the algorithm recovers all of the instances belonging to $C_p$. In order to do that, it first sorts all of the instances based on their distance to $\mu_p^\prime$. By showing that all of the points in $C_p$ lie inside a sphere centered at $\mu_p^\prime$ (which does not include points from any other cluster), it tries to find the radius of this sphere by doing binary search using Cluster-Assignment queries. After that, the elements in $C_p$ will be located and can be removed from the data set. The algorithm repeats this process $k$ times to recover all of the clusters.
 
 %After finding the point in $C_p$ with the maximum distance to $\mu_p\prime$ (we call this point $b_{idx}$), it puts all of the points in the sphere
 
@@ -275,13 +275,13 @@ In the first phase of the algorithm we are making $l>k\eta$ queries. Therefore, 
 \label{thm:steinerQueryPositiveComplexity}
 Let the framework be as in theorem \ref{thm:steinerQueryPositive}. Then Algorithm \ref{alg:steinerQueryPositive} 
 \begin{itemize}[nolistsep,noitemsep]
-\item Makes $O\big(k^2\log |\mc X| + k^3\frac{\log k + \log (1/\delta)}{(\gamma - 1)^4}\big)$ equivalence queries to the oracle $\mc O$.
+\item Makes $O\big(k^2\log |\mc X| + k^3\frac{\log k + \log (1/\delta)}{(\gamma - 1)^4}\big)$ same-cluster queries to the oracle $\mc O$.
 \item Runs in $O\big(k|\mc X|\log |\mc X| + k^2\frac{\log k + \log (1/\delta)}{(\gamma - 1)^4}\big)$ time.
 \end{itemize}
 \end{theorem}
 
 \begin{proof}
-The first phase of the algorithm takes $O(k\eta)$ time and makes $k\eta+1$ membership queries to the oracle. The second phase takes $O(n\log n)$ times and makes $O(\log n)$ membership queries to the oracle. Hence, in total the algorithm takes $O(kn\log n + k^2\eta)$ time and makes $O(k\log n + k^2\eta)$ membership queries. Substituting $\eta = \beta\frac{\log k + \log(1/\delta)}{(\eta-1)^4}$ and using the fact that each membership query can be substituted by $k$ equivalence queries (see appendix \ref{appendix:diffQueryModels}) finishes the proof\footnote{It is actually possible to improve the $k^3$ term in query complexity to $k^2$, by noting that in the second phase of the algorithm we only need to use equivalence queries rather than membership queries.}.
+The first phase of the algorithm takes $O(k\eta)$ time and makes $k\eta+1$ Cluster-Assignment queries to the oracle. The second phase takes $O(n\log n)$ times and makes $O(\log n)$ cluster-assignment queries to the oracle. Hence, in total the algorithm takes $O(kn\log n + k^2\eta)$ time and makes $O(k\log n + k^2\eta)$ cluster-assignment queries. Substituting $\eta = \beta\frac{\log k + \log(1/\delta)}{(\eta-1)^4}$ and using the fact that each cluster-assignment query can be substituted by $k$ same-cluster queries (see appendix \ref{appendix:diffQueryModels}) finishes the proof\footnote{It is actually possible to improve the $k^3$ term in query complexity to $k^2$, by noting that in the second phase of the algorithm we only need to use same-cluster queries rather than cluster-assignment queries.}.
 \qed
 \end{proof}
 
@@ -403,14 +403,14 @@ Lemmas \ref{lemma:kmeansEquivalenceX3C} and \ref{lemma:gammaLower} complete the 
 
 \subsection{Lower Bound on the Number of Queries}
 
-In the previous section we showed that $k$-means clustering is NP-hard even under $\gamma$-margin assumption (for $\gamma < 1.5$). On the other hand, in Section \ref{section:clusteringWithQuery} we showed that this is not the case if the algorithm has access to an oracle. In particular, the algorithm asks $O\big(k^2\log |\mc X| + k^3\frac{\log k + \log (1/\delta)}{(\gamma - 1)^4}\big)$ equivalence queries\footnote{If the algorithm uses membership queries this number reduces by a factor of $k$}. Therefore, a natural follow-up question is that whether there is a polynomial-time algorithm for clustering that uses less number of queries. In this section, we take a first step in this direction and show a lower bound on the number of queries needed to provide a polynomial-time algorithm for $k$-means clustering under margin assumption.
+In the previous section we showed that $k$-means clustering is NP-hard even under $\gamma$-margin assumption (for $\gamma < 1.5$). On the other hand, in Section \ref{section:clusteringWithQuery} we showed that this is not the case if the algorithm has access to an oracle. In particular, the algorithm asks $O\big(k^2\log |\mc X| + k^3\frac{\log k + \log (1/\delta)}{(\gamma - 1)^4}\big)$ same-cluster queries\footnote{If the algorithm uses cluster-assignment queries this number reduces by a factor of $k$}. Therefore, a natural follow-up question is that whether there is a polynomial-time algorithm for clustering that uses less number of queries. In this section, we take a first step in this direction and show a lower bound on the number of queries needed to provide a polynomial-time algorithm for $k$-means clustering under margin assumption.
 
 \begin{theorem}
 \label{thm:queryLower}
-For any $\gamma \le 1.5$, finding the optimal solution to the $k$-means objective function is NP-Hard even when the optimal clustering satisfies $\gamma$-margin and the algorithm can ask $O(\log k + \log |\mc X|)$ equivalence queries.
+For any $\gamma \le 1.5$, finding the optimal solution to the $k$-means objective function is NP-Hard even when the optimal clustering satisfies $\gamma$-margin and the algorithm can ask $O(\log k + \log |\mc X|)$ same-cluster queries.
 \end{theorem}
 \begin{proof}
-Proof by contradiction: assume that there is polynomial-time algorithm $\mc A$ that makes $O(\log k + \log |\mc X|)$ equivalence queries to the oracle. Then, we show there exists another algorithm $\mc A^\prime$ for the same problem that is still polynomial but uses no queries. However, this will be a contradiction to Theorem \ref{thm:gammaLower}, which will prove the result.
+Proof by contradiction: assume that there is polynomial-time algorithm $\mc A$ that makes $O(\log k + \log |\mc X|)$ same-cluster queries to the oracle. Then, we show there exists another algorithm $\mc A^\prime$ for the same problem that is still polynomial but uses no queries. However, this will be a contradiction to Theorem \ref{thm:gammaLower}, which will prove the result.
 
 In order to prove that such $\mc A^\prime$ exists, we use a `simulation' technique. Note that $\mc A$ makes only $q<\beta(\log k + \log |\mc X|)$ binary queries, where $\beta$ is a constant. The oracle therefore can respond to these queries in maximum $2^{q} < k^\beta|\mc X|^\beta$ different ways. Now the algorithm $\mc A^\prime$ can try to simulate all of $k^\beta|\mc X|^\beta$ possible responses by the oracle and output the solution with minimum $k$-means clustering cost. Therefore, $\mc A^\prime$ runs in polynomial-time and is equivalent to $\mc A$.
 \end{proof}
@@ -425,7 +425,7 @@ On ther other hand, it was shown that without the use of an oracle, $k$-means cl
 
 A possible future direction is to improve the upper bound presented for clustering with queries. While one way of improving this result is to provide an algorithm with better query/computational complexity, the other way is to see whether one can provide an algorithm which works for less restrictive settings, e.g., $\gamma < 1$. Another possible direction is to provide stronger lower bounds for query complexity.
 
-A broader future direction is to use the notion of equivalence queries in other clustering problems.
+A broader future direction is to use the notion of same-cluster queries in other clustering problems.
 
 \bibliographystyle{alpha}
 \bibliography{activeClustering}
@@ -435,17 +435,17 @@ A broader future direction is to use the notion of equivalence queries in other 
 \label{appendix:diffQueryModels}
 
 \begin{proposition}
-Any clustering algorithm that uses only $q$ equivalence queries can be adjusted to use $2q$ membership queries (and no equivalence queries) with the same order of time complexity.
+Any clustering algorithm that uses only $q$ same-cluster queries can be adjusted to use $2q$ cluster-assignment queries (and no same-cluster queries) with the same order of time complexity.
 \end{proposition}
 \begin{proof}
-We can replace each equivalence query with two membership queries as in $Q(x_1,x_2)={\mathbbm{1}}\{Q(x_1)=Q(x_2))\}$.
+We can replace each same-cluster query with two cluster-assignment queries as in $Q(x_1,x_2)={\mathbbm{1}}\{Q(x_1)=Q(x_2))\}$.
 \end{proof}
 
 \begin{proposition}
-Any algorithm that uses only $q$ membership queries can be adjusted to use $kq$ equivalence queries (and no membership queries) with at most a factor $k$ increase in computational complexity, where $k$ is the number of clusters.
+Any algorithm that uses only $q$ cluster-assignment queries can be adjusted to use $kq$ same-cluster queries (and no cluster-assignment queries) with at most a factor $k$ increase in computational complexity, where $k$ is the number of clusters.
 \end{proposition}
 \begin{proof}
-If the clustering algorithm has access to an instance from each of $k$ clusters (say $x_i\in X_i$), then it can simply simulate the membership query by making $k$ equivalence queries ($Q(x) = \argmax_{i}\mathbbm{1}\{Q(x, x_i)\}$). Otherwise, assume that at the time of querying $Q(x)$ it has only instances from $k\prime<k$ clusters. In this case, the algorithm can do the same with the $k\prime$ instances and if it does not find the cluster, assign $x$ to a new cluster index. This will work, because in the clustering task the output of the algorithm is a partition of the elements, and therefore the indices of the clusters do not matter.
+If the clustering algorithm has access to an instance from each of $k$ clusters (say $x_i\in X_i$), then it can simply simulate the cluster-assignment query by making $k$ same-cluster queries ($Q(x) = \argmax_{i}\mathbbm{1}\{Q(x, x_i)\}$). Otherwise, assume that at the time of querying $Q(x)$ it has only instances from $k\prime<k$ clusters. In this case, the algorithm can do the same with the $k\prime$ instances and if it does not find the cluster, assign $x$ to a new cluster index. This will work, because in the clustering task the output of the algorithm is a partition of the elements, and therefore the indices of the clusters do not matter.
 \end{proof}
 
 
