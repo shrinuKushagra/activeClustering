@@ -70,16 +70,23 @@ We should write a good abstract here.
 
 \section{Introduction}
 
-\begin{itemize}
-\item importance of prior-knowledge/user feed back in clustering
-\item computational difficulties of clustering 
-\item niceness assumptions....still far from being realistic
-\item a new use direction: can feedback from user/oracle help in reducing the computational complexity of the clustering problem. In particular, making NP-hard problems easy?
+Clustering -- or the task of partioning a set of elements into `coherent' subsets -- is challenging particularly because of the following two reasons. The first problem is that the clustering problem for each task is usually \emph{underspecified}. The second one is that performing clustering under many natural models is computationally hard.
 
-\item how is our setting different with active classification?
-\end{itemize}
+Consider the task of dividing the users of an online shopping service into different groups. The result of this clustering can then be useful for example in suggesting similar products to the users in the same group, or just in organizing data so that it would be easier to read/analyze the monthly purchase reports. In this case, it is clear that one needs to exploit domain knowledge to avoid an ill-defined problem, as there are many different choices for clustering that can give different results. 
+
+Aside from trial and error, the principled way of extracting domain knowledge is to perform clustering using a form of `weak' supervision. This type of supervision is typically weaker than the one used in supervised learning. For example, Balcan and Blum \cite{balcan2008clustering} propose to use an interactive framework with 'split/merge' queries for clustering. In another work, Ashtiani and Ben-David \cite{ashtiani2015representation} require the domain expert to provide the clustering of a 'small' subset of data.
+
+On the other hand, mitigating the computational problem of clustering is critical. To put that into perspective, it is useful to note that solving the well known $k$-means and $k$-median clustering problems is NP-hard. One approach to address this problem is to exploit the fact that natural data sets usually exhibit some 'nice properties' that enable us to avoid the worst-case scenario and find the optimal solution to clustering efficiently. The quest for searching such notions of niceness is still ongoing, and it should be noted that the niceness properties that are currently analyzed are too strict to happen in real world situations.
+
+In this work, we take a new approach in alleviating the computational problem of clustering. In particular, we ask the following question: can weak supervision (in a natural form of queries) help in removing the computational burden of clustering? This will add up to the other benefit of supervision: making the clustering problem well-defined by injecting the domain knowledge through supervised feedback.
+
+The general setting considered in this work is the following. Let $X$ be a set of elements that should be clustered. The oracle (e.g., a doamin expert) has a target clustering $C^*_X$ in his mind. The clustering algorithm has access to $X$, and can make queries in order to recover $C^*_X$. The queries are in the form of \emph{equivalence} queries. This means that the algorithm can ask whether two elements belong to the same cluster or not.
+
+We will also consider the case that the oracle has the optimal $k$-means solution in his mind. We then try to find out whether access to a 'reasonable' number of equivalence queries can enable us to provide an efficient algorithm for an otherwise NP-hard problem. 
 
 \subsection{Contributions}
+
+We provide the notions of clustering with equivalence/membership queries. 
 
 \begin{itemize}
 \item Notion of clustering with equivalence/membership queries
