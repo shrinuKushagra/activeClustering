@@ -103,18 +103,17 @@ We should write a good abstract here.
 \end{itemize}
 
 
-\subsection{Related work}
+\subsection{Related Work}
 
-Balcan $\alpha$-center proximity
+The use of supervision in clustering is not unprecedented. Balcan et. al \cite{balcan2008clustering} provided a framework for interactive clustering with the help of a user (i.e., an oracle). The form of queries considered in this framework are different with ours. In particular, the oracle is provided with the current clustering, and tells the the algorithm to either split a cluster or merge two clusters. Note that in this setting, the oracle should be able to evaluate the whole given clustering for each query.
 
-Other niceness assumptions
+Another example of the use of supervision in clustering was provided by Ashtiani and Ben-David \cite{ashtiani2015representation}. They assumed that the target clustering can be approximated by first mapping the data points to a new space and then performing $k$-means clustering. The supervised data (i.e., the clustering of a small subset of data) was then used to find such mapping.
 
-Hardness of planar $k$-means
+The computational complexity of clustering has been extensively studied. Many of these results are negative, showing that clustering is computationally hard. For example, $k$-means clustering is NP-hard even for $k=2$ \cite{dasgupta2008hardness}, or in a 2-dimensional plane \cite{vattani2009hardness,mahajan2009planar}. 
 
-Balcan active clustering with split/merge
+In order to alleviate the problem of computational complexity, some notions of niceness of data under which the clustering becomes easy has been considered.  
 
-HassanShai (representation learning for clustering)
-
+Balcan $\alpha$-center proximity.......
 
 
 
@@ -433,6 +432,7 @@ In particular, a notion of niceness of data, i.e., $\gamma$-margin property, was
 
 On ther other hand, it was shown that without the use of an oracle, $k$-means clustering is NP-hard for $\gamma < 1.5$. This indicates that for $1<\gamma<1.5$, the use of query is critical, as it makes the computationaly hard problem easy. We also provided lower bounds on the number of queries that can make the hard problem easy, indicating that one would need at least $\omega(kn)$ queries for this to happen.
 
+A possible future direction is to improve the upper bound 
 
 \bibliographystyle{alpha}
 \bibliography{activeClustering}
