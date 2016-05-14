@@ -90,9 +90,7 @@ We introduce the notions of clustering with equivalence/membership queries. We f
 
 In the next step, we provide a probabilistic polynomial time (BPP) algorithm for clustering with queries, under the assumption that $\gamma > 1$. More specifically, this algorithm makes $O\big(k^2\log k\log n)$ equivalence queries to the oracle and runs in $O\big(kn\log n + k^2\log k)$ time, where $k$ is the number of clusters and $n$ is the size of the sample set.
 
-These results when contrasted to each other show an interesting phenomenon. Assume that the oracle has the optimal $k$-means solution in his mind and it satisfies $\gamma$-margin property for $1<\gamma <1.5$. In this case our provided lower bound means that $k$-means clustering is NP-hard without making queries, while the positive result show that with making a reasonble number of queries the problem becomes efficiently solvable. This indicates a nice trade off between query complexity and computatioanl complexity.
-
-We further show a lower bound on the number of queries needed to 
+These results when contrasted to each other show an interesting phenomenon. Assume that the oracle has the optimal $k$-means solution in his mind and it satisfies $\gamma$-margin property for $1<\gamma <1.5$. In this case our provided lower bound means that $k$-means clustering is NP-hard without making queries, while the positive result show that with making a reasonble number of queries the problem becomes efficiently solvable. This indicates a nice trade off between query complexity and computatioanl complexity. We further show a lower bound on the number of queries needed to make the problem efficiently solvable, showing that with access to only $O(\log k + \log n)$ queries the problem remain NP-hard.
 
 \subsection{Related Work}
 
