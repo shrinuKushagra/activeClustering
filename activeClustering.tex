@@ -80,7 +80,7 @@ At the same time, mitigating the computational problem of clustering is critical
 
 In this work, we take a new approach to alleviating the computational problem of clustering. In particular, we ask the following question: can weak supervision (in a natural form of queries) help relaxing the computational burden of clustering? This will add up to the other benefit of supervision: making the clustering problem well-defined by injecting the domain knowledge through supervised feedback.
 
-The general setting considered in this work is the following. Let $X$ be a set of elements that should be clustered. The oracle (e.g., a doamin expert) has a target clustering $C^*_X$ in mind. The clustering algorithm has access to $X$, and can make queries in order to recover $C^*_X$. The queries are in the form of \emph{equivalence} queries. This means that the algorithm can ask whether two elements belong to the same cluster or not.
+The general setting considered in this work is the following. Let $X$ be a set of elements that should be clustered. The oracle (e.g., a doamin expert) has some information about a  target clustering $C^*_X$ in mind. The clustering algorithm has access to $X$, and can make queries in order to recover $C^*_X$. The queries are in the form of \emph{equivalence} queries. This means that the algorithm can ask whether two elements belong to the same cluster or not.
 
 We will also consider the case that the oracle has the optimal $k$-means solution in his mind. We then try to find out whether access to a 'reasonable' number of equivalence queries can enable us to provide an efficient algorithm for an otherwise NP-hard problem. 
 
