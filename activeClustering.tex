@@ -468,11 +468,24 @@ If the clustering algorithm has access to an instance from each of $k$ clusters 
 \section{Comparison of $\gamma$-Margin and $\alpha$-Center Proximity}
 \label{appendix:gammaMrginVsAlphaCenter}
 
-\begin{definition}[$\alpha$-center proximity]
+\begin{definition}[$\alpha$-center proximity \cite{awasthi2012center}]
 \label{defn:alphacp}
 Given a clustering instance $(\mc X, d)$ in some metric space $M$ and the number of clusters $k$. We say that a clustering $\mc C_{\mc X} = \{C_1, \ldots, C_k\}$ induced by centers $c_1, \ldots, c_k \in M$ has $\alpha$-center proximity w.r.t $\mc X$ and $k$ if the following holds. For all $x \in C_i$ and $i\neq j$, 
 $$\alpha d(x, c_i) < d(x, c_j)$$
 \end{definition}
+In this paper, we introduced a notion of $\gamma$-margin. We gave upper (with query) and lower bounds on $\gamma$, when the metric space $M$ is euclidean and the centers are allowed be points in the metric space. 
+
+\begin{table}[]
+\centering
+\caption{Known results for $\alpha$-center proximity}
+\label{my-label}
+\begin{tabular}{l|l|l|}
+\cline{2-3}
+ & Euclidean & Non-euclidean \\ \hline
+\multicolumn{1}{|l|}{\begin{tabular}[c]{@{}l@{}}Centers \\ from data\end{tabular}} & & \begin{tabular}[c]{@{}l@{}}Upper bound - $\sqrt{2}+1$\\ Lower bound - 2\end{tabular} \\ \hline
+\multicolumn{1}{|l|}{\begin{tabular}[c]{@{}l@{}}Centers from\\ metric space\end{tabular}} & & \begin{tabular}[c]{@{}l@{}}Upper bound - $2+\sqrt{3}$\\ Lower bound - 3\end{tabular} \\ \hline
+\end{tabular}
+\end{table}
 
 \section{Concentration inequalities}
 \label{appendixsection:conIneq}
