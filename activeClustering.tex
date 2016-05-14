@@ -70,13 +70,13 @@ We should write a good abstract here.
 
 \section{Introduction}
 
-Clustering is a very challenging particularly because of the following two reasons. The first problem is that the clustering problem for each task is usually \emph{underspecified}. The second one is that performing clustering under many natural models is computationally hard.
+Clustering is a very challenging task particularly because of the following two reasons. The first problem is that the clustering problem for each task is usually \emph{underspecified}. The second one is that performing clustering under many natural models is computationally hard.
 
 Consider the task of dividing the users of an online shopping service into different groups. The result of this clustering can then be useful for example in suggesting similar products to the users in the same group, or just in organizing data so that it would be easier to read/analyze the monthly purchase reports. In this case, it is clear that one needs to exploit domain knowledge to avoid an ill-defined problem, as there are many different choices for clustering that can give different results. 
 
-Aside from trial and error,  principled way of extracting domain knowledge is to perform clustering using a form of `weak' supervision. This type of supervision is typically weaker than the one used in supervised learning. For example, Balcan and Blum \cite{balcan2008clustering} propose to use an interactive framework with 'split/merge' queries for clustering. In another work, Ashtiani and Ben-David \cite{ashtiani2015representation} require the domain expert to provide the clustering of a 'small' subset of data.
+Aside from trial and error, a principled way of extracting domain knowledge is to perform clustering using a form of `weak' supervision.  For example, Balcan and Blum \cite{balcan2008clustering} propose to use an interactive framework with 'split/merge' queries for clustering. In another work, Ashtiani and Ben-David \cite{ashtiani2015representation} require the domain expert to provide the clustering of a 'small' subset of data.
 
-On the other hand, mitigating the computational problem of clustering is critical. To put that into perspective, it is useful to note that solving the well known $k$-means and $k$-median clustering problems is NP-hard. One approach to address this problem is to exploit the fact that natural data sets usually exhibit some 'nice properties' that enable us to avoid the worst-case scenario and find the optimal solution to clustering efficiently. The quest for searching such notions of niceness is still ongoing, and it should be noted that the niceness properties that are currently analyzed are too strict to happen in real world situations.
+At the same time, mitigating the computational problem of clustering is critical. Solving most of the common optimization formulations of clustering is NP hard (in particular, solving the well known $k$-means and $k$-median clustering problems). One approach to address this issues is to exploit the fact that natural data sets usually exhibit some 'nice properties' that enable us to avoid the worst-case scenario and find the optimal solution to clustering efficiently. The quest for searching such notions of niceness is still ongoing, and it should be noted that the niceness properties that are currently analyzed are too strict to happen in real world situations (see \cite{Ben-David 2015} for a critical survey of work in this direction.
 
 In this work, we take a new approach in alleviating the computational problem of clustering. In particular, we ask the following question: can weak supervision (in a natural form of queries) help in removing the computational burden of clustering? This will add up to the other benefit of supervision: making the clustering problem well-defined by injecting the domain knowledge through supervised feedback.
 
@@ -86,24 +86,13 @@ We will also consider the case that the oracle has the optimal $k$-means solutio
 
 \subsection{Contributions}
 
-We introduce the notions of clustering with equivalence/membership queries. We further define a new notion of niceness of data called $\gamma$-margin property. We explore the connections between $\gamma$-margin and other previously studied notions, showing that this is a cenral notion that has not been studied explicitly. We further show that $\gamma$-margin assumption does not make the problem 
+We introduce the notions of clustering with equivalence/membership queries. We further define a new notion of niceness of data called $\gamma$-margin property. We explore the connections between $\gamma$-margin and other previously studied notions, showing that this is a cenral notion that has not been studied explicitly. We further show that $\gamma$-margin assumption is not necessarily strong enough to make the problem computationally easy. In particular, we show that $k$-means clustering under $\gamma$-margin assumption is NP-hard for $\gamma < 1.5$.
 
-$k$-means clustering is NP-hard even under $\gamma$-margin assumption for $\gamma < 1.5$
+In the next step, we provide a probabilistic polynomial time (BPP) algorithm for clustering with queries, under the assumption that $\gamma > 1$. More specifically, this algorithm makes $O\big(k^2\log k\log n)$ equivalence queries to the oracle and runs in $O\big(kn\log n + k^2\log k)$ time, where $k$ is the number of clusters and $n$ is the size of the sample set.
 
-In the next step, we provide a probabilistic polynomial time (BPP) algorithm for clustering with queries, under the assumption that $\gamma > 1$. More specifically, this algorithm makes $O\big(k^2\log |\mc X| + k^3\frac{\log k + \log (1/\delta)}{(\gamma - 1)^4}\big)$ \emph{equivalence queries} to the oracle and runs in $O\big(k|\mc X|\log |\mc X| + k^2\frac{\log k + \log (1/\delta)}{(\gamma - 1)^4}\big)$ time.
+These results when contrasted to each other show an interesting phenomenon. Assume that the oracle has the optimal $k$-means solution in his mind and it satisfies $\gamma$-margin property for $1<\gamma <1.5$. In this case our provided lower bound means that $k$-means clustering is NP-hard without making queries, while the positive result show that with making a reasonble number of queries the problem becomes efficiently solvable. This indicates a nice trade off between query complexity and computatioanl complexity.
 
-\begin{itemize}
-\item Trade offs between computational complexity and query complexity
-\begin{itemize}
-\item If the oracle has the optimal $k$-means solution in its mind and $\gamma > 1$, we would have a poly-time algorithm for $k$-means clustering with query
-\item This shows that for $1<\gamma <1.5$ there is a trade off between query complexity and computatioanl complexity
-\item we further show a lower bound on the number of queries needed to make the problem computationally easy (i.e., polynomial-time)
-
-
-\end{itemize}
-
-\end{itemize}
-
+We further show a lower bound on the number of queries needed to 
 
 \subsection{Related Work}
 
