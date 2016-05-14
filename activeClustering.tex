@@ -70,10 +70,6 @@ We should write a good abstract here.
 
 \section{Introduction}
 
-Clustering -- or the task of partioning a set of elements into `coherent' subsets -- is challenging particularly because of the following two reasons. The first problem is that the clustering problem for each task is usually \emph{underspecified}. The second one is that the performing clustering in many natural models is computationally hard.
-
-The problem of underspecifiedness
-
 \begin{itemize}
 \item importance of prior-knowledge/user feed back in clustering
 \item computational difficulties of clustering 
@@ -477,7 +473,7 @@ If the clustering algorithm has access to an instance from each of $k$ clusters 
 Given a clustering instance $(\mc X, d)$ in some metric space $M$ and the number of clusters $k$. We say that a clustering $\mc C_{\mc X} = \{C_1, \ldots, C_k\}$ induced by centers $c_1, \ldots, c_k \in M$ has $\alpha$-center proximity w.r.t $\mc X$ and $k$ if the following holds. For all $x \in C_i$ and $i\neq j$, 
 $$\alpha d(x, c_i) < d(x, c_j)$$
 \end{definition}
-In this paper, we introduced a notion of $\gamma$-margin. We gave upper (with query) and lower bounds on $\gamma$, when the metric space $M$ is euclidean and the centers are allowed be points in the metric space. 
+In this paper, we introduced a notion of $\gamma$-margin. We gave upper (with query) and lower bounds on $\gamma$, when the metric space $M$ is euclidean and the centers are allowed be points in the metric space. Another notion of niceness of clusterability is $\alpha$-center proximity. This notion has been considered in the past in various works \cite{balcan2012clustering,awasthi2012center}. However, the problem setting in these works was different from our current setting. While in the current work, we were focussed on the euclidean metric space, these works considered arbitrary metric space. 
 
 \begin{table}[]
 \centering
@@ -488,8 +484,77 @@ In this paper, we introduced a notion of $\gamma$-margin. We gave upper (with qu
  & Euclidean & Non-euclidean \\ \hline
 \multicolumn{1}{|l|}{\begin{tabular}[c]{@{}l@{}}Centers \\ from data\end{tabular}} & & \begin{tabular}[c]{@{}l@{}}Upper bound \cite{balcan2012clustering}- $\sqrt{2}+1$\\ Lower bound \cite{ben2014data} - 2\end{tabular} \\ \hline
 \multicolumn{1}{|l|}{\begin{tabular}[c]{@{}l@{}}Centers from\\ metric space\end{tabular}} & & \begin{tabular}[c]{@{}l@{}}Upper bound - $2+\sqrt{3}$\\ Lower bound - 3\\ \cite{awasthi2012center}\end{tabular} \\ \hline
+\label{table:alphacenter}
 \end{tabular}
 \end{table}
+
+An overview of the known results under $\alpha$-center proximity is provided in Table \ref{table:alphacenter}. We will show that using the same techniques as used in the above proofs we can get upper and lower bounds for $\alpha$-center proximity. It is important to note that the upper and lower bounds under $\gamma$-margin are matching. Hence, there is no hope to furthur improve our upper bounds unless P=NP. A summary of our results is provided in \ref{table:gammamargin}.  
+
+\begin{table}[]
+\centering
+\caption{Results for $\gamma$-margin}
+\label{my-label}
+\begin{tabular}{l|l|l|}
+\cline{2-3}
+ & Euclidean & Non-euclidean \\ \hline
+\multicolumn{1}{|l|}{\begin{tabular}[c]{@{}l@{}}Centers \\ from data\end{tabular}} & & \begin{tabular}[c]{@{}l@{}}Upper bound (Thm. \ref{thm:upperCenterData})- $2$\\ Lower bound (Thm. \ref{thm:lowerCenterData}) - 2\end{tabular} \\ \hline
+\multicolumn{1}{|l|}{\begin{tabular}[c]{@{}l@{}}Centers from\\ metric space\end{tabular}} & & \begin{tabular}[c]{@{}l@{}}Upper bound (Thm. \ref{thm:upperCenterMetric})- $3$\\  Lower bound (Thm. \ref{thm:lowerCenterMetric}) - 3\end{tabular} \\ \hline
+\label{table:gammamargin}
+\end{tabular}
+\end{table}
+
+\subsection{Centers from data}
+\begin{theorem}
+\label{thm:upperCenterData}
+Given a clustering instance $(X , d)$. For all $\gamma \ge 2$, Alg. 1 in \cite{balcan2012clustering} outputs a tree $\mc T$ with the following property. For all $k$ and for all $k$-clusterings $\mc C^* = \{C_1^*, \ldots, C_k^* \}$ which satisfy $\gamma$-margin and the cluster centers $\mu_1, \ldots, \mu_k \in X$, the following holds.
+
+For every $1 \le i \le k$, there exists a node $N_i$ in the tree $T$ such that $C_i^* = N_i$. In other words, there exists a pruning of the tree $T$ such that the corresponding clustering equals $C^*$. 
+\end{theorem}
+
+\begin{proof}
+Let $p, p' \in C_i^*$ and $q \in C_j^*$. \cite{balcan2012clustering} prove the correctness of their algorithm for $\alpha > \sqrt{2} + 1$. Their proof relies only on the following three properties which are implied when $\alpha > \sqrt{2} + 1$. We will show that these properties are implied by $\gamma > 2$ instances as well.
+\begin{itemize}[nolistsep,noitemsep]
+\item $d(p, \mu_i) < d(p, q)$\\
+$\gamma d(p, \mu_i) < d(q, \mu_i) < d(p, q) + d(p, \mu_i) \implies d(p, \mu_i) < \frac{1}{\gamma-1}d(p, q)$.
+\item $d(p, \mu_i) < d(q, \mu_i)$\\
+This is trivially true since $\gamma > 2$.
+\item $d(p, \mu_i) < d(p', q)$\\
+Let $r = \max_{x \in C_i^*} d(x, \mu_i)$. Observe that $d(p, \mu_i) < r$. Also, $d(p', q)> d(q, \mu_i)-d(p', \mu_i) > \gamma r - r = (\gamma -1)r$.
+\end{itemize}
+\qed
+\end{proof}
+
+\begin{theorem}
+\label{thm:lowerCenterData}
+Given a clustering instance $(\mc X, d)$ and the number of clusters $k$. For $\gamma < 2$, finding a clustering which satisfies $\gamma$-margin and where the centers $\mu_1, \ldots, \mu_k \in \mc X$ is NP-Hard.
+\end{theorem}
+\begin{proof}
+\cite{ben2014data} proved that for $\alpha < 2$, finding a clustering which satisfies $\alpha$-margin and where the centers $\mu_1, \ldots, \mu_k \in \mc X$ is NP-Hard. Note that the reduced instance in their proof, also satisfies $\gamma$-margin for $\gamma < 2$. 
+\qed
+\end{proof}
+
+\subsection{Centers from metric space}
+\begin{theorem}
+\label{thm:upperCenterMetric}
+Given a clustering instance $(X , d)$. For all $\gamma \ge 3$, the standard single-linkage algorithm outputs a tree $\mc T$ with the following property. For all $k$ and for all $k$-clusterings $\mc C^* = \{C_1^*, \ldots, C_k^* \}$ which satisfy $\gamma$-margin, the following holds.
+
+For every $1 \le i \le k$, there exists a node $N_i$ in the tree $T$ such that $C_i^* = N_i$. In other words, there exists a pruning of the tree $T$ such that the corresponding clustering equals $C^*$. 
+\end{theorem}
+
+\begin{proof}
+\cite{balcan2008discriminative} showed that if a clustering $C^*$ has strong stability property, then single-linkage outputs a tree such that pruning equals $C^*$. It is a simple exercise to see that $\gamma > 3$ instances have strong-stability and the claim follows.  
+\qed
+\end{proof}
+
+
+\begin{theorem}
+\label{thm:lowerCenterMetric}
+Given a clustering instance $(\mc X, d)$ and the number of clusters $k$. For $\gamma < 3$, finding a clustering which satisfies $\gamma$-margin is NP-Hard.
+\end{theorem}
+\begin{proof}
+\cite{awasthi2012center} proved the above claim but for $\alpha < 3$ instances. Note that the reduced instance in their proof, also satisfies $\gamma$-margin for $\gamma < 3$. 
+\qed
+\end{proof}
 
 \section{Concentration inequalities}
 \label{appendixsection:conIneq}
