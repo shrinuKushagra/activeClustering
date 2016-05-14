@@ -98,10 +98,7 @@ In the next step, we provide a probabilistic polynomial time (BPP) algorithm for
 \item If the oracle has the optimal $k$-means solution in its mind and $\gamma > 1$, we would have a poly-time algorithm for $k$-means clustering with query
 \item This shows that for $1<\gamma <1.5$ there is a trade off between query complexity and computatioanl complexity
 \item we further show a lower bound on the number of queries needed to make the problem computationally easy (i.e., polynomial-time)
-
-
 \end{itemize}
-
 \end{itemize}
 
 
@@ -111,14 +108,9 @@ The use of supervision in clustering is not unprecedented. Balcan et. al \cite{b
 
 Another example of the use of supervision in clustering was provided by Ashtiani and Ben-David \cite{ashtiani2015representation}. They assumed that the target clustering can be approximated by first mapping the data points to a new space and then performing $k$-means clustering. The supervised data (i.e., the clustering of a small subset of data) was then used to find such mapping.
 
-The computational complexity of clustering has been extensively studied. Many of these results are negative, showing that clustering is computationally hard. For example, $k$-means clustering is NP-hard even for $k=2$ \cite{dasgupta2008hardness}, or in a 2-dimensional plane \cite{vattani2009hardness,mahajan2009planar}. In order to alleviate the problem of computational complexity, some notions of niceness of data under which the clustering becomes easy has been considered.  
+The computational complexity of clustering has been extensively studied. Many of these results are negative, showing that clustering is computationally hard. For example, $k$-means clustering is NP-hard even for $k=2$ \cite{dasgupta2008hardness}, or in a 2-dimensional plane \cite{vattani2009hardness,mahajan2009planar}. In order to alleviate the problem of computational complexity, some notions of niceness of data under which the clustering becomes easy have been considered.  
 
-The most popular is the notion of $\alpha$-center proximity. The following results are known when no oracle (or queries) is available to the clustering algorithm. In the restricted setting, the algorithm of Balcan and Liang \cite{balcan2012clustering} `recovers' the target clustering (outputs a tree such that the target is a pruning of the tree) when $\alpha > \sqrt{2} + 1$. In this work, we will show that in the presence of queries, we can recover the target clustering as long as $\alpha > 2$. Note that this is still above the NP-Hardness lower bound of $\alpha < 2$ in the restricted setting (\cite{ben2014data}).
-
-In the steiner setting, the algorithm of Awasthi et. al \cite{awasthi2012center} recovers the target clustering when $\alpha > 2+\sqrt{3}$. We show that in the presence of few queries, we can recover the target clustering if $\alpha > \sqrt{2}+1$. This is much better than the previous known result in the absence of queries. This result also beats the NP-Hardness lower bound of $\alpha < 3$ in the steiner setting (\cite{awasthi2012center}).
-
-
-
+Awasthi et. al \cite{awasthi2012center} introduced the notion of $\alpha$-center proximity. In the case when the centers of the clusters must come from the data set (e.g. the optimal $k$-median solution), their algorithm `recovers' the target clustering (outputs a tree such that the target is a pruning of the tree) for $\alpha > 3$.  Balcan and Liang \cite{balcan2012clustering} improve the constant to $\alpha > \sqrt{2} + 1$. Ben-David and Reyzin \cite{ben2014data} show that this problem is NP-Hard for $\alpha < 2$. For the other case when the centers are unrestricted (e.g. the optimal $k$-means clustering), the algorithm of Awasthi et. al \cite{awasthi2012center} recovers the target clustering when $\alpha > 2+\sqrt{3}$. They also show that the problem is NP-Hard for $\alpha < 3$.
 
 \section{Problem Formulation}
 
