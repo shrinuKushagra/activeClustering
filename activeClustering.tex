@@ -65,7 +65,7 @@
 \maketitle
 
 \begin{abstract}
-We provide a framework for clustering where the learner is allowed to ask some \emph{same-cluster} queries from an oracle (e.g., a domain expert). In this type of query, the oracle indicates whether two given instances belong to the same cluster or not. We study the query and computaitonal complexity of clustering in this framework. In order to do that, we consider a setting where the oracle conforms to a center-based clustering with a notion of margin. We then provide a probabilistic polynomial-time (BPP) algorithm  for clustering in this setting. In particular, this algorithm asks $O\big(k^2\log k\log n)$ same-cluster queries and runs with time complexity $O\big(kn\log n + k^2\log k)$, where $k$ is the number of clusters and $n$ is the number of instances.  Furthermore, we show that there is a trade off between computational complexity and query complexity. In particular, we establish that for the case of $k$-means clustering (i.e., when the oracle conforms to the solution of $k$-means), having access to queries is essential, as it makes an otherwise NP hard problem efficiently solvable. We further provide a lower bound on the number of queries needed to have a computatioanly efficient method in this setting.
+We provide a framework for clustering where the learner is allowed to ask some \emph{same-cluster} queries from an oracle (e.g., a domain expert). In this type of query, the oracle indicates whether two given instances belong to the same cluster or not. We study the query and computational complexity of clustering in this framework. In order to do that, we consider a setting where the oracle conforms to a center-based clustering with a notion of margin. We then provide a probabilistic polynomial-time (BPP) algorithm  for clustering in this setting. In particular, this algorithm asks $O\big(k^2\log k\log n)$ same-cluster queries and runs with time complexity $O\big(kn\log n + k^2\log k)$, where $k$ is the number of clusters and $n$ is the number of instances.  Furthermore, we show that there is a trade off between computational complexity and query complexity. In particular, we establish that for the case of $k$-means clustering (i.e., when the oracle conforms to the solution of $k$-means), having access to queries is essential, as it makes an otherwise NP hard problem efficiently solvable. We further provide a lower bound on the number of queries needed to have a computationally efficient method in this setting.
 
 
 \end{abstract}
@@ -344,7 +344,7 @@ The component $H_{l,n}$ is as described in left hand side of Fig. \ref{fig:lower
 \label{fig:ZFig}
 \end{figure}
 
-The set $Z_i$ depends on $S_i$ and is shown in Fig. \ref{fig:setZDescription}.  For every $j\in U$, there are four possible locations $x_{i, j}, x_{i,j'}, y_{i,j}$ and $y_{i, j}'$. One of $x_{i,j}$ and $x_{i,j}'$ will be occupied and one of $y_{i,j}$ and $y_{i,j}'$ will be occupied. Each point has weight $w$. The set $Z_i$ is
+The set $Z_i$ depends on $S_i$ and is shown in Fig. \ref{fig:ZFig}.  For every $j\in U$, there are four possible locations $x_{i, j}, x_{i,j'}, y_{i,j}$ and $y_{i, j}'$. One of $x_{i,j}$ and $x_{i,j}'$ will be occupied and one of $y_{i,j}$ and $y_{i,j}'$ will be occupied. Each point has weight $w$. The set $Z_i$ is
 \begin{itemize}[nolistsep,noitemsep]
 \item $j \in S_i \iff x_{i,j}' \in Z_i$
 \item $j \not\in S_i \iff x_{i,j} \in Z_i$
