@@ -65,7 +65,12 @@
 \maketitle
 
 \begin{abstract}
-We should write a good abstract here.
+We provide a framework for clustering where the learner is allowed to ask \emph{same-cluster} queries from an oracle (e.g., a domain expert). In this type of query, the oracle indicates whether two given instances belong to the same cluster or not.
+
+We study the query and computaitonal complexity in this framework.
+
+r
+
 \end{abstract}
 
 \section{Introduction}
@@ -82,7 +87,7 @@ In this work, we take a new approach to alleviating the computational problem of
 
 The general setting considered in this work is the following. Let $X$ be a set of elements that should be clustered. The oracle (e.g., a doamin expert) has some information about a  target clustering $C^*_X$ in mind. The clustering algorithm has access to $X$, and can make queries in order to recover $C^*_X$. The queries are in the form of \emph{same-cluster} queries. This means that the algorithm can ask whether two elements belong to the same cluster or not.
 
-We will also consider the case that the oracle answers to the queries conform with some optimal $k$-means solution. We then try to find out whether access to a 'reasonable' number of xxx queries can enable an efficient algorithm for an otherwise NP-hard problem. 
+We will also consider the case that the oracle answers to the queries conform with some optimal $k$-means solution. We then try to find out whether access to a 'reasonable' number of same-cluster queries can enable an efficient algorithm for an otherwise NP-hard problem. 
 
 \subsection{Contributions}
 
@@ -90,7 +95,7 @@ We introduce the notions of clustering with same-cluster/cluster-assignment quer
 
 In the next step, we provide a probabilistic polynomial time (BPP) algorithm for clustering with queries, under the assumption that $\gamma > 1$. More specifically, this algorithm makes $O\big(k^2\log k\log n)$ same-cluster queries to the oracle and runs in $O\big(kn\log n + k^2\log k)$ time, where $k$ is the number of clusters and $n$ is the size of the sample set.
 
-These results, when contrasted to each other, show an interesting phenomenon. Assume the oracle answers conform with some $k$-means optimal solution and it satisfying the $\gamma$-margin property for $1<\gamma <1.5$. In this case our lower bound means that $k$-means clustering is NP-hard without making queries, while the positive result shows that with access to a reasonble number of query answers the problem becomes efficiently solvable. This indicates a novel trade off between query complexity and computatioanl complexity. We further show a lower bound on the number of queries needed to make the problem efficiently solvable, showing that with access to only $O(\log k + \log n)$ queries the problem remain NP-hard.
+These results, when contrasted to each other, show an interesting phenomenon. Assume the oracle's answers conform with some $k$-means optimal solution and it satisfies the $\gamma$-margin property for $1<\gamma <1.5$. In this case our lower bound means that $k$-means clustering is NP-hard without making queries, while the positive result shows that with access to a reasonble number of query answers, the problem becomes efficiently solvable. This indicates a novel trade off between query complexity and computatioanl complexity. We further show a lower bound on the number of queries needed to make the problem efficiently solvable, showing that with access to only $O(\log k + \log n)$ queries the problem remains NP-hard.
 
 \subsection{Related Work}
 
