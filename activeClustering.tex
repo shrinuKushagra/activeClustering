@@ -65,7 +65,10 @@
 \maketitle
 
 \begin{abstract}
-We should write a good abstract here.
+We provide a framework for clustering where the learner is allowed to ask \emph{same-cluster} queries from an oracle (e.g., a domain expert). In this type of query, the oracle indicates whether two given instances belong to the same cluster or not. We study the query and computaitonal complexity in this framework. 
+
+r
+
 \end{abstract}
 
 \section{Introduction}
@@ -84,13 +87,13 @@ The general setting considered in this work is the following. Let $X$ be a set o
 
 We will also consider the case that the oracle has the optimal $k$-means solution in his mind. We then try to find out whether access to a 'reasonable' number of equivalence queries can enable us to provide an efficient algorithm for an otherwise NP-hard problem. 
 
-\subsection{Contributions}
 
+\subsection{Contributions}
 We introduce the notions of clustering with equivalence/membership queries. We further define a new notion of niceness of data called $\gamma$-margin property and contrast it to the previously studied notions, showing that this is a cenral notion that has not been studied explicitly. We further show that $\gamma$-margin assumption is not necessarily strong enough to make the problem computationally easy. In particular, we show that $k$-means clustering under $\gamma$-margin assumption is NP-hard for $\gamma < 1.5$.
 
 In the next step, we provide a probabilistic polynomial time (BPP) algorithm for clustering with queries, under the assumption that $\gamma > 1$. More specifically, this algorithm makes $O\big(k^2\log k\log n)$ equivalence queries to the oracle and runs in $O\big(kn\log n + k^2\log k)$ time, where $k$ is the number of clusters and $n$ is the size of the sample set.
 
-These results when contrasted to each other show an interesting phenomenon. Assume that the oracle has the optimal $k$-means solution in his mind and it satisfies $\gamma$-margin property for $1<\gamma <1.5$. In this case our provided lower bound means that $k$-means clustering is NP-hard without making queries, while the positive result shows that with making a reasonble number of queries the problem becomes efficiently solvable. This indicates a nice trade off between query complexity and computatioanl complexity. We further show a lower bound on the number of queries needed to make the problem efficiently solvable, showing that with access to only $O(\log k + \log n)$ queries the problem remain NP-hard.
+These results when contrasted to each other show an interesting phenomenon. Assume that the oracle has the optimal $k$-means solution in his mind and it satisfies $\gamma$-margin property for $1<\gamma <1.5$. In this case our provided lower bound means that $k$-means clustering is NP-hard without making queries, while the positive result shows that with making a reasonable number of queries the problem becomes efficiently solvable. This indicates a nice trade off between query complexity and computational complexity. We further show a lower bound on the number of queries needed to make the problem efficiently solvable, showing that with access to only $O(\log k + \log n)$ queries the problem remain NP-hard.
 
 \subsection{Related Work}
 
