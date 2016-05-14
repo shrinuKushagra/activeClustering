@@ -109,11 +109,12 @@ The use of supervision in clustering is not unprecedented. Balcan et. al \cite{b
 
 Another example of the use of supervision in clustering was provided by Ashtiani and Ben-David \cite{ashtiani2015representation}. They assumed that the target clustering can be approximated by first mapping the data points to a new space and then performing $k$-means clustering. The supervised data (i.e., the clustering of a small subset of data) was then used to find such mapping.
 
-The computational complexity of clustering has been extensively studied. Many of these results are negative, showing that clustering is computationally hard. For example, $k$-means clustering is NP-hard even for $k=2$ \cite{dasgupta2008hardness}, or in a 2-dimensional plane \cite{vattani2009hardness,mahajan2009planar}. 
+The computational complexity of clustering has been extensively studied. Many of these results are negative, showing that clustering is computationally hard. For example, $k$-means clustering is NP-hard even for $k=2$ \cite{dasgupta2008hardness}, or in a 2-dimensional plane \cite{vattani2009hardness,mahajan2009planar}. In order to alleviate the problem of computational complexity, some notions of niceness of data under which the clustering becomes easy has been considered.  
 
-In order to alleviate the problem of computational complexity, some notions of niceness of data under which the clustering becomes easy has been considered.  
+The most popular is the notion of $\alpha$-center proximity. The following results are known when no oracle (or queries) is available to the clustering algorithm. In the restricted setting, the algorithm of Balcan and Liang \cite{balcan2012clustering} `recovers' the target clustering (outputs a tree such that the target is a pruning of the tree) when $\alpha > \sqrt{2} + 1$. In this work, we will show that in the presence of queries, we can recover the target clustering as long as $\alpha > 2$. Note that this is still above the NP-Hardness lower bound of $\alpha < 2$ in the restricted setting (\cite{ben2014data}).
 
-Balcan $\alpha$-center proximity.......
+In the steiner setting, the algorithm of Awasthi et. al \cite{awasthi2012center} recovers the target clustering when $\alpha > 2+\sqrt{3}$. We show that in the presence of few queries, we can recover the target clustering if $\alpha > \sqrt{2}+1$. This is much better than the previous known result in the absence of queries. This result also beats the NP-Hardness lower bound of $\alpha < 3$ in the steiner setting (\cite{awasthi2012center}).
+
 
 
 
@@ -465,75 +466,11 @@ If the clustering algorithm has access to an instance from each of $k$ clusters 
 \section{Comparison of $\gamma$-Margin and $\alpha$-Center Proximity}
 \label{appendix:gammaMrginVsAlphaCenter}
 
-
-
-\section{Center Proximity}
-We are given a clustering instance $(\mc X, d)$ in some metric space $M$. A center-based clustering is induced by centers $c_1, \ldots, c_k \in M$ where each point $x \in \mc X$ is assigned to its closest center.
-
 \begin{definition}[$\alpha$-center proximity]
 \label{defn:alphacp}
-Given a clustering instance $(\mc X, d)$ and the number of clusters $k$. We say that a clustering $\mc C_{\mc X} = \{C_1, \ldots, C_k\}$ induced by centers $c_1, \ldots, c_k \in M$ has $\alpha$-center proximity w.r.t $\mc X$ and $k$ if the following holds. For all $x \in C_i$ and $i\neq j$, 
+Given a clustering instance $(\mc X, d)$ in some metric space $M$ and the number of clusters $k$. We say that a clustering $\mc C_{\mc X} = \{C_1, \ldots, C_k\}$ induced by centers $c_1, \ldots, c_k \in M$ has $\alpha$-center proximity w.r.t $\mc X$ and $k$ if the following holds. For all $x \in C_i$ and $i\neq j$, 
 $$\alpha d(x, c_i) < d(x, c_j)$$
 \end{definition}
-
-\subsection{Goal}
-We are given a dataset $\mc X$. $\mc X$ has a target clustering $\mc C_{\mc X}$ which satisfies $\alpha$-center proximity. Our goal is to recover the target clustering $\mc C_{\mc X}$. There is a catch. Our algorithm has access to an {\it oracle} which can provide answers to membership queries. That is, we can pose the following question to the oracle.
-\begin{center}
-  \begin{tabular}{l}
-	{\it Question:} Does $x \in \mc X$ belong to the $i^{th}$ cluster $C_i$ ? \\
-	{\it Oracle:} Answers `yes' or `no'
-  \end{tabular}
-\end{center}
-
-\noindent Our goal is to design an algorithm which given a set $\mc X$ and an oracle $\mc O$ outputs the target clustering $\mc C_{\mc X}$ while making as few queries to the oracle as possible. Note that it is always possible recover the target clustering by making $n = |\mc X|$ queries to the oracle. Hence, we will require that any algorithm make sub-linear queries to the oracle. 
-
-\subsubsection*{Problem Setting}
-\begin{itemize}[nolistsep, noitemsep]
-\item {\it Steiner} - In this setting, centers $c_1, \ldots, c_k$ can be arbitrary points in the metric space.
-\item {\it Restricted} - The centers are part of the data-set $\mc X$, that is, $c_1, \ldots, c_k \in \mc X$ \\
-\end{itemize}
-We will give algorithms in both the settings. Note that restricted setting is similar to working with $k$-median cost function (if we consider the target clustering to be the optimal $k$-median clustering). Similarly, the optimal $k$-means solution can be thought of as a target in the steiner setting.
-
-\subsection{Related work}
-\label{section:relatedwork}
-For $\alpha$-center proximity, the following results are known when no oracle (or queries) is available to the clustering algorithm. In the restricted setting, the algorithm of Balcan and Liang \cite{balcan2012clustering} `recovers' the target clustering (outputs a tree such that the target is a pruning of the tree) when $\alpha > \sqrt{2} + 1$. In this work, we will show that in the presence of queries, we can recover the target clustering as long as $\alpha > 2$. Note that this is still above the NP-Hardness lower bound of $\alpha < 2$ in the restricted setting (\cite{ben2014data}).
-
-In the steiner setting, the algorithm of Awasthi et. al \cite{awasthi2012center} recovers the target clustering when $\alpha > 2+\sqrt{3}$. We show that in the presence of few queries, we can recover the target clustering if $\alpha > \sqrt{2}+1$. This is much better than the previous known result in the absence of queries. This result also beats the NP-Hardness lower bound of $\alpha < 3$ in the steiner setting (\cite{awasthi2012center}).
-
-\subsection{Algorithm}
-
-
-\subsection{Lower bound}
-In the steiner setting, Awasthi et. al \cite{awasthi2012center} showerd that for $\alpha < 3$ it is NP-Hard to find the optimal solution to the $k$-median objective function. Our positive result (Thm. \ref{thm:steinerQueryPositive}) is for the $k$-means optimal clustering. Hence, we would like to prove lower bounds in this setting. We will show that for $\alpha < 3$, it is NP-Hard to approximate the $k$-means cost function as well. The proof uses a simple reduction from the $k$-median instance to the $k$-means instance and is stated below.
-
-\begin{theorem}
-For any $\alpha < 3$, finding the optimal solution to the $k$-means objective function is even when the optimal solution satisfies $\alpha$-center proximity is NP-hard.
-\end{theorem}
-
-\begin{proof}
-We will first state both the $k$-median and the $k$-means optimization problem under $\alpha$-center proximity and then show the reduction.
-
-\vspace{1em}\noindent $k$-media clustering\\
-{\it Input:} A set $\mc X$, integer $k$ and metric $d$. It is known that the desired solution satisfies $\alpha$-center proximity.\\
-{\it Output:} A partition of $\mc X \subseteq M$ into $k$ clusters $C_1, \ldots, C_k$ with a center $c_i \in M$ for each cluster so as to minimize $\sum_{C_i}\sum_{x \in C_i} d(x, c_i)$.  
-
-\vspace{0.5em}\noindent $k$-means clustering\\
-{\it Input:} A set $\mc X$, integer $k$ and metric $d$. It is known that the desired solution satisfies $\alpha$-center proximity.\\
-{\it Output:} A partition of $\mc X \subseteq M$ into $k$ clusters $C_1, \ldots, C_k$ with a center $c_i \in M$ for each cluster so as to minimize $\sum_{C_i}\sum_{x \in C_i} d^2(x, c_i)$.  
-
-\vspace{1em}\noindent Awasthi et. al \cite{awasthi2012center} showed that the $k$-median problem above is NP-Hard. Given an instance of $k$-median problem we construct an instance of $k$-means as follows. We, let $\mc X, k$ be the same. But we use a new metric $\tilde d = \frac{d}{\sqrt{|\mc X|}}$. We will show that if the $k$-median instance has cost $\le A$ if and only if $k$-means instance has cost $\le A^2$. In the proof, we use $c(x)$ to denote the center of $x$. This will prove our desired result.
-
-\noindent$\Rightarrow$ For the forward direction, observe that $\sum_x \tilde d^{2}(x, c_i) \le\sum_{x}d^2(x, c(x)) \le (\sum_{x} d(x, c_i))^2 \le A^2$.
-
-\noindent$\Leftarrow$ For the reverse direction, observe that $(\sum_{x}d(x, c(x)))^2 \le n\sum_{x} d^2(x, c_i) = \sum_x \tilde d^{2}(x, c_i) \le A^2$.
-\end{proof}
-
-
-
-
-
-
-
 
 \section{Concentration inequalities}
 \label{appendixsection:conIneq}
@@ -543,36 +480,6 @@ We will first state both the $k$-median and the $k$-means optimization problem u
 Let $X_1, \ldots. X_n$ be i.i.d random vectors in some Hilbert space such that for all $i$, $\|X_i\|_2 \le R$ and $E[X_i] = \mu$. If $n > c\frac{\log(1/\delta)}{\epsilon^2}$, then with probability atleast $1-\delta$, we have that
 $$\Big\|\mu - \frac{1}{n}\sum X_i\Big\|_2^2 \le R^2\epsilon$$ 
 \end{theorem}
-
-\section{Some properties of Center Proximity (maybe useful later)}
-\begin{lemma}
-\label{lemma:hasPropertyR}
-Given a clustering instance $(\mc X, d)$ in some metric space $M$. Let $\mc C_{\mc X} = \{C_1, \ldots, C_k\}$ be a clustering of $\mc X$ induced by centers $c_1, \ldots, c_k \in M$ which satisfies $\alpha$-center proximity. Let $c_i' \in M$ such that $d(c_i, c_i') \le r(C_i)\epsilon$. If $\alpha \ge 2 + 3\epsilon$ then for all $x \in C_i$ and for all $y \in C_j$
-$$d(x, c_i') < d(x, y)$$  
-\end{lemma}
-
-\begin{proof}
-Fix any $x \in C_i$ and $y \in C_j$. Let $c_i, c_i'$ and $c_j$ be as defined in the statement of the lemma. Let $x^*$ be such that $d(x^*, c_i) = r(C_i)$. The proof of our lemma will follow from the following two properties of $\alpha$-center proximity instances.
-\begin{enumerate}[nolistsep,noitemsep]
-\item $r(C_i) < \frac{1}{\alpha-1}d(c_i, c_j)$.
-\begin{flalign*}
-&(\alpha-1) r(C_i) = \alpha d(x^*, c_i) - d(x^*, c_i) < d(x^*, c_j) - d(x^*, c_i) \le d(c_i, c_j)&
-\end{flalign*}
-\item $d(c_i, c_j) < \frac{\alpha+1}{\alpha-1}d(x, y)$
-\begin{flalign*}
-&\text{Using the triangle inequality, we get that}&\\
-&d(c_i, c_j) \le d(x, y) + d(x, c_i) + d(y, c_j). \text{From Corollary $2.3$ in \cite{awasthi2012center}, we know that}&\\
-&d(x, c_i), d(y, c_j)< d(x, y)/(\alpha-1) \text{ which completes the proof of the result.}&
-\end{flalign*}
-\end{enumerate}
-\begin{flalign*}
-&\text{Now to prove the lemma, observe that using triangle inequality, we get that
-}&\\
-&d(x, c_i') \le d(c_i, c_i') + d(x, c_i) < \frac{d(x, y)}{(\alpha-1)} + \epsilon r(C_i) < \bigg[ \frac{1}{\alpha-1} + \frac{\epsilon(\alpha+1)}{(\alpha-1)^2}\bigg]d(x, y) = \frac{(1+\epsilon)\alpha-1+\epsilon}{(\alpha-1)^2}d(x, y)&
-\end{flalign*}
-Observe that, $(\alpha-1)^2 \ge (1+\epsilon)\alpha -1 + \epsilon \iff \alpha^2 -(3+\epsilon)\alpha + 2-\epsilon \ge 0$
-$\iff \alpha \ge \frac{3+\epsilon + \sqrt{1+10\epsilon + \epsilon^2}}{2}$ or $\alpha \le \frac{3+\epsilon - \sqrt{1+10\epsilon + \epsilon^2}}{2}$. Now, for $\alpha \ge 2 + 3\epsilon \implies \alpha \ge \frac{3+\epsilon + \sqrt{(1+5\epsilon)^2}}{2}$ which completes the proof of the lemma.
-\end{proof}
 
 \end{document}
 
