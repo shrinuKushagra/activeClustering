@@ -313,7 +313,7 @@ The corollary is the immediate result of theorem \ref{thm:steinerQueryPositiveCo
 \label{section:lowerBounds}
 In section \ref{section:clusteringWithQuery}, we proposed an algorithm that could recover the true clustering with high probability, assuming that it has the $\gamma$-margin property for $\gamma>1$. A first challenge that comes to mind is that whether we can provide lower bounds for the number required queries.
 
-A more interesting but subtle challenge is revealed by noting that the `clustering with query' model can be contrasted to the usual unsupervised clustering. Assume that the oracle has the optimal $k$-means clustering in its mind. Finding the $k$-means solution without the help of the oracle is generaly computationally hard. Therefore, one may ask whether under $\gamma$-margin assumption one can provide a polynomial time algorithm that does not make any queries. In the next section we show a negative answer: for $\gamma < 1.5$ finding the solution to $k$-means clustering is computationally hard. This together with Theorem \ref{thm:steinerQueryPositive} and \ref{thm:steinerQueryPositiveComplexity} shows that for $1<\gamma<1.5$, having access to queries makes the computationally hard problem of $k$-means clustering efficiently solvable\footnote{To be precise, note that the algorithm used for clustering with queries is probabilistic. However, the lower bound that we provide is for deterministic algorithms. However, this means a lower bound for randomized algorithms as well unless $BPP\neq P$}.
+A more interesting but subtle challenge is revealed by noting that the `clustering with query' model can be contrasted to the usual unsupervised clustering. Assume that the oracle has the optimal $k$-means clustering in its mind. Finding the $k$-means solution without the help of the oracle is generally computationally hard. Therefore, one may ask whether under $\gamma$-margin assumption one can provide a polynomial time algorithm that does not make any queries. In the next section we show a negative answer: for $\gamma < 1.5$ finding the solution to $k$-means clustering is computationally hard. This together with Theorem \ref{thm:steinerQueryPositive} and \ref{thm:steinerQueryPositiveComplexity} shows that for $1<\gamma<1.5$, having access to queries makes the computationally hard problem of $k$-means clustering efficiently solvable\footnote{To be precise, note that the algorithm used for clustering with queries is probabilistic. However, the lower bound that we provide is for deterministic algorithms. However, this means a lower bound for randomized algorithms as well unless $BPP\neq P$}.
 
 Next, we also give a lower bound on the number of queries needed. We show that with making `too few' queries the problem is still hard.
 
@@ -321,24 +321,23 @@ Next, we also give a lower bound on the number of queries needed. We show that w
 
 \subsection{Lower Bound $k$-Means Clustering without Query}
 Given a set of instances $\mc X \subset \mb R ^d$, the $k$-means clustering finds a clustering $\mc C = \{C_1, \ldots, C_k\}$ which minimizes the following objective function
-
-$$\sum\limits_{C_i}\frac{1}{|C_i|} \sum_{x, y \in C_i} d^2(x, y)$$.
-
-One can also consider a weighted version of the problem \cite{vattani2009hardness} where every point $x$ has a weight $w(x)$. 
+$$\sum\limits_{C_i}\frac{1}{|C_i|} \sum_{x, y \in C_i} d^2(x, y).$$
+One can also consider a weighted version of the problem where every point $x$ has a weight $w(x)$. 
 
 $$\sum\limits_{C_i}\frac{1}{\sum_{x \in C_i}w(x)} \sum_{x, y \in {C_i \choose 2}} w(x)w(y)d^2(x, y).$$ 
 
-Vattani showed \cite{vattani2009hardness} that finding the optimal solution to the weighted $k$-means objective is NP-Hard even in Euclidean plane. We will also use similar ideas and reduction technique to get our lower bound. However, Vattani's proof does not imply hardness under $\gamma$-margin assumption. Therefore, we have to modify the proof by setting up the construction more carefully.
+Note that weighted $k$-means is e as Vattani showed \cite{vattani2009hardness} that finding the optimal solution to the weighted $k$-means objective is NP-Hard even in Euclidean plane. However, Vattani's proof does not imply hardness under $\gamma$-margin assumption. We will also use similar ideas and reduction technique to get our lower bound. Therefore, we have to modify the proof by setting up the construction more carefully. Hence, $U$ has a set cover of size $n$ iff $X$ has a clustering of cost $\le L$. We setup the distances such that the optimal clustering has $\gamma$-margin for $\gamma \le 1.5$. This completes the proof of the theorem.  
 
 \begin{theorem}
 \label{thm:gammaLower}
 For any $\gamma \le 1.5$, finding the optimal solution to the $k$-means objective function is NP-Hard even when the optimal satisfies $\gamma$-margin.
 \end{theorem}
-To prove the theorem, we will reduce an instance of exact cover by 3-sets (X3C) to the decision version of weighted $k$-means (which asks for a clustering with cost $\le L$).
+To prove the theorem, we will reduce an instance of exact cover by 3-sets (X3C) to the decision version of weighted $k$-means (which asks for a clustering with cost $\le L$). 
 \begin{definition}[X3C]
 Given a set $U$ containing exactly $3n$ elements and a collection $\mc S = \{S_1, \ldots, S_l\}$ of subsets of $X$ such that each $S_i$ contains exactly three elements. Does there exist $n$ elements in $\mc S$ such that their union is $U$? 
 \end{definition}
 
+Before, we go into the details of the proof, we give a brief sketch of the proof of the theorem. The proof constructs a an instance $X$ in the euclidean plane. The instance consists of $l$ different `rows' corresponding to the collection $\mc S$ and roughly $6n$ different `columns' corresponding to the set $U$. Now, the set $X$ and its parameters (distances between the points, number of clusters etc.) are chosen such that in any clustering $C$ of cost $\le L$, the rows can be clustered only in two possible ways. One of them corresponds to the $S_i$ being included in the cover and the other corresponds to it being excluded from the cover.   
 \subsubsection{Component design}
 Given an instance of X3C, that is, given elements $U = \{1, \ldots, 3n\}$ and collection $\mc S$, we construct an instance $X$ of $k$-means as follows. $X = H_{l,n} \cup (\cup_{i=1}^l Z_i)$. This reduction which we describe below is same as the construction of \cite{vattani2009hardness}.
 
