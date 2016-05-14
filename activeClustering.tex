@@ -323,10 +323,16 @@ Given a set $U$ containing exactly $3n$ elements and a collection $\mc S = \{S_1
 
 Before, we go into the details of the proof, we give a brief sketch of the proof of the theorem. The proof constructs a an instance $X$ in the euclidean plane. The instance consists of $l$ different `rows' corresponding to the collection $\mc S$ and roughly $6n$ different `columns' corresponding to the set $U$. Now, the set $X$ and its parameters (distances between the points, number of clusters etc.) are chosen such that in any clustering $C$ of cost $\le L$, the rows can be clustered only in two possible ways. One of them corresponds to the $S_i$ being included in the cover and the other corresponds to it being excluded from the cover. Hence, $U$ has a cover of size $n$ iff $X$ has a clustering of cost $\le L$. We choose the distances such that the optimal clustering satisfies $\gamma$-margin for $\gamma \le 1.5$ thereby completing the proof of the theorem. 
   
+\begin{figure}
+\input{figures/lowerBdFig}
+\caption{The component $H_{l,n}$. The left hand side shows the complete design. Rows $R_i$ have $6n+1$ bullets and two circles. Rows $M_i$ have $3n$ circles. The bullets have weight $w$ while the circles have weight $2w$. The distance between the rows $R_i$ and $M_i$ is $2(h+\sqrt{h^2-1})$. The right side has the distance between the different points. An enlarged view of the points $r_{i, j}$ and $m_{i,j}$ is shown in the next figure.}
+\label{fig:lowerBoundComponent}
+\end{figure}
+
 \subsubsection{Component design}
 Given an instance of X3C, that is, given elements $U = \{1, \ldots, 3n\}$ and collection $\mc S$, we construct an instance $X$ of $k$-means as follows. $X = H_{l,n} \cup (\cup_{i=1}^l Z_i)$. This reduction which we describe below is same as the construction of \cite{vattani2009hardness}.
 
-The component $H_{l,n}$ is as described in left hand side of Fig. 1 in \cite{vattani2009hardness}. The row $R_i$ is composed of $6n + 3$ points $\{s_i, r_{i, 1}, \ldots, r_{i, 6n+1}, f_i\}$. The points $r_{i, j}$ have weight $w$ and points $s_i$ and $f_i$ have weight $2w$. Row $M_i$ is composed of $3n$ points $\{m_{i,1}, \ldots, m_{i, 3n}\}$ of weight $2w$. The distances between the points are shown in Fig. \ref{fig:lowerBoundComponent}.
+The component $H_{l,n}$ is as described in left hand side of Fig. \ref{fig:lowerBoundComponent}. The row $R_i$ is composed of $6n + 3$ points $\{s_i, r_{i, 1}, \ldots, r_{i, 6n+1}, f_i\}$. The points $r_{i, j}$ have weight $w$ and points $s_i$ and $f_i$ have weight $2w$. Row $M_i$ is composed of $3n$ points $\{m_{i,1}, \ldots, m_{i, 3n}\}$ of weight $2w$. The distances between the points are shown in Fig. \ref{fig:lowerBoundComponent}.
 
 The set $Z_i$ depends on $S_i$ and is shown in Fig. \ref{fig:setZDescription}.  For every $j\in U$, there are four possible locations $x_{i, j}, x_{i,j'}, y_{i,j}$ and $y_{i, j}'$. One of $x_{i,j}$ and $x_{i,j}'$ will be occupied and one of $y_{i,j}$ and $y_{i,j}'$ will be occupied. Each point has weight $w$. The set $Z_i$ is
 \begin{itemize}[nolistsep,noitemsep]
