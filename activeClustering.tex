@@ -337,7 +337,8 @@ To prove the theorem, we will reduce an instance of exact cover by 3-sets (X3C) 
 Given a set $U$ containing exactly $3n$ elements and a collection $\mc S = \{S_1, \ldots, S_l\}$ of subsets of $X$ such that each $S_i$ contains exactly three elements. Does there exist $n$ elements in $\mc S$ such that their union is $U$? 
 \end{definition}
 
-Before, we go into the details of the proof, we give a brief sketch of the proof of the theorem. The proof constructs a an instance $X$ in the euclidean plane. The instance consists of $l$ different `rows' corresponding to the collection $\mc S$ and roughly $6n$ different `columns' corresponding to the set $U$. Now, the set $X$ and its parameters (distances between the points, number of clusters etc.) are chosen such that in any clustering $C$ of cost $\le L$, the rows can be clustered only in two possible ways. One of them corresponds to the $S_i$ being included in the cover and the other corresponds to it being excluded from the cover.   
+Before, we go into the details of the proof, we give a brief sketch of the proof of the theorem. The proof constructs a an instance $X$ in the euclidean plane. The instance consists of $l$ different `rows' corresponding to the collection $\mc S$ and roughly $6n$ different `columns' corresponding to the set $U$. Now, the set $X$ and its parameters (distances between the points, number of clusters etc.) are chosen such that in any clustering $C$ of cost $\le L$, the rows can be clustered only in two possible ways. One of them corresponds to the $S_i$ being included in the cover and the other corresponds to it being excluded from the cover. Hence, $U$ has a cover of size $n$ iff $X$ has a clustering of cost $\le L$. We choose the distances such that the optimal clustering satisfies $\gamma$-margin for $\gamma \le 1.5$ thereby completing the proof of the theorem. 
+  
 \subsubsection{Component design}
 Given an instance of X3C, that is, given elements $U = \{1, \ldots, 3n\}$ and collection $\mc S$, we construct an instance $X$ of $k$-means as follows. $X = H_{l,n} \cup (\cup_{i=1}^l Z_i)$. This reduction which we describe below is same as the construction of \cite{vattani2009hardness}.
 
@@ -354,17 +355,18 @@ The parameters of the component are defined below. $$k = (l-1)3n + l(3n+2) \text
 $$L_1 = (6n+3)w \text{ and } L_2 = 6n(l-1)\frac{2w\frac{w}{2}}{2w+\frac{w}{2}}h^2 = 6n(l-1)$$
 $$h = \sqrt{5}, d = \sqrt{4.5}, \epsilon = \frac{1}{w^2} \text{ and } \alpha = \frac{d}{w}-\frac{1}{2w^3}.$$
 
-\begin{definition}[$A$ and $B$ clustering of $R_i$ \cite{vattani2009hardness}]
-
+\begin{definition}[$A$ and $B$ clustering of $R_i$]
+\label{defn:abclusteringVattani}
 \noindent $A$ - For $1 \le j \le 3n$, $R_i$ has clusters $\{r_{2j-1}, r_{2j}\}$. Also, it has clusters $\{s_i\}, \{r_{i, 6n+1}, f_i\}$\\
 \noindent $B$ - For $1 \le j \le 3n$, $R_i$ has clusters $\{r_{2j}, r_{2j+1}\}$. Also, it has clusters $\{s_i, r_{i, 1}\}, \{f_i\}$
 \end{definition}
 
-\begin{definition}[Good point for a cluster \cite{vattani2009hardness}]
+\begin{definition}[Good point for a cluster]
+\label{defn:goodPointVattani}
 A cluster $C$ is good for a point $x \not\in C$ if adding $z$ to $C$ increases cost by exactly $\frac{2ww'}{2w+w'}h^2$ 
 \end{definition}
 
-A row grouped in a $A$ clustering costs $(6n+3)w-\alpha$ while a row in $B$ clustering costs $(6n+3)w$. Also, the following simple observations (also in \cite{vattani2009hardness}) can be made. 
+Defns. \ref{defn:abclusteringVattani} and \ref{defn:goodPointVattani} have been taken from \cite{vattani2009hardness}. A row grouped in a $A$ clustering costs $(6n+3)w-\alpha$ while a row in $B$ clustering costs $(6n+3)w$. Also, the following simple observations can be made. 
 \begin{itemize}[nolistsep,noitemsep]
 \item The clusters $\{r_{i,2j-1}, r_{i, 2j}\}$, $\{r_{i,2j}, r_{i, 2j+1}\}$ and $\{m_{i,j}\}$ are good for $x_{i,j}$ and $y_{i-1,j}$.
 \item The clusters $\{r_{i,2j}, r_{i, 2j+1}\}$ and $\{m_{i,j}\}$ are good for $x_{i,j}'$ and $y_{i-1,j}'$.
