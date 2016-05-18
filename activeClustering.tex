@@ -1,14 +1,21 @@
-\documentclass[orivec]{llncs}
-\usepackage{llncsdoc}
+\documentclass{article}
+\usepackage{nips_2016}
 
 \def\COMPLETE{}
 \usepackage[boxruled]{algorithm2e}
-\usepackage{amsmath,amssymb,amstext}
-\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amstext,amsthm}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
 
 \usepackage{graphicx}
 \usepackage{hyperref}
-\usepackage[toc,page]{appendix}
 
 \usepackage{color}
 \usepackage[toc,page]{appendix}
@@ -30,18 +37,15 @@
 \DeclareMathOperator{\vcdim}{VC-Dim}
 \DeclareMathOperator{\vol}{vol}
 
-\renewcommand{\qed}{\hfill\ensuremath{\blacksquare}}
 \renewcommand\labelitemi{$\bullet$}
 \renewcommand{\labelitemii}{$\star$}
 
-\makeatletter  %% this is crucial
-\renewcommand\subsubsection{\@startsection{subsubsection}{3}{\z@}%
-   {-18\p@ \@plus -4\p@ \@minus -4\p@}%
-   {8\p@ \@plus 4\p@ \@minus 4\p@}%     <-- this
-   {\normalfont\normalsize\bfseries\boldmath
-   \rightskip=\z@ \@plus 8em \pretolerance=10000}}
-\makeatother   %% this is crucial
-\setcounter{secnumdepth}{3}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
 
 
 \newcommand{\todo}{\textcolor{blue}{[TODO]}\xspace}
@@ -509,7 +513,7 @@ In this paper, we introduced a notion of $\gamma$-margin. We gave upper (with qu
 \begin{table}[]
 \centering
 \caption{Known results for $\alpha$-center proximity}
-\label{my-label}
+\label{table:alphacp}
 \begin{tabular}{lll}
 \cline{2-3}
 \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{Euclidean} & \multicolumn{1}{l|}{Non-euclidean} \\ \hline
@@ -525,7 +529,7 @@ An overview of the known results under $\alpha$-center proximity is provided in 
 \begin{table}[]
 \centering
 \caption{Results for $\gamma$-margin}
-\label{my-label}
+\label{table:gammamargin}
 \begin{tabular}{lll}
 \cline{2-3}
 \multicolumn{1}{l|}{}                                                                     & \multicolumn{1}{l|}{Euclidean} & \multicolumn{1}{l|}{Non-euclidean}                                                                         \\ \hline
