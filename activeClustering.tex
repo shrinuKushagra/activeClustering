@@ -120,7 +120,7 @@ Awasthi et. al \cite{awasthi2012center} introduced the notion of $\alpha$-center
 
 
 
-\subsection{Clustering with Query}
+\subsection{Clustering with Queries}
 
 Let $\mc X$ be domain set and $d:(\mc X, \mc X) \rightarrow \mc R $ be a distance function over its elements. Let $\mc C_{\mc X} = \{C_1, \ldots, C_k\}$ be a clustering (i.e., a partitioning) of $\mc X$. We say $x_1 \overset{C_{\mc X}}{\sim} x_2$ if $x_1$ and $x_2$ belong to the same cluster according to $C_{\mc X}$. We further denote by $n$ the number of instances ($|{\mc X}|$) and by $k$ the number of clusters.
 
@@ -186,7 +186,7 @@ In clustering literature, similar notions have been considered before. One of th
  
 Throughout the next sections, we assume that the instaces are in a Euclidean metric space (i.e., $\mc X\subset \mathbb{R}^d$). Furthermore, we assume that the clustering instance $(\mc X, d, C^*)$ is center-based and admits a $\gamma$-margin property\footnote{Naturally, the larger the value of $\gamma$, the stronger this assumtion is.}. Finally, we assume that the centers $\mu^*$ corresponding to $C^*$ are the centers of mass of the corresponding clusters. In other words, $\mu^*_i=\frac{1}{|C_i|}\sum_{x\in C^*_i} x$. Note that this is the case for example when the oracle's clustering is the optimal solution to the Euclidean k-means clustering problem.
 
-\section{An Algorithm for Clustering with Query}
+\section{An Algorithm for Clustering with Queries}
 \label{section:clusteringWithQuery}
 
 In this section we provide an efficient algorithm for clustering with queries. The setting is the one described in the previous section. In particular, it is assumed that the oracle has a $\gamma$-margin center-based clustering in his mind. The space is Euclidean and the center of each cluster is the center of mass of the instances in that cluster. The algorithm makes cluster-assignment queires to the oracle, but this can be translated to binary same-cluster queries (see appendix \ref{appendix:diffQueryModels}). 
@@ -314,7 +314,7 @@ The corollary is the immediate result of theorem \ref{thm:steinerQueryPositiveCo
 
 Finding $k$-means solution without the help of the oracle is generally computationally hard. In this section, we will show that solving $k$-means remains hard even if we know that the optimal solution satisfies $\gamma$-margin property for $\gamma=1.5$. In particular, we show the hardness for the case of $k=\Theta(n^\epsilon)$ for any $\epsilon\in (0,1)$. This is a critical result for our purpose, because it shows that our niceness assumption (i.e., the $\gamma$-margin property) is not too strong, and the use of oracle is necessary.
 
-In section \ref{section:clusteringWithQuery}, we proposed a polynomial-time algorithm that could recover the target clustering using $O(k^2\log k \log n)$ queries, assuming that the clustering satisfies $\gamma$-margin property for $\gamma=1$. Now assume that the oracle conforms to the optimal $k$-means clustering solution. In this case, for $1<\gamma<1.5$, solving $k$-means clustering would be NP-hard without query, while with a `reasonble' number of queries it becomes efficiently solvable \footnote{To be precise, note that the algorithm used for clustering with queries is probabilistic. However, the lower bound that we provide is for deterministic algorithms. However, this means a lower bound for randomized algorithms as well unless $BPP\neq P$}.
+In section \ref{section:clusteringWithQuery}, we proposed a polynomial-time algorithm that could recover the target clustering using $O(k^2\log k \log n)$ queries, assuming that the clustering satisfies $\gamma$-margin property for $\gamma=1$. Now assume that the oracle conforms to the optimal $k$-means clustering solution. In this case, for $1<\gamma<1.5$, solving $k$-means clustering would be NP-hard without query, while it becomes efficiently solvable with the help of an oracle \footnote{To be precise, note that the algorithm used for clustering with queries is probabilistic. However, the lower bound that we provide is for deterministic algorithms. However, this means a lower bound for randomized algorithms as well unless $BPP\neq P$}. %Moreover, note that the lower bound holds for $k << n$. In this 
 
 %This together with Theorem \ref{thm:steinerQueryPositive} and \ref{thm:steinerQueryPositiveComplexity} show that for , having access to queries makes the computationally hard problem of $k$-means clustering efficiently solvable
 
@@ -342,9 +342,9 @@ It is known that finding the optimal $k$-means solution is NP-hard even in the E
 \label{thm:gammaLower}
 Finding the optimal solution to $k$-means objective function is NP-hard when $k=\Theta(n^\epsilon)$ for any $\epsilon \in (0,1)$. Furthermore, this result holds even when the optimal solution satisfies $\gamma$-margin property for $\gamma = 1.5$.
 
-\end{theorem}
+In the following we provide the proof of this theorem.
 
-Note that .....number of queries reasonable....
+\end{theorem}
 
 \subsubsection{Plan of Attack}
 
