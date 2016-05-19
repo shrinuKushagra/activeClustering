@@ -20,7 +20,7 @@
 \usepackage{color}
 \usepackage[toc,page]{appendix}
 \usepackage{xspace}
-\usepackage{enumitem}
+\usepackage[inline]{enumitem}
 \usepackage{times}
 \usepackage{float}
 \usepackage{capt-of}
@@ -384,17 +384,17 @@ Furthermore, our choice of embedding makes sure that the optimal clustering sati
   
 \begin{figure}
  \resizebox{.9\linewidth}{!}{\input{figures/lowerBdFig}}
-\caption{Geometry of $H_{l,n}$. This figure is similar to Fig. 1 in \cite{vattani2009hardness}. The left hand side shows the complete design. Rows $R_i$ have $6m+1$ bullets and two circles. Rows $G_i$ have $3m$ circles. The bullets have weight $w$ while the circles have weight $2w$. The distance between the rows $R_i$ and $G_i$ is $2(h+\sqrt{h^2-1})$. Furthermore, the right side of the figure shows the distance between the points. %An enlarged view of the points $r_{i, j}$ and $m_{i,j}$ is shown in Fig. \ref{fig:ZFig}
+\caption{Geometry of $H_{l,m}$. This figure is similar to Fig. 1 in \cite{vattani2009hardness}. The left hand side shows the complete design. Rows $R_i$ have $6m+1$ bullets and two circles. Rows $G_i$ have $3m$ circles. The bullets have weight $w$ while the circles have weight $2w$. The distance between the rows $R_i$ and $G_i$ is $> 2(h+\sqrt{h^2-1})$. Furthermore, the right side of the figure shows the distance between the points. %An enlarged view of the points $r_{i, j}$ and $m_{i,j}$ is shown in Fig. \ref{fig:ZFig}
 }
 \label{fig:lowerBoundComponent}
 \end{figure}
 
 \subsubsection{Reduction Design}
-Given an instance of X3C, that is the elements $U = \{1, \ldots, 3m\}$ and the collection $\mc S$, we construct a set of points $X$ in the Euclidean plane which we want to cluster. Particularly, $X$ consists of a set of points $H_{l,n}$, and the sets $Z_i$ corresponding to $S_i$. In other words, $X = H_{l,n} \cup (\cup_{i=1}^l Z_i)$. Also, these points are weighted, simply meaning that each point with weight $w$ is actually a set of $w$ points with weight $1$\footnote{This is valid because the weights are integers}.
+Given an instance of X3C, that is the elements $U = \{1, \ldots, 3m\}$ and the collection $\mc S$, we construct a set of points $X$ in the Euclidean plane which we want to cluster. Particularly, $X$ consists of a set of points $H_{l,m}$, and the sets $Z_i$ corresponding to $S_i$. In other words, $X = H_{l,m} \cup (\cup_{i=1}^l Z_i)$. Also, these points are weighted, simply meaning that each point with weight $w$ is actually a set of $w$ points on the same location.
 
 %The set $X$ is described in Fig. \ref{fig:lowerBoundComponent} and the set $Z$ is described in Fig. \ref{fig:ZFig}.
 
-The set $H_{l,n}$ is as described in Fig. \ref{fig:lowerBoundComponent}. The row $R_i$ is composed of $6m + 3$ points $\{s_i, r_{i, 1}, \ldots, r_{i, 6m+1}, f_i\}$. The points $r_{i, j}$ have weight $w$, and the points $s_i$ and $f_i$ have weight $2w$. Row $G_i$ is composed of $3m$ points $\{g_{i,1}, \ldots, g_{i, 3m}\}$ of weight $2w$. The distances between the points are shown in Fig. \ref{fig:lowerBoundComponent}.
+The set $H_{l,m}$ is as described in Fig. \ref{fig:lowerBoundComponent}. The row $R_i$ is composed of $6m + 3$ points $\{s_i, r_{i, 1}, \ldots, r_{i, 6m+1}, f_i\}$. The points $r_{i, j}$ have weight $w$, and the points $s_i$ and $f_i$ have weight $2w$. Row $G_i$ is composed of $3m$ points $\{g_{i,1}, \ldots, g_{i, 3m}\}$ of weight $2w$. The distances between the points are shown in Fig. \ref{fig:lowerBoundComponent}.
 
 
 \begin{figure}
@@ -419,7 +419,7 @@ Furthermore, $x_{i, j}, x_{i,j}^\prime, y_{i,j}$ and $y_{i, j}^\prime$ are speci
 
 We set the parameters as follows
 
-$$h = \sqrt{5}, d = \sqrt{4.5}, \epsilon = \frac{1}{w^2} ,k = (l-1)3m + l(3m+2)$$
+$$h = 2, d = \sqrt{6}, \epsilon = \frac{1}{w^2}, \lambda = \frac{2}{\sqrt{3}}h \text{ and }k = (l-1)3m + l(3m+2)$$
 
 %$$k = (l-1)3m + l(3m+2) \text{ and the cost }L = L_1 + L_2 -m\alpha.$$
 %$$L_1 = (6m+3)w \text{ and } L_2 = 6m(l-1)\frac{2w\frac{w}{2}}{2w+\frac{w}{2}}h^2 = 6m(l-1)$$
@@ -436,47 +436,61 @@ $$L_1 = (6m+3)w, L_2 = 6m(l-1), L=L_1 + L_2, \alpha = \frac{d}{w}-\frac{1}{2w^3}
 \label{defn:abclusteringVattani}
 
 An $A$-Clustering of row $R_i$ is a clustering in the form of $\{\{s_i\}, \{r_{i,1}, r_{i,2}\}, \{r_{i,3}, r_{i,4}\}, \ldots, \{r_{i,6m-1}, r_{i,6m}\},\{r_{i, 6m+1}, f_i\}\}$. A $B$-Clustering of row $R_i$ is a clustering in the form of $\{\{s_i, r_{i, 1}\}, \{r_{i,2}, r_{i,3}\}, \{r_{i,4}, r_{i,5}\}, \ldots, \{r_{i,6m}, r_{i,6m+1}\},\{f_i\}\}$. 
-
-%- For $1 \le j \le 3m$, $R_i$ has clusters $\{r_{2j-1}, r_{2j}\}$. Also, it has clusters $\{s_i\}, \{r_{i, 6m+1}, f_i\}$\\
-
-%\noindent $B$ - For $1 \le j \le 3m$, $R_i$ has clusters $\{r_{2j}, r_{2j+1}\}$. Also, it has clusters $\{s_i, r_{i, 1}\}, \{f_i\}$
 \end{definition}
 
 \begin{definition}[Good point for a cluster]
 \label{defn:goodPointVattani}
-A cluster $C$ is good for a point $z \not\in C$ if adding $z$ to $C$ increases cost by exactly $\frac{2ww'}{2w+w'}h^2$ 
+A cluster $C$ is good for a point $z \not\in C$ if adding $z$ to $C$ increases cost by exactly $\frac{2w}{3}h^2$ 
 \end{definition}
 
-\begin{definition}[Nice Clustering]
-\label{defn:niceClustering}
-A $k$-clusteirng is nice if every $g_{i,j}$ is a singleton cluster, and each $R_i$ is grouped in the form of either an $A$-clustering or a $B$-clustering.
-\end{definition}
-
-
-%Defns. \ref{defn:abclusteringVattani} and \ref{defn:goodPointVattani} have been taken from \cite{vattani2009hardness}.
-It is straightforward to see that a row grouped in a $A$-clustering costs $(6m+3)w-\alpha$ while a row in $B$-clustering costs $(6m+3)w$. Hence, a nice clustering of $H_{l,n}$ costs at most $L_1$. Also, the following simple observations can be made. 
+Given the above definition, the following simple observations can be made. 
 \begin{itemize}[nolistsep,noitemsep]
 \item The clusters $\{r_{i,2j-1}, r_{i, 2j}\}$, $\{r_{i,2j}, r_{i, 2j+1}\}$ and $\{g_{i,j}\}$ are good for $x_{i,j}$ and $y_{i-1,j}$.
 \item The clusters $\{r_{i,2j}, r_{i, 2j+1}\}$ and $\{g_{i,j}\}$ are good for $x_{i,j}'$ and $y_{i-1,j}'$.
 \end{itemize}
-Therefore, a nice clustering of $H_{l,n} \cup Z$ costs at most $L_1 + L_2$. More specifically, if $t$ rows are group in a $A$-clustering, the nice-clustering costs $L_1+L_2-t\alpha$.
+
+\begin{definition}[Nice Clustering]
+\label{defn:niceClustering}
+A $k$-clusteirng is nice if every $g_{i,j}$ is a singleton cluster, each $R_i$ is grouped in the form of either an $A$-clustering or a $B$-clustering and the points in $Z_i$ are added to a cluster which is good for it.
+\end{definition}
+
+It is straightforward to see that a row grouped in a $A$-clustering costs $(6m+3)w-\alpha$ while a row in $B$-clustering costs $(6m+3)w$. Hence, a nice clustering of $H_{l,m} \cup Z$ costs at most $L_1 + L_2$. More specifically, if $t$ rows are group in a $A$-clustering, the nice-clustering costs $L_1+L_2-t\alpha$. Also, observe that any nice clustering of $X$ has only the following four different types of clusters. \begin{enumerate}[label=(\arabic*),nolistsep,leftmargin=*]
+\item Type E - $\{r_{i,2j-1}, r_{i,2j+1}\}$ \\
+The cost of this cluster is $2w$ and we define the contribution of each location as  cost/no. of locations $ = \frac{2w}{2} = w$.
+\item Type F - $\{r_{i,2j-1}, r_{i, 2j}, x_{i, j}\}$ or $\{r_{i,2j-1}, r_{i, 2j}, y_{i-1, j}\}$ or $\{r_{i,2j}, r_{i, 2j+1}, x_{i, j}'\}$ or $\{r_{i,2j}, r_{i, 2j+1}, y_{i-1, j}'\}$\\
+The cost of any cluster of this type is $2w(1+\frac{h^2}{3})$ and the contribution of each location to is atmost $\frac{2w}{9}(h^2+3)$. For $h = \sqrt 5$, this equals $\frac{16}{9}w$.  
+\item Type I - $\{g_{i, j}, x_{i,j}\}$ or $\{g_{i, j}, x_{i,j}'\}$  or $\{g_{i, j}, y_{i,j}\}$  or $\{g_{i, j}, y_{i,j}'\}$\\
+The cost of any cluster of this type is $\frac{2}{3}wh^2$ and the contribution to cost of each location is $\frac{w}{3}h^2$. For our choice of $h$, the contribution is $\frac{5}{3}w$.
+\item Type J - $\{s_i, r_{i,1}\}$ or $\{r_{i,6m+1}, f_i\}$\\
+The cost of this cluster is $3w$ (or $3w-\alpha$) and we define the contribution of each location to cost is atmost $1.5w$. 
+\end{enumerate}
+Hence, observe that in a nice-clustering, any location contributes atmost $\le \frac{16}{9}w$ to the total clustering cost. This observation will be useful in the proof of the lemma below.
 
 \begin{lemma}
-For large enough $w = poly(l, n)$, any non-nice clustering of $H_{l, n}$ costs at least $  (L_1 + L_2 - l\alpha + w) > (L + \frac{7}{8}w)$.
+For large enough $w = poly(l, m)$, any non-nice clustering of $X = H_{l, m} \cup Z$ costs at least $  L_1 + L_2 - l\alpha + w > L + cw$ for any $c < 1$.
 \end{lemma}
 
 \begin{proof}
-Any non-nice $k$-clustering $C$ can take the following forms. 
+We will show that any non-nice clustering $C$ of $X$ costs atleast $w$ more than the cost of any nice clustering. This will prove our result. The following cases are possible.
+
 \begin{itemize}[nolistsep,leftmargin=*]
-\item All the clusters have cardinality $\le 3$ - In this case the following scenarios can arise.\\
-$m_{i, j}, m_{i,j+1}$ are in the same cluster. Then $C$ must have either of the following. (1) $r_{i, j}$ and $r_{i,j+1}$ as a singleton. In this case, the cost difference is at least $ \frac{141}{6}w - 2w -\frac{20}{6}w > 14w$. (2) $s_i$ and $r_{i,1}$ as singleton. The difference is at least $13w$. (3) $f_i$ and $r_{i,6n+1}$ as singleton. Similarly, the cost difference is at least $13w+\alpha$. (4) $x_{i,j}$ and $y_{i+1,j}$ as singleton. The cost difference is at least $16w-\frac{20}{3}w > 9w$. Note that having multiple $m_{i, j}$'s in the same cluster or having multiple clusters which contain $m_{i, j}, m_{i,j+1}$ will bring the cost up even furthur.
+\item $C$ contains a cluster $C_i$ of cardinality $t > 6$\\
+Observe that any $x \in C_i$ has at least $t-5$ locations at a distance $\ge 4$ and $4$ locations at a distance atleast $2$. Hence, the cost of $C_i$ is atleast $\frac{w}{2t}(4^2(t-5)+2^24)t = 8w(t-4)$. $C_i$ allows us to use atmost $t-2$ singletons. This is because a nice clustering of these $t+(t-2)$ points uses atmost $t-1$ clusters and the clustering $C$ uses  $1 + (t-2)$ clusters for these points. The cost of the nice cluster on these points is $\le \frac{16w}{9}2(t-1)$. While the non-nice clustering costs atleast $8w(t-4)$. For $t \ge 6.4 \implies 8(t-4) > \frac{32}{9}(t-1)$ and the claim follows. Note that in this case the difference in cost is atleast $\frac{8w}{3}$. 
 
-$C$ is such that $r_{i, 2j}, m_{i, j}$ are in the some cluster $C_i$\\
-This has the following possibilities. (1) $r_{i, j'}$ is a singleton. In this case the smallest cost difference is when $x_{i,j} \in C_i$ which is at least $ \frac{w}{4}(14+2(\sqrt5+2)^2) - 2w -\frac{10}{3}w > 7w$. (2) $s_i$ and $r_{i,1}$ as singleton. In this case, the analysis is the same as before. The cost difference is at least $6w$. (3) $f_i$ and $r_{i,6n+1}$ as singleton. Similar to before, the cost difference is at least $6w+\alpha$. (4) $x_{i,j}$'s are singletons. In this case, the difference is at least $ \frac{w}{4}(14+2(\sqrt5+2)^2) + 2w -\frac{10}{3}w > 11w$. Note that having multiple clusters which contain $m_{i, j}, r_{i',j'}$ will bring the cost up even furthur.
+\item Contains a cluster of cardinality $t = 6$\\
+Simple arguments show that amongst all clusters of cardinality $6$, the following has the minimum cost. $C_i = \{r_{i, 2j-1}, r_{i, 2j}, x_{i,j}, y_{i-1, j}, r_{i, 2j+1}, r_{2j+2}\}$. The cost of this cluster is $\frac{176w}{6}$. Arguing as before, this allows us to use $4$ singletons. Hence, a nice cluster on these $10$ points costs atmost $\frac{160w}{9}$. The difference of cost is atleast $34w$.  
 
-$r_{i,j}$ is a singleton - $C$ must contain both $\{s_i, r_{i,1}\}$ and $\{r_{i,6n+1}, f_i\}$. Hence the increase in cost is at least $3w - 2w = w$. We have omitted a few cases for brevity but the analysis is exactly similar. 
+\item Contains a cluster of cardinality $t = 5$\\
+Simple arguments show that amongst all clusters of cardinality $5$, the following has the minimum cost. $C_i = \{r_{i, 2j-1}, r_{i, 2j}, x_{i,j}, y_{i-1, j}, r_{i, 2j+1}\}$. The cost of this cluster is $16w$. Arguing as before, this allows us to use $3$ singletons. Hence, a nice cluster on these $8$ points costs atmost $16w\frac{8}{9}$. The difference of cost is atleast $\frac{16w}{9}$.  
 
-\item $C$ contains a cluster of cardinality $m > 4$ - Using a simple counting argument, we can observe that such a clustering costs at least $\sim 8wm$. A nice clustering however on these points costs at most $\sim \frac{16w}{6}m$ and uses at most $m/2$ clusters. Hence, on the $m+m/2$ points, $C$ costs $8wm$ while the nice clustering costs atmost $4mw$. We have omitted the details of the calculations here for brevity. However, note that this follows by observing that in any cluster of size $m > 4$, any point $x$ has at least $m-4$ at a distance $\ge 4$.
+\item Contains a cluster of cardinality $t = 4$\\
+It is easy to see that amongst all clusters of cardinality $4$, the following has the minimum cost. $C_i = \{r_{i, 2j-1}, r_{i, 2j}, x_{i,j}, r_{i, 2j+1}\}$. The cost of this cluster is $11w$. Arguing as before, this allows us to use $2$ singletons. Hence, a nice cluster on these $6$ points costs atmost $\frac{32w}{3}$. The difference of cost is atleast $\frac{w}{3}$.
+
+\item All the clusters have cardinality $\le 3$ \\
+Observe that amongst all non-nice clusters of cardinality $3$, the following has the minimum cost. $C_i = \{r_{i, 2j-1}, r_{i, 2j}, r_{i, 2j+1}\}$. The cost of this cluster is $8w$. Arguing as before, this allows us to use atmost $1$ more singleton. Hence, a nice cluster on these $4$ points costs atmost $\frac{64w}{9}$. The difference of cost is atleast $\frac{8w}{9}$.
+
+It is also simple to see that any non-nice clustering of size $2$ causes an increase in cost of atleast $w$.
+
 \end{itemize}
 \end{proof}
 
