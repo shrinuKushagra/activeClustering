@@ -131,21 +131,12 @@ yeild the feasibility of $k$-means clustering when the input satisfies the condi
 
 The framework of clustering with queries is can be applied to any type of clustering. However, in this work, we focus on a certain family of common clustering - center based clustering in Euclidean spaces\footnote{In fact, results in this work are all independent of teh Euclidean dimension and applyto any Hilbert space.}.
 
-Let ${\mc X}$ be a subset of some euclidean space, $\mathbb{R}^n$. We say that a clustering $C_{\mc X}$ is \emph{center-based} if there exists a set of centers $\mc \mu = \{\mu_1, \ldots, \mu_k\} \subset \mc R^n$ such that the clustering corresponds to the Voroni diagram over those center points. Namely, for every $x$ in $\mc X$ and $i \leq k$,  $x\in C_i \Leftrightarrow i=\argmin_j d(x,\mu_j)$. 
+Let ${\mc X}$ be a subset of some euclidean space, $\mathbb{R}^n$. Let $\mc C_{\mc X} = \{C_1, \ldots, C_k\}$ be a clustering (i.e., a partitioning) of $\mc X$. We say $x_1 \overset{C_{\mc X}}{\sim} x_2$ if $x_1$ and $x_2$ belong to the same cluster according to $C_{\mc X}$. We further denote by $n$ the number of instances ($|{\mc X}|$) and by $k$ the number of clusters.
+
+We say that a clustering $C_{\mc X}$ is \emph{center-based} if there exists a set of centers $\mc \mu = \{\mu_1, \ldots, \mu_k\} \subset \mc R^n$ such that the clustering corresponds to the Voroni diagram over those center points. Namely, for every $x$ in $\mc X$ and $i \leq k$,  $x\in C_i \Leftrightarrow i=\argmin_j d(x,\mu_j)$. 
 
 %A clustering instance $(\mc X, d, C^*)$ is center-based if $C^*$ is a center-based clustering of $\mc X$.
 
-Some of the most-used clustering methods (e.g., k-means and k-median clustering) are center-based. However, clustering is genrally computationally hard in these settings. Therefore, some notions of \emph{niceness} of the clustering instance (under which clustering becomes \emph{easy}) have been considered in literature. In the following we introduce a related notion of niceness.
-
-\begin{definition}[$\gamma$-Margin Property]
-\label{defn:alphacp}
-We say that a center-based clustering instance $(\mc X, d, C^*)$ has $\gamma$-margin property if for every $C_i$ in $C^*$ the following holds
-
-$$\forall x\in C^*_i, y \notin C^*_i, \gamma d(x, \mu_i) < d(y, \mu_i)$$
-
-where $\mu_i$ is the center corresponding to $C_i$.
-
-\end{definition}
 
 
 %, a center-based clutering algorithm outputs a set of centers $\mu$ (or the corresponding partitioning $C_{\mc X}$ based on a criterion. This criterion can be the optimization of a certain objective fucntion (e.g., k-means objective function). In the next section, we introduce a different setting where the algorithm tries to find out the clustering that an oracle has in mind by querying the oracle. 
@@ -169,14 +160,16 @@ Similar notions have been considered before in the clustering literature. The cl
  
 MAYBE ADD HERE A SHORT STATEMENT ABOUT THE "CORRESPONDENCE" BETWEEN THE TWO NOTIONS.
 
+IT MAY ALSO MAKE SENSE TO HAVE THE HARDNESS AND FEASIBILITY RESULTS FOR GAMMA MARGINS (JUST CITE TEH RESULTS AND SAY THE PROOFS FOLLOW FROM THOSE FOR ALPHA CENTEAR.
 
  %Furthermore, we assume that the clustering instance $(\mc X, d, C^*)$ is center-based and admits a $\gamma$-margin property\footnote{Naturally, the larger the value of $\gamma$, the stronger this assumtion is.}.
 
-\subsection{Clustering with Queries}
+\subsection{The algorithmic setup}
 
-Let $\mc X$ be domain set and $d:(\mc X, \mc X) \rightarrow \mc R $ be a distance function over its elements. Let $\mc C_{\mc X} = \{C_1, \ldots, C_k\}$ be a clustering (i.e., a partitioning) of $\mc X$. We say $x_1 \overset{C_{\mc X}}{\sim} x_2$ if $x_1$ and $x_2$ belong to the same cluster according to $C_{\mc X}$. We further denote by $n$ the number of instances ($|{\mc X}|$) and by $k$ the number of clusters.
 
-We assume that an oracle $\mc O$ has a clustering $C^*_{\mc X}=\{ C^*_1, \ldots C^*_k\}$ in his mind. The clustering algorithm then tries to recover $C^*_{\mc X}$ by querying the oracle. The following notions of query are natural for clustering tasks.
+
+For a clustering $C^*_{\mc X}=\{ C^*_1, \ldots C^*_k\}$, a $C^*$ oracle is a
+a function that provides answers to queries according to that clustering. One can think of such an oracle as a suer that has some idea about its desired clustering, enough to answer the algorithm's queries. The clustering algorithm then tries to recover $C^*$ by querying a $C^*$ oracle. The following notions of query are natural for clustering tasks.
 
 \begin{definition}[Same-cluster Query]
 A same-cluster query asks whether two instances $x_1$ and $x_2$ belong to the same cluster, i.e., 
@@ -198,9 +191,9 @@ A cluster-assignment query asks the cluster index that an instance $x$ belongs t
 %\right. $$
 \end{definition}
 
-Same-cluster queries seem to be more natural for clustering tasks, as the oracle (or the domain expert) will only need to respond to binary equivalence questions. In appendix \ref{appendix:diffQueryModels} we show that these two notions of query are related, in the sense that they give relatively the same power to the clustering algorithm. This is useful for some of our proofs, as using cluster-assignment queries makes the analysis more transparent.
+Same-cluster queries seem to be more natural, as the oracle (or the domain expert) will only need to respond to binary \emph{link/don't-link} questions. In appendix \ref{appendix:diffQueryModels} we show that these two notions of query are equivalent, in the sense that they give the same power to the clustering algorithm (up to a constant in terms of number of queries and run time). This is useful for some of our proofs, since using cluster-assignment queries makes the analysis more transparent.
 
-An active clustering instance is determined by the tuple $(\mc X, d, C^*)$. A clustering algorithm $\mc A$ is called a $q$-solver of this instance if it can recover $C^*$ by having access to $(\mc X, d)$ and making at most $q$ queries. This algorithm is further called a polynomial $q$-solver if its time-complexity is polynomial in $|\mc X|$ and $|C^*|$.
+An active clustering instance is determined by the tuple $(\mc X, d, C^*)$. A clustering algorithm $\mc A$ is called a $q$-solver of this instance if it can recover $C^*$ by having access to $(\mc X, d)$ and making at most $q$ queries to a $C^*$ oracle. This algorithm is further called a polynomial $q$-solver if its time-complexity is polynomial in $|\mc X|$ and $|C^*|$ (the number of clusters).
 
 \begin{definition}[Query Complexity]
 \label{definition:QueryComplexity}
@@ -376,7 +369,7 @@ To prove the theorem, we will provide a reduction from the problem of Exact Cove
 Given a set $U$ containing exactly $3m$ elements and a collection $\mc S = \{S_1, \ldots, S_l\}$ of subsets of $U$ such that each $S_i$ contains exactly three elements, does there exist $m$ elements in $\mc S$ such that their union is $U$? 
 \end{definition}
 
-We will show how to translate each instance of X3C, $(U,\mc S)$, to an instance of $k$-means clustering in the Euclidean plane, $X$. In particular, $X$ is a gridlike structure consisting of $l$ rows (one for each $S_i$) and roughly $6m$ columns (corresponding to $U$) which are embedded in the Euclidean plane. The special geometry of the embedding makes sure that any low-cost $k$-means clustering of the points (where $k$ is roughly $6ml$) exhibit a certain structure. In particular, any low-cost $k$-means clustering could cluster each row in only two ways; One of these corresponds to $S_i$ being included in the cover, while the other means it should be excluded. We will then show that $U$ has a cover of size $m$ if $X$ has a clustering of cost less than a specific value.
+We will show how to translate each instance of X3C, $(U,\mc S)$, to an instance of $k$-means clustering in the Euclidean plane, $X$. In particular, $X$ has a gridlike structure consisting of $l$ rows (one for each $S_i$) and roughly $6m$ columns (corresponding to $U$) which are embedded in the Euclidean plane. The special geometry of the embedding makes sure that any low-cost $k$-means clustering of the points (where $k$ is roughly $6ml$) exhibits a certain structure. In particular, any low-cost $k$-means clustering could cluster each row in only two ways; One of these corresponds to $S_i$ being included in the cover, while the other means it should be excluded. We will then show that $U$ has a cover of size $m$ if $X$ has a clustering of cost less than a specific value.
 
 Furthermore, our choice of embedding makes sure that the optimal clustering satisfies $\gamma$-margin for $\gamma=1.5$\footnote{As mentioned earlier, this is not the case in the original Vattani's proof \cite{vattani2009hardness}}.
 
@@ -415,9 +408,7 @@ $$ B_{i,j} = \left\{
         \end{array}
 \right\}$$
 
-Furthermore, $x_{i, j}, x_{i,j}^\prime, y_{i,j}$ and $y_{i, j}^\prime$ are specific locations as depicted in Fig. \ref{fig:ZFig}. In other words, exactly one of the locations $x_{i,j}$ and $x_{i,j}^\prime$, and one of $y_{i,j}$ and $y_{i,j}^\prime$ will be occupied.
-
-We set the parameters as follows
+Furthermore, $x_{i, j}, x_{i,j}^\prime, y_{i,j}$ and $y_{i, j}^\prime$ are specific locations as depicted in Fig. \ref{fig:ZFig}. In other words, exactly one of the locations $x_{i,j}$ and $x_{i,j}^\prime$, and one of $y_{i,j}$ and $y_{i,j}^\prime$ will be occupied. We set the parameters as follows
 
 $$h = \sqrt{5}, d = \sqrt{4.5}, \epsilon = \frac{1}{w^2} ,k = (l-1)3m + l(3m+2)$$
 
@@ -462,7 +453,7 @@ It is straightforward to see that a row grouped in a $A$-clustering costs $(6m+3
 Therefore, a nice clustering of $H_{l,n} \cup Z$ costs at most $L_1 + L_2$. More specifically, if $t$ rows are group in a $A$-clustering, the nice-clustering costs $L_1+L_2-t\alpha$.
 
 \begin{lemma}
-For large enough $w = poly(l, n)$, any non-nice clustering of $H_{l, n}$ costs at least $  (L_1 + L_2 - l\alpha + w) > (L + \frac{7}{8}w)$.
+For large enough $w = poly(l, n)$, any non-nice $k$-clustering of $H_{l, n}$ costs at least $(L + \frac{7}{8}w)$.%$  (L_1 + L_2 - l\alpha + w) > (L + \frac{7}{8}w)$.
 \end{lemma}
 
 \begin{proof}
