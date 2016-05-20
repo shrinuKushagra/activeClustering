@@ -71,7 +71,7 @@
 \begin{abstract}
 We propose a framework for Semi-Supervised Active Clustering framework (SSAC), where the learner is allowed to interact with a domain expert, asking whether two given instances belong to the same cluster or not. We study the query and computational complexity of clustering in this framework. We consider a setting where the expert conforms to a center-based clustering with a notion of margin.  We show that there is a trade off between computational complexity and query complexity; We prove that for the case of $k$-means clustering (i.e., when the expert conforms to a solution of $k$-means), having access to relatively few such queries allows efficient solutions to otherwise NP hard problems.
 
-In particular, we provide a probabilistic polynomial-time (BPP) algorithm  for clustering in this setting that asks $O\big(k^2\log k\log n)$ same-cluster queries and runs with time complexity $O\big(kn\log n + k^2\log k)$ (where $k$ is the number of clusters and $n$ is the number of instances). The success of the algorithm is guaranteed for data satisfying margin conditions under which, without queries, we show that the problem is NP hard. We also prove a lower bound on the number of queries needed to have a computationally efficient clustering algorithm in this setting.
+In particular, we provide a probabilistic polynomial-time (BPP) algorithm  for clustering in this setting that asks $O\big(k^2\log k + k\log n)$ same-cluster queries and runs with time complexity $O\big(kn\log n)$ (where $k$ is the number of clusters and $n$ is the number of instances). The success of the algorithm is guaranteed for data satisfying margin conditions under which, without queries, we show that the problem is NP hard. We also prove a lower bound on the number of queries needed to have a computationally efficient clustering algorithm in this setting.
 \end{abstract}
 
 \section{Introduction}
@@ -98,7 +98,7 @@ demostration that access to simple query answers can turn an otherwise NP hard c
 
 Before we explain those results, let us also mention a notion of clusterability (or `input niceness') that we introduce. We define a novel notion of niceness of data, called $\gamma$-margin property that is related to the previously introdcued notion of center proximity (\cite{awasthi2012center}). The larger the value of $\gamma$, the stronger the assumption becomes, which means that clustering becomes easier. With respect to that $\gamma$ parameter, we get a sharp `phase transition' between $k$-means being NP hard and being optimally solvable in polynomial time\footnote{The exact value of such a threshold $\gamma$ depends on some finer details of the clustering task; whether $d$ is required to be Euclidean and whether the cluster centers must be members of $X$.}.
 
-We focus on the effect of using queries on the computational complexity of clustering. We provide a probabilistic polynomial time (BPP) algorithm for clustering with queries, that has guaranteed success under the assumption that the input satisfies the $\gamma$-margin condition for $\gamma > 1$. This algorithm makes $O\big(k^2\log k\log n)$ same-cluster queries to the oracle and runs in $O\big(kn\log n + k^2\log k)$ time, where $k$ is the number of clusters and $n$ is the size of the instance set.
+We focus on the effect of using queries on the computational complexity of clustering. We provide a probabilistic polynomial time (BPP) algorithm for clustering with queries, that has guaranteed success under the assumption that the input satisfies the $\gamma$-margin condition for $\gamma > 1$. This algorithm makes $O\big(k^2\log k + k\log n)$ same-cluster queries to the oracle and runs in $O\big(kn\log n)$ time, where $k$ is the number of clusters and $n$ is the size of the instance set.
 
 On the other hand, we show that without access to query answers, $k$-means clustering under $\gamma$-margin assumption is NP-hard for any $\gamma \leq 1.5$ and $k=\Theta(n^\epsilon)$ (for any $\epsilon\in (0,1)$). We further show that access to $\Omega(\log k + \log n)$ queries is needed to overcome the NP hardness in that case.
 These results, put together, show an interesting phenomenon. Assume that the oracle conforms to an optimal solution of $k$-means clustering and that it satisfies $\gamma$-margin property for some $1<\gamma \leq 1.5$. In this case, our lower bound means that without making queries $k$-means clustering is NP-hard, while the positive result shows that with a reasonable number of queries the problem becomes efficiently solvable.  
@@ -205,6 +205,9 @@ A cluster-assignment query asks the cluster index that an instance $x$ belongs t
 %		\mbox{false } & o.w. 
 %	\end{array}
 %\right. $$
+% * <shrinukushagra@gmail.com> 2016-05-20T03:15:43.052Z:
+%
+% ^.
 \end{definition}
 
 Note however that each cluster-assignment query can be replaced with $k$ same-cluster queries (see \ref{appendix:diffQueryModels}). Therefore, we can express everything in terms of the more natural notion of same-cluster queries, and the use of cluster-assignment query is just to make the representation of the algorithm simpler.
@@ -230,7 +233,7 @@ In the second phase, the algorithm recovers all of the instances belonging to $C
 
 %$\mu_p'$. Then, it clusters and deletes all points whose distance is $\le d(b_{idx}, \mu_p')$. We will show that this process guarantees that (as long as $\mu_p'$ is a good approximation of the actual center $\mu_p$) and $\gamma > 1$, all the points from $C_p$ are now recovered. We then repeat this process $k$ times to recover all the clusters.
 
-The details of our approach is stated precisely in Algorithm \ref{alg:steinerQueryPositive}. Note that $\beta$ is a small constant\footnote{It corresponds to the constant appeared in generalized Hoefding inequality bound, discussed in Theorem \ref{thm:genHoeff} in appendix \ref{appendixsection:conIneq}}. Theorem \ref{thm:steinerQueryPositive} shows that if $\gamma > 1$ then our algorithm recovers the target clustering with high probability. Next, we give bounds on the time and query complexity of our algorithm. Theorem \ref{thm:steinerQueryPositiveComplexity} shows that our approach needs $O(k\log n)$ queries and runs with time complexity $O(kn\log n)$.
+The details of our approach is stated precisely in Algorithm \ref{alg:steinerQueryPositive}. Note that $\beta$ is a small constant\footnote{It corresponds to the constant appeared in generalized Hoefding inequality bound, discussed in Theorem \ref{thm:genHoeff} in appendix \ref{appendixsection:conIneq}}. Theorem \ref{thm:steinerQueryPositive} shows that if $\gamma > 1$ then our algorithm recovers the target clustering with high probability. Next, we give bounds on the time and query complexity of our algorithm. Theorem \ref{thm:steinerQueryPositiveComplexity} shows that our approach needs $O(k\log n + k^2\log k)$ queries and runs with time complexity $O(kn\log n)$.
 
 \RestyleAlgo{boxruled} 
 \SetAlgoNoLine
@@ -304,19 +307,19 @@ In the first phase of the algorithm we are making $l>k\eta$ cluster-assignment q
 \label{thm:steinerQueryPositiveComplexity}
 Let the framework be as in theorem \ref{thm:steinerQueryPositive}. Then Algorithm \ref{alg:steinerQueryPositive} 
 \begin{itemize}[nolistsep,noitemsep]
-\item Makes $O\big(k^2\log |\mc X| + k^3\frac{\log k + \log (1/\delta)}{(\gamma - 1)^4}\big)$ same-cluster queries to the oracle $\mc O$.
-\item Runs in $O\big(k|\mc X|\log |\mc X| + k^2\frac{\log k + \log (1/\delta)}{(\gamma - 1)^4}\big)$ time.
+\item Makes $O\big(k\log n + k^2\frac{\log k + \log (1/\delta)}{(\gamma - 1)^4}\big)$ same-cluster queries to the oracle $\mc O$.
+\item Runs in $O\big(kn\log n + k^2\frac{\log k + \log (1/\delta)}{(\gamma - 1)^4}\big)$ time.
 \end{itemize}
 \end{theorem}
 
 \begin{proof}
-In each iteration (i) the first phase of the algorithm takes $O(\eta)$ time and makes $\eta+1$ cluster-assignment queries (ii) the second phase takes $O(n\log n)$ times and makes $O(\log n)$ same-cluster queries. Each cluster-assignment query can be replaced with $k$ same-cluster queries; therefore, each iteration runs in $O(k\eta + n\log n)$ and uses $O(k\eta + \log n)$ same-cluster queries. The fina
+In each iteration (i) the first phase of the algorithm takes $O(\eta)$ time and makes $\eta+1$ cluster-assignment queries (ii) the second phase takes $O(n\log n)$ times and makes $O(\log n)$ same-cluster queries. Each cluster-assignment query can be replaced with $k$ same-cluster queries; therefore, each iteration runs in $O(k\eta + n\log n)$ and uses $O(k\eta + \log n)$ same-cluster queries. By replacing $\eta = \beta\frac{\log k + \log(1/\delta)}{(\gamma-1)^4}$ and noting that there are $k$ iterations, the proof will be complete.
 
-Hence, in total the algorithm takes $O(kn\log n + k^2\eta)$ time and makes $O(k\log n + k^2\eta)$ cluster-assignment queries. Substituting $\eta = \beta\frac{\log k + \log(1/\delta)}{(\eta-1)^4}$ and using the fact that each cluster-assignment query can be substituted by $k$ same-cluster queries (see appendix \ref{appendix:diffQueryModels}) finishes the proof\footnote{It is actually possible to improve the $k^3$ term in query complexity to $k^2$, by noting that in the second phase of the algorithm we only need to use same-cluster queries rather than cluster-assignment queries.}.
+%Hence, in total the algorithm takes $O(kn\log n + k^2\eta)$ time and makes $O(k\log n + k^2\eta)$ cluster-assignment queries. Substituting $\eta = \beta\frac{\log k + \log(1/\delta)}{(\eta-1)^4}$ and using the fact that each cluster-assignment query can be substituted by $k$ same-cluster queries (see appendix \ref{appendix:diffQueryModels}) finishes the proof\footnote{It is actually possible to improve the $k^3$ term in query complexity to $k^2$, by noting that in the second phase of the algorithm we only need to use same-cluster queries rather than cluster-assignment queries.}.
 \end{proof}
 
 \begin{corollary}
-The set of Euclidean clustering instances that satisfy $\gamma$-margin property for some $\gamma > 1$ admits query complexity $O\big(k^2\log |\mc X| + k^3\frac{\log k + \log (1/\delta)}{(\gamma - 1)^4}\big)$. 
+The set of Euclidean clustering instances that satisfy $\gamma$-margin property for some $\gamma > 1$ admits query complexity $O\big(k\log n + k^2\frac{\log k + \log (1/\delta)}{(\gamma - 1)^4}\big)$. 
 \end{corollary}
 
 \section{Hardness Results}
@@ -326,7 +329,7 @@ The set of Euclidean clustering instances that satisfy $\gamma$-margin property 
 
 Finding $k$-means solution without the help of the oracle is generally computationally hard. In this section, we will show that solving $k$-means remains hard even if we know that the optimal solution satisfies $\gamma$-margin property for $\gamma=1.5$. In particular, we show the hardness for the case of $k=\Theta(n^\epsilon)$ for any $\epsilon\in (0,1)$. This is a critical result for our purpose, because it shows that our niceness assumption (i.e., the $\gamma$-margin property) is not too strong, and the use of oracle is necessary.
 
-In section \ref{section:clusteringWithQuery}, we proposed a polynomial-time algorithm that could recover the target clustering using $O(k^2\log k \log n)$ queries, assuming that the clustering satisfies $\gamma$-margin property for $\gamma>1$. Now assume that the oracle conforms to the optimal $k$-means clustering solution. In this case, for $1<\gamma\le 1.5$, solving $k$-means clustering would be NP-hard without query, while it becomes efficiently solvable with the help of an oracle \footnote{To be precise, note that the algorithm used for clustering with queries is probabilistic. However, the lower bound that we provide is for deterministic algorithms. However, this means a lower bound for randomized algorithms as well unless $BPP\neq P$}. 
+In section \ref{section:clusteringWithQuery}, we proposed a polynomial-time algorithm that could recover the target clustering using $O(k^2\log k +k\log n)$ queries, assuming that the clustering satisfies $\gamma$-margin property for $\gamma>1$. Now assume that the oracle conforms to the optimal $k$-means clustering solution. In this case, for $1<\gamma\le 1.5$, solving $k$-means clustering would be NP-hard without query, while it becomes efficiently solvable with the help of an oracle \footnote{To be precise, note that the algorithm used for clustering with queries is probabilistic. However, the lower bound that we provide is for deterministic algorithms. However, this means a lower bound for randomized algorithms as well unless $BPP\neq P$}. 
 
 Given a set of instances $\mc X \subset \mb R ^d$, the $k$-means clustering problem is to find a clustering $\mc C = \{C_1, \ldots, C_k\}$ which minimizes $f(\mc C) = \sum\limits_{C_i} \min\limits_{\mu_i\in {\mb R}^d}\sum\limits_{x\in C_i} \|x - \mu_i \|_2^2$. The decision version of $k$-means is to find a clustering $\mc C$ with cost $\le L$.
 
