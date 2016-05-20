@@ -69,41 +69,42 @@
 \maketitle
 
 \begin{abstract}
-We propose a framework for clustering where the learner is allowed to interact with a domain expert, asking whether two given instances belong to the same cluster or not. We study the query and computational complexity of clustering in this framework. We consider a setting where the expert conforms to a center-based clustering with a notion of margin. We then provide a probabilistic polynomial-time (BPP) algorithm  for clustering in this setting. In particular, this algorithm asks $O\big(k^2\log k\log n)$ same-cluster queries and runs with time complexity $O\big(kn\log n + k^2\log k)$, where $k$ is the number of clusters and $n$ is the number of instances.  Furthermore, we show that there is a trade off between computational complexity and query complexity. In particular, we establish that for the case of $k$-means clustering (i.e., when the expert conforms to a solution of $k$-means), having access to queries is essential, as it makes an otherwise NP hard problem efficiently solvable. We also prove a lower bound on the number of queries needed to have a computationally efficient clustering algorithm in this setting.
+We propose a framework for Semi-Supervised Active Clustering framework (SSAC), where the learner is allowed to interact with a domain expert, asking whether two given instances belong to the same cluster or not. We study the query and computational complexity of clustering in this framework. We consider a setting where the expert conforms to a center-based clustering with a notion of margin.  We show that there is a trade off between computational complexity and query complexity; We prove that for the case of $k$-means clustering (i.e., when the expert conforms to a solution of $k$-means), having access to relatively few such queries allows efficient solutions to otherwise NP hard problems.
+
+In particular, we provide a probabilistic polynomial-time (BPP) algorithm  for clustering in this setting that asks $O\big(k^2\log k\log n)$ same-cluster queries and runs with time complexity $O\big(kn\log n + k^2\log k)$ (where $k$ is the number of clusters and $n$ is the number of instances). The success of the algorithm is guaranteed for data satisfying margin conditions under which, without queries, we show that the problem is NP hard. We also prove a lower bound on the number of queries needed to have a computationally efficient clustering algorithm in this setting.
 \end{abstract}
 
 \section{Introduction}
 
-Clustering is a challenging task particularly due to the following two impediments. The first problem is that clustering, in the absense of domain knowledge, is usually an \emph{under-specified} task; the solution of choice may vary significantly between different intended application. The second one is that performing clustering under many natural models is computationally hard.
+Clustering is a challenging task particularly due to two impediments. The first problem is that clustering, in the absense of domain knowledge, is usually an \emph{under-specified} task; the solution of choice may vary significantly between different intended applications. The second one is that performing clustering under many natural models is computationally hard.
 
-Consider the task of dividing the users of an online shopping service into different groups. The result of this clustering can then be used for example in suggesting similar products to the users in the same group, or for organizing data so that it would be easier to read/analyze the monthly purchase reports. Those different application may result in conflicting solution requirements. In such cases, one needs to exploit domain knowledge to better define the clustering problem.
+Consider the task of dividing the users of an online shopping service into different groups. The result of this clustering can then be used for example in suggesting similar products to the users in the same group, or for organizing data so that it would be easier to read/analyze the monthly purchase reports. Those different applications may result in conflicting solution requirements. In such cases, one needs to exploit domain knowledge to better define the clustering problem.
 %as there are many different choices for clustering that can give different results. 
 
 Aside from trial and error, a principled way of extracting domain knowledge is to perform clustering using a form of `weak' supervision. For example, Balcan and Blum \cite{balcan2008clustering} propose to use an interactive framework with 'split/merge' queries for clustering. In another work, Ashtiani and Ben-David \cite{ashtiani2015representation} require the domain expert to provide the clustering of a 'small' subset of data.
 
-At the same time, mitigating the computational problem of clustering is critical. Solving most of the common optimization formulations of clustering is NP-hard (in particular, solving the popular $k$-means and $k$-median clustering problems). One approach to address this issues is to exploit the fact that natural data sets usually exhibit some nice properties and likely to avoid the worst-case scenario. In such cases, optimal solution to clustering may be found efficiently. The quest for notions of niceness that are likely to occur in real data and allow clustering efficiency is still ongoing. Regretfully, the niceness properties that have been analyzed so far are too strict to happen in many real world situations (see \cite{Ben-David15} for a critical survey of work in this direction).
+At the same time, mitigating the computational problem of clustering is critical. Solving most of the common optimization formulations of clustering is NP-hard (in particular, solving the popular $k$-means and $k$-median clustering problems). One approach to address this issues is to exploit the fact that natural data sets usually exhibit some nice properties and likely to avoid the worst-case scenarios. In such cases, optimal solution to clustering may be found efficiently. The quest for notions of niceness that are likely to occur in real data and allow clustering efficiency is still ongoing (see \cite{Ben-David15} for a critical survey of work in that direction).
 
-In this work, we take a new approach to alleviating the computational problem of clustering. In particular, we ask the following question: can weak supervision (in a natural form of queries) help relaxing the computational burden of clustering? This will add up to the other benefit of supervision: making the clustering problem better defined by enabling the accession of domain knowledge through supervised feedback.
+In this work, we take a new approach to alleviating the computational problem of clustering. In particular, we ask the following question: can weak supervision (in the form of answers to natural queries) help relaxing the computational burden of clustering? This will add up to the other benefit of supervision: making the clustering problem better defined by enabling the accession of domain knowledge through the supervised feedback.
 
 The general setting considered in this work is the following. Let $X$ be a set of elements that should be clustered and $d$ a dissimilarity function over it. The oracle (e.g., a doamin expert) has some information about a  target clustering $C^*_X$ in mind. The clustering algorithm has access to $X, d$, and can also make queries about $C^*_X$. The queries are in the form of \emph{same-cluster} queries. Namely, the algorithm can ask whether two elements belong to the same cluster or not. The goal of the algorithm is to find a clustering that meets some predefined clusterability conditions and is consistent with the answers given to its queries. 
 
-We will also consider the case that the oracle has the optimal $k$-means solution in his mind. We then show that access to a 'reasonable' number of same-cluster queries can enable us to provide an efficient algorithm for an otherwise NP-hard problem. 
+We will also consider the case that the oracle conforms with some optimal $k$-means solution. We then show that access to a 'reasonable' number of same-cluster queries can enable us to provide an efficient algorithm for otherwise NP-hard problems. 
 
 
 \subsection{Contributions}
-The two main contributions of this paper are the introduction of the clustering
-active supervision model of same-cluster queries and the, rather unsual, 
-demostration that access to to simple query answers can turn an otherwise NP hard clustering problem into a feasible one. 
+The two main contributions of this paper are the introduction of the semi-supervised active clustering (SSAC) framework and, the rather unsual 
+demostration that access to simple query answers can turn an otherwise NP hard clustering problem into a feasible one. 
 
-Before we explain those results, let us also mention a notion of clusterability (or `input niceness') that we introduce. We define a novel notion of niceness of data, called $\gamma$-margin property that is related to the previousley introdcued notion of center proximity (\cite{}). With respect to that $\gamma$ parameter, we get a sharp `phase transition' between $k$-means being NP hard and being optimally solvable in polynomial time.
+Before we explain those results, let us also mention a notion of clusterability (or `input niceness') that we introduce. We define a novel notion of niceness of data, called $\gamma$-margin property that is related to the previously introdcued notion of center proximity (\cite{awasthi2012center}). The larger the value of $\gamma$, the stronger the assumption becomes, which means that clustering becomes easier. With respect to that $\gamma$ parameter, we get a sharp `phase transition' between $k$-means being NP hard and being optimally solvable in polynomial time\footnote{The exact value of such a threshold $\gamma$ depends on some finer details of the clustering task; whether $d$ is required to be Euclidean and whether the cluster centers must be members of $X$.}.
 
-We focus on the effect of using queries on the computational complexity of clustering. We provide a probabilistic polynomial time (BPP) algorithm for clustering with (relatively few) queries, under the assumption that the input satisfies the $\gamma$-margin condition for $\gamma > 1$. This algorithm makes $O\big(k^2\log k\log n)$ same-cluster queries to the oracle and runs in $O\big(kn\log n + k^2\log k)$ time, where $k$ is the number of clusters and $n$ is the size of the instance set.
+We focus on the effect of using queries on the computational complexity of clustering. We provide a probabilistic polynomial time (BPP) algorithm for clustering with queries, that has guaranteed success under the assumption that the input satisfies the $\gamma$-margin condition for $\gamma > 1$. This algorithm makes $O\big(k^2\log k\log n)$ same-cluster queries to the oracle and runs in $O\big(kn\log n + k^2\log k)$ time, where $k$ is the number of clusters and $n$ is the size of the instance set.
 
-On the other hand, we show that without access to query answers $k$-means clustering under $\gamma$-margin assumption is NP-hard for any $\gamma < 1.5$. 
-These results, put together, show an interesting phenomenon. Assume that the oracle conforms to an optimal solution of $k$-means clustering and that it satisfies $\gamma$-margin property for some $1<\gamma <1.5$. In this case, our lower bound means that without making queries $k$-means clustering is NP-hard, while the positive result shows that with a reasonable number of queries the problem becomes efficiently solvable. 
+On the other hand, we show that without access to query answers, $k$-means clustering under $\gamma$-margin assumption is NP-hard for any $\gamma \leq 1.5$ and $k=\Theta(n^\epsilon)$ (for any $\epsilon\in (0,1)$). We further show that access to $\Omega(\log k + \log n)$ queries is needed to overcome the NP hardness in that case.
+These results, put together, show an interesting phenomenon. Assume that the oracle conforms to an optimal solution of $k$-means clustering and that it satisfies $\gamma$-margin property for some $1<\gamma \leq 1.5$. In this case, our lower bound means that without making queries $k$-means clustering is NP-hard, while the positive result shows that with a reasonable number of queries the problem becomes efficiently solvable.  
 
-We further show that with access to only $O(\log k + \log n)$ queries, the problem remain NP-hard. In other words, both the data niceness condition and the access to query answers are essential to the feasiblity of $k$-means clustering.
-This indicates an interesting (and as far as we are aware, novel) trade off between query complexity and computational complexity in the clustering domain. 
+%In other words, both the data niceness (margin) condition and the access to query answers are essential to the feasiblity of $k$-means clustering.
+This indicates an interesting (and as far as we are aware, novel) tradeoff between query complexity and computational complexity in the clustering domain. 
 
 
 \subsection{Related Work}
@@ -118,8 +119,10 @@ Our proposed setup combines the user-friendliness of \emph{link/don't-link} quer
 
 The computational complexity of clustering has been extensively studied. Many of these results are negative, showing that clustering is computationally hard. For example, $k$-means clustering is NP-hard even for $k=2$ \cite{dasgupta2008hardness}, or in a 2-dimensional plane \cite{vattani2009hardness,mahajan2009planar}. In order to tackle the problem of computational complexity, some notions of niceness of data under which the clustering becomes easy have been considered (see \cite{Ben-David15} for a survey).
 
-The proposal closest to this work is the notion of $\alpha$-center proximity introduced by Awasthi et. al \cite{awasthi2012center}. We discuss the relationship of that notion to our notion of margin clustering in Appendix B. In the restricted scenario (i.e., when the centers of clusters are selected from the sample set), their algorithm efficiently recovers the target clustering (outputs a tree such that the target is a pruning of the tree) for $\alpha > 3$.  Balcan and Liang \cite{balcan2012clustering} improve the assumption to $\alpha > \sqrt{2} + 1$. Ben-David and Reyzin \cite{ben2014data} show that this problem is NP-Hard for $\alpha < 2$. For the case when the centers are unrestricted, the algorithm of Awasthi et. al \cite{awasthi2012center} recovers the target clustering when $\alpha > 2+\sqrt{3}$. They also show that the problem is NP-Hard for $\alpha < 3$\footnote{The lower bound however is established only for rather unnatural settting of clustering with Steiner points}.Variants of these proofs for our $\gamma$-margin condition
-yeild the feasibility of $k$-means clustering when the input satisfies the condition with $\gamma >2$ and NP hardness when $\gamma <2$.
+The proposal closest to this work is the notion of $\alpha$-center proximity introduced by Awasthi et. al \cite{awasthi2012center}. We discuss the relationship of that notion to our notion of margin clustering in Appendix B. In the restricted scenario (i.e., when the centers of clusters are selected from the sample set), their algorithm efficiently recovers the target clustering (outputs a tree such that the target is a pruning of the tree) for $\alpha > 3$.  Balcan and Liang \cite{balcan2012clustering} improve the assumption to $\alpha > \sqrt{2} + 1$. Ben-David and Reyzin \cite{ben2014data} show that this problem is NP-Hard for $\alpha < 2$. 
+%For the case when the centers are unrestricted, the algorithm of Awasthi et. al \cite{awasthi2012center} recovers the target clustering when $\alpha > 2+\sqrt{3}$. They also show that the problem is NP-Hard for $\alpha < 3$\footnote{The lower bound however is established only for rather unnatural settting of clustering with Steiner points}.
+Variants of these proofs for our $\gamma$-margin condition
+yeild the feasibility of $k$-means clustering when the input satisfies the condition with $\gamma >2$ and NP hardness when $\gamma <2$, both in the case of arbitrary (not necessarily Euclidean) metrics\footnote{In particular, the hardness result of \cite{ben2014data} relies on teh ability to contruct non-Euclidean distance functions. Later in this paper, we prove hardness for $\gamma \leq 1.5$ for Euclidean instances.} .
 
 \section{Problem Formulation}
 
@@ -127,9 +130,9 @@ yeild the feasibility of $k$-means clustering when the input satisfies the condi
 
 
 
-\subsection{Center-based Clustering}
+\subsection{Center-based clustering}
 
-The framework of clustering with queries is can be applied to any type of clustering. However, in this work, we focus on a certain family of common clustering - center based clustering in Euclidean spaces\footnote{In fact, results in this work are all independent of teh Euclidean dimension and applyto any Hilbert space.}.
+The framework of clustering with queries can be applied to any type of clustering. However, in this work, we focus on a certain family of common clusterings -- center based clustering in Euclidean spaces\footnote{In fact, our results are all independent of the Euclidean dimension and apply to any Hilbert space.}.
 
 Let ${\mc X}$ be a subset of some euclidean space, $\mathbb{R}^n$. Let $\mc C_{\mc X} = \{C_1, \ldots, C_k\}$ be a clustering (i.e., a partitioning) of $\mc X$. We say $x_1 \overset{C_{\mc X}}{\sim} x_2$ if $x_1$ and $x_2$ belong to the same cluster according to $C_{\mc X}$. We further denote by $n$ the number of instances ($|{\mc X}|$) and by $k$ the number of clusters.
 
@@ -159,50 +162,57 @@ Similar notions have been considered before in the clustering literature. The cl
 %Here, let us just mention that the computational feasibility positive results obtained under $\alpha$-center proximity can also be obtained under $\gamma$-margin for `reasonably small' values of $\gamma$. 
  
 MAYBE ADD HERE A SHORT STATEMENT ABOUT THE "CORRESPONDENCE" BETWEEN THE TWO NOTIONS.
-
 IT MAY ALSO MAKE SENSE TO HAVE THE HARDNESS AND FEASIBILITY RESULTS FOR GAMMA MARGINS (JUST CITE TEH RESULTS AND SAY THE PROOFS FOLLOW FROM THOSE FOR ALPHA CENTEAR.
 
  %Furthermore, we assume that the clustering instance $(\mc X, d, C^*)$ is center-based and admits a $\gamma$-margin property\footnote{Naturally, the larger the value of $\gamma$, the stronger this assumtion is.}.
 
 \subsection{The algorithmic setup}
-
-
-
-For a clustering $C^*_{\mc X}=\{ C^*_1, \ldots C^*_k\}$, a $C^*$ oracle is a
-a function that provides answers to queries according to that clustering. One can think of such an oracle as a suer that has some idea about its desired clustering, enough to answer the algorithm's queries. The clustering algorithm then tries to recover $C^*$ by querying a $C^*$ oracle. The following notions of query are natural for clustering tasks.
+For a clustering $C^*=\{ C^*_1, \ldots C^*_k\}$, a $C^*$ oracle is a
+a function ${\mc O}_{C^*}$ that answers queries according to that clustering. One can think of such an oracle as a user that has some idea about its desired clustering, enough to answer the algorithm's queries. The clustering algorithm then tries to recover $C^*$ by querying a $C^*$ oracle. The following notion of query is arguably most intuitive.
 
 \begin{definition}[Same-cluster Query]
 A same-cluster query asks whether two instances $x_1$ and $x_2$ belong to the same cluster, i.e., 
-$${\mc O}(x_1, x_2) = \left\{
+$${\mc O}_{C^*}(x_1, x_2) = \left\{
 	\begin{array}{ll}
-		\mbox{true }  & \mbox{if } x_1 \overset{C^*_{\mc X}}{\sim} x_2   \\
+		\mbox{true }  & \mbox{if } x_1 \overset{C^*}{\sim} x_2   \\
 		\mbox{false } & o.w. 
 	\end{array}
 \right. $$
+
+(we omit the subscript $C^*$ when it is clear from the context).
 \end{definition}
 
-\begin{definition}[Cluster-assignment Query]
-A cluster-assignment query asks the cluster index that an instance $x$ belongs to. In other words ${\mc O}(x) = i$ if and only if $x \in C^*_i$.
+%\begin{definition}[Cluster-assignment Query]
+%A cluster-assignment query asks the cluster index that an instance $x$ belongs to. In other words ${\mc O}(x) = i$ if and only if $x \in C^*_i$.
 %$$Q(x, i) = \left\{
 %	\begin{array}{ll}
 %		\mbox{true }  & \mbox{if } x \in C^*_i   \\
 %		\mbox{false } & o.w. 
 %	\end{array}
 %\right. $$
-\end{definition}
+%\end{definition}
 
-Same-cluster queries seem to be more natural, as the oracle (or the domain expert) will only need to respond to binary \emph{link/don't-link} questions. In appendix \ref{appendix:diffQueryModels} we show that these two notions of query are equivalent, in the sense that they give the same power to the clustering algorithm (up to a constant in terms of number of queries and run time). This is useful for some of our proofs, since using cluster-assignment queries makes the analysis more transparent.
+%Same-cluster queries seem to be more natural, as the oracle (or the domain expert) will only need to respond to binary \emph{link/don't-link} questions. In appendix \ref{appendix:diffQueryModels} we show that these two notions of query are equivalent, in the sense that they give the same power to the clustering algorithm (up to a constant in terms of number of queries and run time). This is useful for some of our proofs, since using cluster-assignment queries makes the analysis more transparent.
 
-An active clustering instance is determined by the tuple $(\mc X, d, C^*)$. A clustering algorithm $\mc A$ is called a $q$-solver of this instance if it can recover $C^*$ by having access to $(\mc X, d)$ and making at most $q$ queries to a $C^*$ oracle. This algorithm is further called a polynomial $q$-solver if its time-complexity is polynomial in $|\mc X|$ and $|C^*|$ (the number of clusters).
 
 \begin{definition}[Query Complexity]
 \label{definition:QueryComplexity}
-Let $G$ be a set of clustering instances. We say $G$ admits an $O(q)$ query complexity if there exists an algorithm $\mc A$ that is a polynomial $q$-solver for every clustering instance in $G$.
+An SSAC instance is determined by the tuple $(\mc X, d, C^*)$. 
+We will consider families of such instances determined by niceness conditions on their oracle clusterings $C^*$.
+\begin{enumerate}
+\item A SSAC algorithm $\mc A$ is called a $q$-solver for a family $G$ of such instances, if for every instance in $G$, it can recover $C^*$ by having access to $(\mc X, d)$ and making at most $q$ queries to a $C^*$ oracle. 
+
+\item Such an algorithm is a polynomial $q$-solver if its time-complexity is polynomial in $|\mc X|$ and $|C^*|$ (the number of clusters).
+
+\item  We say $G$ admits an $O(q)$ query complexity if there exists an algorithm $\mc A$ that is a polynomial $q$-solver for every clustering instance in $G$.
+\end{enumerate}
+
 \end{definition}
-\section{An Algorithm for Clustering with Queries}
+
+\section{An Efficient SSAC algorithm}
 \label{section:clusteringWithQuery}
 
-In this section we provide an efficient algorithm for clustering with queries. The setting is the one described in the previous section. In particular, it is assumed that the oracle has a $\gamma$-margin center-based clustering in his mind. The space is Euclidean and the center of each cluster is the center of mass of the instances in that cluster. The algorithm makes cluster-assignment queires to the oracle, but this can be translated to binary same-cluster queries (see appendix \ref{appendix:diffQueryModels}). 
+In this section we provide an efficient algorithm for clustering with queries. The setting is the one described in the previous section. In particular, it is assumed that the oracle has a $\gamma$-margin center-based clustering in his mind. The space is Euclidean and the center of each cluster is the center of mass of the instances in that cluster. The algorithm makes cluster-assignment queiries to the oracle, but this can be translated to binary same-cluster queries (see appendix \ref{appendix:diffQueryModels}). 
 
 %We will assume that the target clustering $\mc C_{\mc X} = \{C_1, \ldots, C_k\}$ induced by centers $\mu_1, \ldots, \mu_k$ has the following property. For all $i$, $\mu_i$ is the mean of all the points in cluster $C_i$, that is,
 %\begin{align}
@@ -210,7 +220,7 @@ In this section we provide an efficient algorithm for clustering with queries. T
 %\end{align}
 %Note that the optimal solution to the euclidean $k$-means cost has this property. Our algorithm is more general and works for any target clustering which has the above property (\ref{property:targetClust}).
 
-Intuitively, our algorithm (Algorithm  \ref{alg:steinerQueryPositive}) does the following. In the first phase, it tries to approximate the center of on of the clusters. It does this by querying points from $\mc X$ uniformly at random until it has a sufficient number of points from at least one cluster (say $C_p$). It uses the mean of these points, $\mu_p^\prime$, to approximate the cluster center. 
+Intuitively, our algorithm (Algorithm  \ref{alg:steinerQueryPositive}) does the following. In the first phase, it tries to approximate the center of one of the clusters. It does this by querying points from $\mc X$ uniformly at random until it has a sufficient number of points from at least one cluster (say $C_p$). It uses the mean of these points, $\mu_p^\prime$, to approximate the cluster center. 
 
 In the second phase, the algorithm recovers all of the instances belonging to $C_p$. In order to do that, it first sorts all of the instances based on their distance to $\mu_p^\prime$. By showing that all of the points in $C_p$ lie inside a sphere centered at $\mu_p^\prime$ (which does not include points from any other cluster), it tries to find the radius of this sphere by doing binary search using cluster-assignment queries. After that, the elements in $C_p$ will be located and can be removed from the data set. The algorithm repeats this process $k$ times to recover all of the clusters.
 
@@ -226,11 +236,11 @@ The details of our approach is stated precisely in Algorithm \ref{alg:steinerQue
  \KwIn{Clustering instance $\mc X$, oracle $\mc O$, the number of clusters $k$ and parameter $\delta \in (0, 1)$}
  \KwOut{A clustering $\mc C$ of the set $\mc X$}
 
- \vspace{0.5em} $\mc C = \{\}$\\ 
- $\mc S_{1} = \mc X$\\
+ \vspace{0.5em} $\mc C = \{\}$,
+ $\mc S_{1} = \mc X$,
  $\eta = \beta \frac{\log k + \log(1/\delta)}{(\gamma-1)^4}$\\
  \For{$i = 1$ to $k$}{
- 	\vspace{0.7em}\textbf{Phase 1}\\
+ 	\vspace{0.5em}\textbf{Phase 1}\\
  	$l = k \eta + 1$\;
 	$Z \sim U^l[\mc S_i]$    \mbox{       } //   Draws $l$ independent elements from $\mc S_i$ uniformly at random\\
 	For $1 \le t \le i$,\\
@@ -240,7 +250,7 @@ The details of our approach is stated precisely in Algorithm \ref{alg:steinerQue
 $p = \argmax_t |Z_t|$\\
 	$\mu_p' := \frac{1}{|Z_p|}\sum_{x \in Z_p} x$.\\
 
-	\vspace{1.5em}\textbf{Phase 2}\\
+	\vspace{0.5em}\textbf{Phase 2}\\
     // We know that there exists $r_i$ such that $\forall x\in {\mc S_i}$, $x\in C_i \Leftrightarrow d(x, \mu^\prime_i)< r_i$.\\ 
     // Therefore, $r_i$ can be found by simple binary search\\
     
@@ -253,7 +263,6 @@ $p = \argmax_t |Z_t|$\\
 	$S_{i+1} = S_{i}\setminus C_p'$.\\
 	$\mc C = \mc C \cup \{C_p'\}$
  }
- Output $\mc C$.
  \label{alg:steinerQueryPositive}
  \caption{Algorithm for $\gamma(> 1)$-margin instances with queries}
 \end{algorithm}
@@ -281,7 +290,7 @@ Fix any $x \in C_i$ and $y \in C_j$. $d(x, \mu_i') \le d(x, \mu_i)+d(\mu_i, \mu_
 Let the framework be as in Lemma \ref{lemma:hasGammaMargin}. Let $Z_p, C_p, \mu_p$, $\mu_p^\prime$ and $\eta$ be defined as in Algorhtm \ref{alg:steinerQueryPositive}, and $\epsilon = \frac{\gamma - 1}{2}$. If $|Z_p| > \eta$, then the probability that $d(\mu_p, \mu_p^\prime) > r(C_p)\epsilon$ is at most $\frac{\delta}{k}$.
 \end{lemma}
 \begin{proof}
-Define a uniform distribution $U$ over $C_p$. Then $\mu_p$ is the mean of this distribution, and $\mu_p^\prime$ is the empirical mean. Now, we only need to use a concentration inequality to show that the empirical means is close to the true mean. Therefore, using Thm. \ref{thm:genHoeff} from Appendix \ref{appendixsection:conIneq} completes the proof.
+Define a uniform distribution $U$ over $C_p$. Then $\mu_p$ and $\mu_p^\prime$ are the true and empirical mean of this distribution. Using a standard concentration inequality (Thm. \ref{thm:genHoeff} from Appendix \ref{appendixsection:conIneq}) shows that the empirical mean is close to the true mean, completing the proof.
 
 \end{proof}
 
@@ -324,7 +333,7 @@ The corollary is the immediate result of theorem \ref{thm:steinerQueryPositiveCo
 
 Finding $k$-means solution without the help of the oracle is generally computationally hard. In this section, we will show that solving $k$-means remains hard even if we know that the optimal solution satisfies $\gamma$-margin property for $\gamma=1.5$. In particular, we show the hardness for the case of $k=\Theta(n^\epsilon)$ for any $\epsilon\in (0,1)$. This is a critical result for our purpose, because it shows that our niceness assumption (i.e., the $\gamma$-margin property) is not too strong, and the use of oracle is necessary.
 
-In section \ref{section:clusteringWithQuery}, we proposed a polynomial-time algorithm that could recover the target clustering using $O(k^2\log k \log n)$ queries, assuming that the clustering satisfies $\gamma$-margin property for $\gamma=1$. Now assume that the oracle conforms to the optimal $k$-means clustering solution. In this case, for $1<\gamma<1.5$, solving $k$-means clustering would be NP-hard without query, while it becomes efficiently solvable with the help of an oracle \footnote{To be precise, note that the algorithm used for clustering with queries is probabilistic. However, the lower bound that we provide is for deterministic algorithms. However, this means a lower bound for randomized algorithms as well unless $BPP\neq P$}. %Moreover, note that the lower bound holds for $k << n$. In this 
+In section \ref{section:clusteringWithQuery}, we proposed a polynomial-time algorithm that could recover the target clustering using $O(k^2\log k \log n)$ queries, assuming that the clustering satisfies $\gamma$-margin property for $\gamma>1$. Now assume that the oracle conforms to the optimal $k$-means clustering solution. In this case, for $1<\gamma\le 1.5$, solving $k$-means clustering would be NP-hard without query, while it becomes efficiently solvable with the help of an oracle \footnote{To be precise, note that the algorithm used for clustering with queries is probabilistic. However, the lower bound that we provide is for deterministic algorithms. However, this means a lower bound for randomized algorithms as well unless $BPP\neq P$}. %Moreover, note that the lower bound holds for $k << n$. In this 
 
 %This together with Theorem \ref{thm:steinerQueryPositive} and \ref{thm:steinerQueryPositiveComplexity} show that for , having access to queries makes the computationally hard problem of $k$-means clustering efficiently solvable
 
@@ -338,21 +347,19 @@ Given a set of instances $\mc X \subset \mb R ^d$, the $k$-means clustering prob
 
 $$f(\mc C) = \sum\limits_{C_i} \min\limits_{\mu_i\in {\mb R}^d}\sum\limits_{x\in C_i} \|x - \mu_i \|_2^2$$
 
-It is easy to see that in the optimal solution, $\mu_i$ is the center of mass of $C_i$, i.e., $\mu_i = \frac{1}{|C_i|}\sum_{x\in C_i}x$. Also, the objective function can be rewritten in the following form (E.g., see \cite{inaba1994applications})
-
-$$f(\mc C) = \sum\limits_{C_i}\frac{1}{|C_i|} \sum_{x, y \in C_i} d^2(x, y).$$
 
 %One can also consider a weighted version of the problem where every point $x$ has a weight $w(x)$. 
 
 %$$f(\mc C) = \sum\limits_{C_i}\frac{1}{\sum_{x \in C_i}w(x)} \sum_{x, y \in {C_i \choose 2}} w(x)w(y)d^2(x, y).$$ 
 
-It is known that finding the optimal $k$-means solution is NP-hard even in the Euclidean plane \cite{vattani2009hardness,mahajan2009planar}. However, the $\gamma$-margin property is not satisfied in these constructions. Therefore, we still need to prove that even under the $\gamma$-margin property, the problem remains hard. The following is the main statement of this section.
+%It is known that finding the optimal $k$-means solution is NP-hard even in the Euclidean plane \cite{vattani2009hardness,mahajan2009planar}. However, the $\gamma$-margin property is not satisfied in these constructions. Therefore, we still need to prove that even under the $\gamma$-margin property, the problem remains hard. The following is the main statement of this section.
+
+The following theorem is the main result of this section. The next subsections are devoted to proving this theorem.
 
 \begin{theorem}
 \label{thm:gammaLower}
 Finding the optimal solution to $k$-means objective function is NP-hard when $k=\Theta(n^\epsilon)$ for any $\epsilon \in (0,1)$. Furthermore, this result holds even when the optimal solution satisfies $\gamma$-margin property for $\gamma = 1.5$.
 
-The rest of this section is devoted to provide the proof of this theorem.
 
 \end{theorem}
 
@@ -369,18 +376,27 @@ To prove the theorem, we will provide a reduction from the problem of Exact Cove
 Given a set $U$ containing exactly $3m$ elements and a collection $\mc S = \{S_1, \ldots, S_l\}$ of subsets of $U$ such that each $S_i$ contains exactly three elements, does there exist $m$ elements in $\mc S$ such that their union is $U$? 
 \end{definition}
 
-We will show how to translate each instance of X3C, $(U,\mc S)$, to an instance of $k$-means clustering in the Euclidean plane, $X$. In particular, $X$ has a gridlike structure consisting of $l$ rows (one for each $S_i$) and roughly $6m$ columns (corresponding to $U$) which are embedded in the Euclidean plane. The special geometry of the embedding makes sure that any low-cost $k$-means clustering of the points (where $k$ is roughly $6ml$) exhibits a certain structure. In particular, any low-cost $k$-means clustering could cluster each row in only two ways; One of these corresponds to $S_i$ being included in the cover, while the other means it should be excluded. We will then show that $U$ has a cover of size $m$ if $X$ has a clustering of cost less than a specific value.
-
-Furthermore, our choice of embedding makes sure that the optimal clustering satisfies $\gamma$-margin for $\gamma=1.5$\footnote{As mentioned earlier, this is not the case in the original Vattani's proof \cite{vattani2009hardness}}.
+We will show how to translate each instance of X3C, $(U,\mc S)$, to an instance of $k$-means clustering in the Euclidean plane, $X$. In particular, $X$ has a gridlike structure consisting of $l$ rows (one for each $S_i$) and roughly $6m$ columns (corresponding to $U$) which are embedded in the Euclidean plane. The special geometry of the embedding makes sure that any low-cost $k$-means clustering of the points (where $k$ is roughly $6ml$) exhibits a certain structure. In particular, any low-cost $k$-means clustering could cluster each row in only two ways; One of these corresponds to $S_i$ being included in the cover, while the other means it should be excluded. We will then show that $U$ has a cover of size $m$ if $X$ has a clustering of cost less than a specific value. Furthermore, our choice of embedding makes sure that the optimal clustering satisfies $\gamma$-margin for $\gamma=1.5$\footnote{As mentioned earlier, this is not the case in the original Vattani's proof \cite{vattani2009hardness}}.
 
 %The proof constructs an instance $X$ in the Euclidean plane. The instance consists of $l$ different `rows' corresponding to the collection $\mc S$ and roughly $6n$ different `columns' corresponding to the set $U$. Now, the set $X$ and its parameters (distances between the points, number of clusters, etc.) are chosen such that in any clustering $C$ of cost $\le L$, the rows can be clustered only in two possible ways. One of them corresponds to the $S_i$ being included in the cover and the other corresponds to it being excluded from the cover. Hence, $U$ has a cover of size $n$ iff $X$ has a clustering of cost $\le L$. We choose the distances such that the optimal clustering satisfies $\gamma$-margin for $\gamma \le 1.5$ thereby completing the proof of the theorem. 
   
-\begin{figure}
- \resizebox{.9\linewidth}{!}{\input{figures/lowerBdFig}}
-\caption{Geometry of $H_{l,m}$. This figure is similar to Fig. 1 in \cite{vattani2009hardness}. The left hand side shows the complete design. Rows $R_i$ have $6m+1$ bullets and two circles. Rows $G_i$ have $3m$ circles. The bullets have weight $w$ while the circles have weight $2w$. The distance between the rows $R_i$ and $G_i$ is $> 2(h+\sqrt{h^2-1})$. Furthermore, the right side of the figure shows the distance between the points. %An enlarged view of the points $r_{i, j}$ and $m_{i,j}$ is shown in Fig. \ref{fig:ZFig}
-}
-\label{fig:lowerBoundComponent}
-\end{figure}
+  
+  
+%\begin{figure}
+% \resizebox{.9\linewidth}{!}{\input{figures/lowerBdFig}}
+%\caption{Geometry of $H_{l,m}$. This figure is similar to Fig. 1 in \cite{vattani2009hardness}. The left hand side shows the complete design. Rows $R_i$ have $6m+1$ bullets and two circles. Rows $G_i$ have $3m$ circles. The bullets have weight $w$ while the circles have weight $2w$. The distance between the rows $R_i$ and $G_i$ is $> 2(h+\sqrt{h^2-1})$. Furthermore, the right side of the figure shows the distance between the points. %An enlarged view of the points $r_{i, j}$ and $m_{i,j}$ is shown in Fig. \ref{fig:ZFig}
+%}
+%\label{fig:lowerBoundComponent}
+%\end{figure}
+
+
+%\begin{figure}
+%\center
+%\input{figures/ZFig}
+%\caption{The geometry of $Z_i$. This figure is similar to Fig. 2 in \cite{vattani2009hardness}, and describes the position of the points $x_{i,j}$, $x_{i,j}'$, $y_{i,j}$ and $y_{i,j}'$ in the set $Z_i$. The points in bullet have weight $w$ while the points in circles have weight $2w$.}
+%\label{fig:ZFig}
+%\end{figure}
+
 
 \subsubsection{Reduction Design}
 Given an instance of X3C, that is the elements $U = \{1, \ldots, 3m\}$ and the collection $\mc S$, we construct a set of points $X$ in the Euclidean plane which we want to cluster. Particularly, $X$ consists of a set of points $H_{l,m}$, and the sets $Z_i$ corresponding to $S_i$. In other words, $X = H_{l,m} \cup (\cup_{i=1}^l Z_i)$. Also, these points are weighted, simply meaning that each point with weight $w$ is actually a set of $w$ points on the same location.
@@ -390,12 +406,6 @@ Given an instance of X3C, that is the elements $U = \{1, \ldots, 3m\}$ and the c
 The set $H_{l,m}$ is as described in Fig. \ref{fig:lowerBoundComponent}. The row $R_i$ is composed of $6m + 3$ points $\{s_i, r_{i, 1}, \ldots, r_{i, 6m+1}, f_i\}$. The points $r_{i, j}$ have weight $w$, and the points $s_i$ and $f_i$ have weight $2w$. Row $G_i$ is composed of $3m$ points $\{g_{i,1}, \ldots, g_{i, 3m}\}$ of weight $2w$. The distances between the points are shown in Fig. \ref{fig:lowerBoundComponent}.
 
 
-\begin{figure}
-\center
-\input{figures/ZFig}
-\caption{The geometry of $Z_i$. This figure is similar to Fig. 2 in \cite{vattani2009hardness}, and describes the position of the points $x_{i,j}$, $x_{i,j}'$, $y_{i,j}$ and $y_{i,j}'$ in the set $Z_i$. The points in bullet have weight $w$ while the points in circles have weight $2w$.}
-\label{fig:ZFig}
-\end{figure}
 
 Each set $Z_i$ is constructed based on $S_i$. In particular, $Z_i = \cup_{j\in [l]} B_{i,j}$ where 
 
@@ -415,6 +425,25 @@ $$h = 2, d = \sqrt{6}, \epsilon = \frac{1}{w^2}, \lambda = \frac{2}{\sqrt{3}}h \
 %$$k = (l-1)3m + l(3m+2) \text{ and the cost }L = L_1 + L_2 -m\alpha.$$
 %$$L_1 = (6m+3)w \text{ and } L_2 = 6m(l-1)\frac{2w\frac{w}{2}}{2w+\frac{w}{2}}h^2 = 6m(l-1)$$
 %$$h = \sqrt{5}, d = \sqrt{4.5}, \epsilon = \frac{1}{w^2} \text{ and } \alpha = \frac{d}{w}-\frac{1}{2w^3}.$$
+
+
+  \begin{figure}[!tbp]
+  \centering
+  \begin{minipage}[b]{0.49\textwidth}
+    \resizebox{\linewidth}{!}{\input{figures/lowerBdFig}}
+    \caption{Geometry of $H_{l,m}$. This figure is similar to Fig. 1 in \cite{vattani2009hardness}. The left hand side shows the complete design. Rows $R_i$ have $6m+1$ bullets and two circles. Rows $G_i$ have $3m$ circles. The bullets have weight $w$ while the circles have weight $2w$. The distance between the rows $R_i$ and $G_i$ is $> 2(h+\sqrt{h^2-1})$.}
+    \label{fig:lowerBoundComponent}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[b]{0.49\textwidth}
+    \input{figures/ZFig}
+    \caption{The locations of $x_{i,j}$, $x_{i,j}'$, $y_{i,j}$ and $y_{i,j}'$ in the set $Z_i$. The points in bullet have weight $w$ while the points in circles have weight $2w$.}
+    \label{fig:ZFig}
+  \end{minipage}
+\end{figure}
+  
+
+
 
 
 \subsubsection{Properties of the Construction}
@@ -647,6 +676,17 @@ Given a clustering instance $(\mc X, d)$ and the number of clusters $k$. For $\g
 Let $X_1, \ldots. X_n$ be i.i.d random vectors in some Hilbert space such that for all $i$, $\|X_i\|_2 \le R$ and $E[X_i] = \mu$. If $n > c\frac{\log(1/\delta)}{\epsilon^2}$, then with probability atleast $1-\delta$, we have that
 $$\Big\|\mu - \frac{1}{n}\sum X_i\Big\|_2^2 \le R^2\epsilon$$ 
 \end{theorem}
+
+
+
+\section{Concentration inequalities}
+\label{appendixsection:proofs}
+
+It is easy to see that in the optimal solution of $k$-means objective function, $\mu_i$ is the center of mass of $C_i$, i.e., $\mu_i = \frac{1}{|C_i|}\sum_{x\in C_i}x$. Also, the objective function can be rewritten in the following form (E.g., see \cite{inaba1994applications})
+
+$$f(\mc C) = \sum\limits_{C_i}\frac{1}{|C_i|} \sum_{x, y \in C_i} d^2(x, y).$$
+
+
 
 \end{document}
 
