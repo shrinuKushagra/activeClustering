@@ -159,12 +159,6 @@ $$\gamma d(x, \mu_i) < d(y, \mu_i)$$
 
 Similar notions have been considered before in the clustering literature. The closest one to our $\gamma$-margin is the notion of $\alpha$-center proximity \cite{balcan2012clustering,awasthi2012center}. We discuss the relationship betwen these two notions in appendix \ref{appendix:gammaMrginVsAlphaCenter}. 
 
-%Here, let us just mention that the computational feasibility positive results obtained under $\alpha$-center proximity can also be obtained under $\gamma$-margin for `reasonably small' values of $\gamma$. 
- 
-%MAYBE ADD HERE A SHORT STATEMENT ABOUT THE "CORRESPONDENCE" BETWEEN THE TWO NOTIONS.
-%IT MAY ALSO MAKE SENSE TO HAVE THE HARDNESS AND FEASIBILITY RESULTS FOR GAMMA MARGINS (JUST CITE TEH RESULTS AND SAY THE PROOFS FOLLOW FROM THOSE FOR ALPHA CENTEAR.
-
- %Furthermore, we assume that the clustering instance $(\mc X, d, C^*)$ is center-based and admits a $\gamma$-margin property\footnote{Naturally, the larger the value of $\gamma$, the stronger this assumtion is.}.
 
 \subsection{The algorithmic setup}
 For a clustering $C^*=\{ C^*_1, \ldots C^*_k\}$, a $C^*$ oracle is a
@@ -181,18 +175,6 @@ $${\mc O}_{C^*}(x_1, x_2) = \left\{
 
 (we omit the subscript $C^*$ when it is clear from the context).
 \end{definition}
-
-%\begin{definition}[Cluster-assignment Query]
-%A cluster-assignment query asks the cluster index that an instance $x$ belongs to. In other words ${\mc O}(x) = i$ if and only if $x \in C^*_i$.
-%$$Q(x, i) = \left\{
-%	\begin{array}{ll}
-%		\mbox{true }  & \mbox{if } x \in C^*_i   \\
-%		\mbox{false } & o.w. 
-%	\end{array}
-%\right. $$
-%\end{definition}
-
-%Same-cluster queries seem to be more natural, as the oracle (or the domain expert) will only need to respond to binary \emph{link/don't-link} questions. In appendix \ref{appendix:diffQueryModels} we show that these two notions of query are equivalent, in the sense that they give the same power to the clustering algorithm (up to a constant in terms of number of queries and run time). This is useful for some of our proofs, since using cluster-assignment queries makes the analysis more transparent.
 
 
 \begin{definition}[Query Complexity]
@@ -357,7 +339,7 @@ Finding $k$-means solution without the help of the oracle is generally computati
 
 In section \ref{section:clusteringWithQuery}, we proposed a polynomial-time algorithm that could recover the target clustering using $O(k^2\log k \log n)$ queries, assuming that the clustering satisfies $\gamma$-margin property for $\gamma>1$. Now assume that the oracle conforms to the optimal $k$-means clustering solution. In this case, for $1<\gamma\le 1.5$, solving $k$-means clustering would be NP-hard without query, while it becomes efficiently solvable with the help of an oracle \footnote{To be precise, note that the algorithm used for clustering with queries is probabilistic. However, the lower bound that we provide is for deterministic algorithms. However, this means a lower bound for randomized algorithms as well unless $BPP\neq P$}. 
 
-Given a set of instances $\mc X \subset \mb R ^d$, the $k$-means clustering problem is to find a clustering $\mc C = \{C_1, \ldots, C_k\}$ which minimizes $f(\mc C) = \sum\limits_{C_i} \min\limits_{\mu_i\in {\mb R}^d}\sum\limits_{x\in C_i} \|x - \mu_i \|_2^2$
+Given a set of instances $\mc X \subset \mb R ^d$, the $k$-means clustering problem is to find a clustering $\mc C = \{C_1, \ldots, C_k\}$ which minimizes $f(\mc C) = \sum\limits_{C_i} \min\limits_{\mu_i\in {\mb R}^d}\sum\limits_{x\in C_i} \|x - \mu_i \|_2^2$. The decision version of $k$-means is to find a clustering $\mc C$ with cost $\le L$.
 
 
 %One can also consider a weighted version of the problem where every point $x$ has a weight $w(x)$. 
@@ -389,11 +371,12 @@ We will show how to translate each instance of X3C, $(U,\mc S)$, to an instance 
 \subsubsection{Reduction Design}
 The clustering instance $X = H_{l,m} \cup (\cup_{i=1}^l Z_i)$. The set $H_{l,m}$ is as described in Fig. \ref{fig:lowerBoundComponent}. The row $R_i$ is composed of $6m + 3$ points $\{s_i, r_{i, 1}, \ldots, r_{i, 6m+1}, f_i\}$. Row $G_i$ is composed of $3m$ points $\{g_{i,1}, \ldots, g_{i, 3m}\}$. The distances between the points are also shown in Fig. \ref{fig:lowerBoundComponent}. Also, all these points have weight $w$, simply meaning that each point is actually a set of $w$ points on the same location.
 
-Each set $Z_i$ is constructed based on $S_i$. In particular, $Z_i = \cup_{j\in [3m]} B_{i,j}$. The construction of $B_{i,j}$ is as follows. $x_{i,j} \in B_{i,j}$ iff $j \not\in S_i$ and $x_{i,j}' \in B_{i,j}$ iff $j \in S_i$. Similarly,  $y_{i,j} \in B_{i,j}$ iff $j \not\in S_{i+1}$ and $y_{i,j}' \in B_{i,j}$ iff $j \in S_{i+1}$. The locations, $x_{i, j}, x_{i,j}^\prime, y_{i,j}$ and $y_{i, j}^\prime$ are specific locations as depicted in Fig. \ref{fig:ZFig}. In other words, exactly one of the locations $x_{i,j}$ and $x_{i,j}^\prime$, and one of $y_{i,j}$ and $y_{i,j}^\prime$ will be occupied. We set the parameters as follows, $h = 2, d = \sqrt{6}, \epsilon = \frac{1}{w^2}, \lambda = \frac{2}{\sqrt{3}}h$ and $k = (l-1)3m + l(3m+2)$
-
-%$$k = (l-1)3m + l(3m+2) \text{ and the cost }L = L_1 + L_2 -m\alpha.$$
-%$$L_1 = (6m+3)w \text{ and } L_2 = 6m(l-1)\frac{2w\frac{w}{2}}{2w+\frac{w}{2}}h^2 = 6m(l-1)$$
-%$$h = \sqrt{5}, d = \sqrt{4.5}, \epsilon = \frac{1}{w^2} \text{ and } \alpha = \frac{d}{w}-\frac{1}{2w^3}.$$
+Each set $Z_i$ is constructed based on $S_i$. In particular, $Z_i = \cup_{j\in [3m]} B_{i,j}$. The construction of $B_{i,j}$ is as follows. $x_{i,j} \in B_{i,j}$ iff $j \not\in S_i$ and $x_{i,j}' \in B_{i,j}$ iff $j \in S_i$. Similarly,  $y_{i,j} \in B_{i,j}$ iff $j \not\in S_{i+1}$ and $y_{i,j}' \in B_{i,j}$ iff $j \in S_{i+1}$. The locations, $x_{i, j}, x_{i,j}^\prime, y_{i,j}$ and $y_{i, j}^\prime$ are specific locations as depicted in Fig. \ref{fig:ZFig}. In other words, exactly one of the locations $x_{i,j}$ and $x_{i,j}^\prime$, and one of $y_{i,j}$ and $y_{i,j}^\prime$ will be occupied. We set the parameters as follows, 
+\vspace{-0.1in}
+\begin{align*}
+&h = 2, d = \sqrt{6}, \epsilon = \frac{1}{w^2}, \lambda = \frac{2}{\sqrt{3}}h, k = (l-1)3m + l(3m+2)\\
+& L_1 = (6m+3)w, L_2 = 6m(l-1), L = L_1 + L_2, \alpha = \frac{d}{w}-\frac{1}{2w^3}
+\end{align*}
 
 
   \begin{figure}[!tbp]
@@ -414,8 +397,6 @@ Each set $Z_i$ is constructed based on $S_i$. In particular, $Z_i = \cup_{j\in [
 \subsubsection{Properties of the Construction}
 
 In this section we show some properties of the construction that will ultimately enable us to prove Theorem \ref{thm:gammaLower}. These definitions will be useful throughout the section
-
-$$L_1 = (6m+3)w, L_2 = 6m(l-1), L=L_1 + L_2, \alpha = \frac{d}{w}-\frac{1}{2w^3}$$
 
 \begin{definition}[$A$- and $B$-Clustering of $R_i$]
 \label{defn:abclusteringVattani}
@@ -440,14 +421,10 @@ A $k$-clusteirng is nice if every $g_{i,j}$ is a singleton cluster, each $R_i$ i
 \end{definition}
 
 It is straightforward to see that a row grouped in a $A$-clustering costs $(6m+3)w-\alpha$ while a row in $B$-clustering costs $(6m+3)w$. Hence, a nice clustering of $H_{l,m} \cup Z$ costs at most $L_1 + L_2$. More specifically, if $t$ rows are group in a $A$-clustering, the nice-clustering costs $L_1+L_2-t\alpha$. Also, observe that any nice clustering of $X$ has only the following four different types of clusters. \begin{enumerate}[label=(\arabic*),nolistsep,leftmargin=*]
-\item Type E - $\{r_{i,2j-1}, r_{i,2j+1}\}$ \\
-The cost of this cluster is $2w$ and we define the contribution of each location as  cost/no. of locations $ = \frac{2w}{2} = w$.
-\item Type F - $\{r_{i,2j-1}, r_{i, 2j}, x_{i, j}\}$ or $\{r_{i,2j-1}, r_{i, 2j}, y_{i-1, j}\}$ or $\{r_{i,2j}, r_{i, 2j+1}, x_{i, j}'\}$ or $\{r_{i,2j}, r_{i, 2j+1}, y_{i-1, j}'\}$\\
-The cost of any cluster of this type is $2w(1+\frac{h^2}{3})$ and the contribution of each location to is atmost $\frac{2w}{9}(h^2+3)$. For $h = \sqrt 5$, this equals $\frac{16}{9}w$.  
-\item Type I - $\{g_{i, j}, x_{i,j}\}$ or $\{g_{i, j}, x_{i,j}'\}$  or $\{g_{i, j}, y_{i,j}\}$  or $\{g_{i, j}, y_{i,j}'\}$\\
-The cost of any cluster of this type is $\frac{2}{3}wh^2$ and the contribution to cost of each location is $\frac{w}{3}h^2$. For our choice of $h$, the contribution is $\frac{5}{3}w$.
-\item Type J - $\{s_i, r_{i,1}\}$ or $\{r_{i,6m+1}, f_i\}$\\
-The cost of this cluster is $3w$ (or $3w-\alpha$) and we define the contribution of each location to cost is atmost $1.5w$. 
+\item Type E - $\{r_{i,2j-1}, r_{i,2j+1}\}$. The cost of this cluster is $2w$ and we define the contribution of each location $ = \frac{2w}{2} = w$.
+\item Type F - $\{r_{i,2j-1}, r_{i, 2j}, x_{i, j}\}$ or $\{r_{i,2j-1}, r_{i, 2j}, y_{i-1, j}\}$ or $\{r_{i,2j}, r_{i, 2j+1}, x_{i, j}'\}$ or $\{r_{i,2j}, r_{i, 2j+1}, y_{i-1, j}'\}$. The cost of this type is $2w(1+\frac{h^2}{3})$ and the contribution of each location to is atmost $\frac{2w}{9}(h^2+3)$.
+\item Type I - $\{g_{i, j}, x_{i,j}\}$ or $\{g_{i, j}, x_{i,j}'\}$  or $\{g_{i, j}, y_{i,j}\}$  or $\{g_{i, j}, y_{i,j}'\}$. The cost of any cluster of this type is $\frac{2}{3}wh^2$ and the contribution to cost of each location is $\frac{w}{3}h^2$.
+\item Type J - $\{s_i, r_{i,1}\}$ or $\{r_{i,6m+1}, f_i\}$. The cost of this cluster is $3w$ (or $3w-\alpha$) and the contribution of each location is atmost $1.5w$. 
 \end{enumerate}
 Hence, observe that in a nice-clustering, any location contributes atmost $\le \frac{16}{9}w$ to the total clustering cost. This observation will be useful in the proof of the lemma below.
 
@@ -456,26 +433,18 @@ For large enough $w = poly(l, m)$, any non-nice clustering of $X = H_{l, m} \cup
 \end{lemma}
 
 \begin{proof}
-We will show that any non-nice clustering $C$ of $X$ costs atleast $w$ more than the cost of any nice clustering. This will prove our result. The following cases are possible.
+We will show that any non-nice clustering $C$ of $X$ costs atleast $w/3$ more than the cost of any nice clustering. This will prove our result. The following cases are possible.
 
 \begin{itemize}[nolistsep,leftmargin=*]
-\item $C$ contains a cluster $C_i$ of cardinality $t > 6$\\
-Observe that any $x \in C_i$ has at least $t-5$ locations at a distance $\ge 4$ and $4$ locations at a distance atleast $2$. Hence, the cost of $C_i$ is atleast $\frac{w}{2t}(4^2(t-5)+2^24)t = 8w(t-4)$. $C_i$ allows us to use atmost $t-2$ singletons. This is because a nice clustering of these $t+(t-2)$ points uses atmost $t-1$ clusters and the clustering $C$ uses  $1 + (t-2)$ clusters for these points. The cost of the nice cluster on these points is $\le \frac{16w}{9}2(t-1)$. While the non-nice clustering costs atleast $8w(t-4)$. For $t \ge 6.4 \implies 8(t-4) > \frac{32}{9}(t-1)$ and the claim follows. Note that in this case the difference in cost is atleast $\frac{8w}{3}$. 
+\item $C$ contains a cluster $C_i$ of cardinality $t > 6$. Observe that any $x \in C_i$ has at least $t-5$ locations at a distance $\ge 4$ and $4$ locations at a distance atleast $2$. Hence, the cost of $C_i$ is atleast $8w(t-4)$. A cluster of size $t$ allows us to use atmost $t-2$ singletons. The cost of the nice cluster on these points is $\le \frac{16w}{9}2(t-1)$. While the non-nice clustering costs atleast $8w(t-4)$. For $t \ge 6.4 \implies 8(t-4) > \frac{32}{9}(t-1)$ and the claim follows. Note that in this case the difference in cost is atleast $\frac{8w}{3}$. 
 
-\item Contains a cluster of cardinality $t = 6$\\
-Simple arguments show that amongst all clusters of cardinality $6$, the following has the minimum cost. $C_i = \{r_{i, 2j-1}, r_{i, 2j}, x_{i,j}, y_{i-1, j}, r_{i, 2j+1}, r_{2j+2}\}$. The cost of this cluster is $\frac{176w}{6}$. Arguing as before, this allows us to use $4$ singletons. Hence, a nice cluster on these $10$ points costs atmost $\frac{160w}{9}$. The difference of cost is atleast $34w$.  
+\item Contains a cluster of cardinality $t = 6$. Simple arguments show that amongst all clusters of cardinality $6$, the following has the minimum cost. $C_i = \{r_{i, 2j-1}, r_{i, 2j}, x_{i,j}, y_{i-1, j}, r_{i, 2j+1}, r_{2j+2}\}$. The cost of this cluster is $\frac{176w}{6}$. Arguing as before, a nice cluster on these $10$ points costs atmost $\frac{160w}{9}$. The difference of cost is atleast $34w$.  
 
-\item Contains a cluster of cardinality $t = 5$\\
-Simple arguments show that amongst all clusters of cardinality $5$, the following has the minimum cost. $C_i = \{r_{i, 2j-1}, r_{i, 2j}, x_{i,j}, y_{i-1, j}, r_{i, 2j+1}\}$. The cost of this cluster is $16w$. Arguing as before, this allows us to use $3$ singletons. Hence, a nice cluster on these $8$ points costs atmost $16w\frac{8}{9}$. The difference of cost is atleast $\frac{16w}{9}$.  
+\item Contains a cluster of cardinality $t = 5$. Similar analysis as above shows that the difference of cost in this case is atleast $\frac{16w}{9}$.  
 
-\item Contains a cluster of cardinality $t = 4$\\
-It is easy to see that amongst all clusters of cardinality $4$, the following has the minimum cost. $C_i = \{r_{i, 2j-1}, r_{i, 2j}, x_{i,j}, r_{i, 2j+1}\}$. The cost of this cluster is $11w$. Arguing as before, this allows us to use $2$ singletons. Hence, a nice cluster on these $6$ points costs atmost $\frac{32w}{3}$. The difference of cost is atleast $\frac{w}{3}$.
+\item Contains a cluster of cardinality $t = 4$. Similar analysis as above shows that the difference of cost in this case is atleast $\frac{w}{3}$.  
 
-\item All the clusters have cardinality $\le 3$ \\
-Observe that amongst all non-nice clusters of cardinality $3$, the following has the minimum cost. $C_i = \{r_{i, 2j-1}, r_{i, 2j}, r_{i, 2j+1}\}$. The cost of this cluster is $8w$. Arguing as before, this allows us to use atmost $1$ more singleton. Hence, a nice cluster on these $4$ points costs atmost $\frac{64w}{9}$. The difference of cost is atleast $\frac{8w}{9}$.
-
-It is also simple to see that any non-nice clustering of size $2$ causes an increase in cost of atleast $w$.
-
+\item All the clusters have cardinality $\le 3$. It is also simple to see that any non-nice clustering of size $2$ causes an increase in cost of atleast $w$.
 \end{itemize}
 \end{proof}
 
@@ -489,17 +458,17 @@ The proof is identical to the proof of Lemma 11 in \cite{vattani2009hardness}.
 
 \begin{lemma}
 \label{lemma:gammaLower}
-The clustering instance $X = H_{l,n} \cup Z$ has $\gamma$-margin where $\gamma = 1.5$.
+Any clustering of $X = H_{l,n} \cup Z$ with cost $\le L$ has $\gamma$-margin where $\gamma = 1.5$.
 \end{lemma}
 \begin{proof}
-Any clustering of cost $\le L$ has the following different types of clusters. (1) $\{r_{i,2j-1}, r_{i, 2j}\}$. Then $x_{i,j}$ or $y_{i,j}$ is added to this cluster. The radius of this cluster is $\frac{2}{3}h$. The closest distance of any other point to this cluster is at least $h$. Hence, $\gamma = 1.5$. (2) $\{r_{i,2j}, r_{i, 2j+1}\}$. Then, $x_{i,j}$ or $y_{i,j}$ is added to this cluster, similar to the previous case. 
-(3) $\{r_{i,2j}, r_{i, 2j+1}\}$. Then, $x_{i,j}'$ or $y_{i,j}'$ is added to this cluster, same as case 1 and 2. (4) $\{m_{i,j}\}$. Then, $x_{i,j}$ or $y_{i,j}$ is added to this cluster. The radius is again $\frac{2}{3}h$. Any other point is at least $h$ away from the center. Hence, $y= 3/2$. The analysis of all the other cases is analogous.
+Note that any nice-clustering of $X$ has only four different types of clusters (Type E or F or I or J). The proof easily follows from a simple distance calculation on these clusters.
 \end{proof}
+
 Lemmas \ref{lemma:kmeansEquivalenceX3C} and \ref{lemma:gammaLower} complete the proof of the main result (Thm. \ref{thm:gammaLower}). 
 
 \subsection{Lower Bound on the Number of Queries}
 
-In the previous section we showed that $k$-means clustering is NP-hard even under $\gamma$-margin assumption (for $\gamma < 1.5$). On the other hand, in Section \ref{section:clusteringWithQuery} we showed that this is not the case if the algorithm has access to an oracle. In particular, the algorithm asks $O\big(k^2\log |\mc X| + k^3\frac{\log k + \log (1/\delta)}{(\gamma - 1)^4}\big)$ same-cluster queries\footnote{If the algorithm uses cluster-assignment queries this number reduces by a factor of $k$}. Therefore, a natural follow-up question is that whether there is a polynomial-time algorithm for clustering that uses less number of queries. In this section, we take a first step in this direction and show a lower bound on the number of queries needed to provide a polynomial-time algorithm for $k$-means clustering under margin assumption.
+In the previous section we showed that $k$-means clustering is NP-hard even under $\gamma$-margin assumption (for $\gamma < 1.5$). On the other hand, in Section \ref{section:clusteringWithQuery} we showed that this is not the case if the algorithm has access to an oracle. In this section, we show a lower bound on the number of queries needed to provide a polynomial-time algorithm for $k$-means clustering under margin assumption.
 
 \begin{theorem}
 \label{thm:queryLower}
