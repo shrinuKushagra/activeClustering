@@ -333,7 +333,9 @@ We will show how to translate each instance of X3C, $(U,\mc S)$, to an instance 
 
 
 \subsubsection{Reduction Design}
-The clustering instance is $X = H_{l,m} \cup (\cup_{i=1}^l Z_i)$. The set $H_{l,m}$ is as described in Fig. \ref{fig:lowerBoundComponent}. The row $R_i$ is composed of $6m + 3$ points $\{s_i, r_{i, 1}, \ldots, r_{i, 6m+1}, f_i\}$. Row $G_i$ is composed of $3m$ points $\{g_{i,1}, \ldots, g_{i, 3m}\}$. The distances between the points are also shown in Fig. \ref{fig:lowerBoundComponent}. Also, all these points have weight $w$, simply meaning that each point is actually a set of $w$ points on the same location.
+Given an instance of X3C, that is the elements $U = \{1, \ldots, 3m\}$ and the collection $\mc S$, we construct a set of points $X$ in the Euclidean plane which we want to cluster. Particularly, $X$ consists of a set of points $H_{l,m}$ in a grid-like manner, and the sets $Z_i$ corresponding to $S_i$. In other words, $X = H_{l,m} \cup (\cup_{i=1}^l Z_i)$. 
+
+The set $H_{l,m}$ is as described in Fig. \ref{fig:lowerBoundComponent}. The row $R_i$ is composed of $6m + 3$ points $\{s_i, r_{i, 1}, \ldots, r_{i, 6m+1}, f_i\}$. Row $G_i$ is composed of $3m$ points $\{g_{i,1}, \ldots, g_{i, 3m}\}$. The distances between the points are also shown in Fig. \ref{fig:lowerBoundComponent}. Also, all these points have weight $w$, simply meaning that each point is actually a set of $w$ points on the same location.
 
 Each set $Z_i$ is constructed based on $S_i$. In particular, $Z_i = \cup_{j\in [3m]} B_{i,j}$. The construction of $B_{i,j}$ is as follows. $x_{i,j} \in B_{i,j}$ iff $j \not\in S_i$ and $x_{i,j}' \in B_{i,j}$ iff $j \in S_i$. Similarly,  $y_{i,j} \in B_{i,j}$ iff $j \not\in S_{i+1}$ and $y_{i,j}' \in B_{i,j}$ iff $j \in S_{i+1}$. The locations, $x_{i, j}, x_{i,j}^\prime, y_{i,j}$ and $y_{i, j}^\prime$ are specific locations as depicted in Fig. \ref{fig:ZFig}. In other words, exactly one of the locations $x_{i,j}$ and $x_{i,j}^\prime$, and one of $y_{i,j}$ and $y_{i,j}^\prime$ will be occupied. We set the parameters as follows, 
 \vspace{-0.1in}
@@ -347,7 +349,7 @@ Each set $Z_i$ is constructed based on $S_i$. In particular, $Z_i = \cup_{j\in [
   \centering
   \begin{minipage}[b]{0.49\textwidth}
     \resizebox{\linewidth}{!}{\input{figures/lowerBdFig}}
-    \caption{Geometry of $H_{l,m}$. This figure is similar to Fig. 1 in \cite{vattani2009hardness}. The left hand side shows the complete design. Rows $R_i$ have $6m+1$ bullets and two circles. Rows $G_i$ have $3m$ circles. All the points have weight $w$. The distance between the rows $R_i$ and $G_i$ is $> (h+\sqrt{h^2-1})$.}
+    \caption{Geometry of $H_{l,m}$. This figure is similar to Fig. 1 in \cite{vattani2009hardness}. The left hand side shows the complete design. Rows $R_i$ have $6m+1$ bullets and two circles. Rows $G_i$ have $3m$ circles. The points $s_i, f_i$ have been labelled by diamonds while $g_{i,j}$ and $r_{i, j}$ have been labelled by circle and bullet respectively.}
     \label{fig:lowerBoundComponent}
   \end{minipage}
   \hfill
