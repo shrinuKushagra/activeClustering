@@ -180,12 +180,11 @@ Given a clustering instance $(\mc X, d)$ and the number of clusters $k$. For $\g
 
 
 \section{Proofs of lemmas and theorems}
-\label{appendix:hardnessthms}
 \subsection{Hardness of Euclidean k-means with Margin}
 
-Finding $k$-means solution without the help of the oracle is generally computationally hard. In this section, we will show that solving $k$-means remains hard even if we know that the optimal solution satisfies $\gamma$-margin property for $\gamma=1.5$. In particular, we show the hardness for the case of $k=\Theta(n^\epsilon)$ for any $\epsilon\in (0,1)$. This is a critical result for our purpose, because it shows that our niceness assumption (i.e., the $\gamma$-margin property) is not too strong, and the use of oracle is necessary.
+Finding $k$-means solution without the help of the oracle is generally computationally hard. In this section, we will show that solving $k$-means remains hard even if we know that the optimal solution satisfies $\gamma$-margin property for $\gamma=\sqrt{3.4} \approx 1.84$. In particular, we show the hardness for the case of $k=\Theta(n^\epsilon)$ for any $\epsilon\in (0,1)$. This is a critical result for our purpose, because it shows that our niceness assumption (i.e., the $\gamma$-margin property) is not too strong, and the use of oracle is necessary.
 
-In section \ref{A-section:clusteringWithQuery}, we proposed a polynomial-time algorithm that could recover the target clustering using $O(k^2\log k \log n)$ queries, assuming that the clustering satisfies $\gamma$-margin property for $\gamma>1$. Now assume that the oracle conforms to the optimal $k$-means clustering solution. In this case, for $1<\gamma\le 1.5$, solving $k$-means clustering would be NP-hard without query, while it becomes efficiently solvable with the help of an oracle \footnote{To be precise, note that the algorithm used for clustering with queries is probabilistic. However, the lower bound that we provide is for deterministic algorithms. However, this means a lower bound for randomized algorithms as well unless $BPP\neq P$}. 
+In section \ref{A-section:clusteringWithQuery}, we proposed a polynomial-time algorithm that could recover the target clustering using $O(k^2\log k \log n)$ queries, assuming that the clustering satisfies $\gamma$-margin property for $\gamma>1$. Now assume that the oracle conforms to the optimal $k$-means clustering solution. In this case, for $1<\gamma\le \sqrt{3.4} \approx 1.84$, solving $k$-means clustering would be NP-hard without query, while it becomes efficiently solvable with the help of an oracle \footnote{To be precise, note that the algorithm used for clustering with queries is probabilistic. However, the lower bound that we provide is for deterministic algorithms. However, this means a lower bound for randomized algorithms as well unless $BPP\neq P$}. 
 
 \subsubsection{Formal Setting}
 
@@ -204,7 +203,7 @@ The following theorem is the main result of this section. The next subsections a
 
 \begin{theorem}
 \label{thm:gammaLower}
-Finding the optimal solution to $k$-means objective function is NP-hard when $k=\Theta(n^\epsilon)$ for any $\epsilon \in (0,1)$. Furthermore, this result holds even when the optimal solution satisfies $\gamma$-margin property for $\gamma = 1.5$.
+Finding the optimal solution to $k$-means objective function is NP-hard when $k=\Theta(n^\epsilon)$ for any $\epsilon \in (0,1)$. Furthermore, this result holds even when the optimal solution satisfies $\gamma$-margin property for $\gamma = \sqrt{3.4} \approx 1.84$.
 
 
 \end{theorem}
@@ -213,36 +212,13 @@ Finding the optimal solution to $k$-means objective function is NP-hard when $k=
 
 Our method to prove Theorem \ref{thm:gammaLower} is based on the approach employed by \cite{vattani2009hardness}. However, the original construction proposed in \cite{vattani2009hardness} does not satisfy $\gamma$-margin property. Therefore, we have to modify the proof by setting up the parameters of the construction more carefully. 
 
-%Hence, $U$ has a set cover of size $n$ iff $X$ has a clustering of cost $\le L$. We setup the distances such that the optimal clustering has $\gamma$-margin for $\gamma \le 1.5$. This completes the proof of the theorem.  
-
-
 To prove the theorem, we will provide a reduction from the problem of Exact Cover by 3-Sets (X3C) which is NP-Complete \cite{garey2002computers}, to the decision version of $k$-means (which given a real value $L$, asks whether a clustering with cost $\le L$ exists).
 
 \begin{definition}[X3C]
 Given a set $U$ containing exactly $3m$ elements and a collection $\mc S = \{S_1, \ldots, S_l\}$ of subsets of $U$ such that each $S_i$ contains exactly three elements, does there exist $m$ elements in $\mc S$ such that their union is $U$? 
 \end{definition}
 
-We will show how to translate each instance of X3C, $(U,\mc S)$, to an instance of $k$-means clustering in the Euclidean plane, $X$. In particular, $X$ has a gridlike structure consisting of $l$ rows (one for each $S_i$) and roughly $6m$ columns (corresponding to $U$) which are embedded in the Euclidean plane. The special geometry of the embedding makes sure that any low-cost $k$-means clustering of the points (where $k$ is roughly $6ml$) exhibits a certain structure. In particular, any low-cost $k$-means clustering could cluster each row in only two ways; One of these corresponds to $S_i$ being included in the cover, while the other means it should be excluded. We will then show that $U$ has a cover of size $m$ if $X$ has a clustering of cost less than a specific value. Furthermore, our choice of embedding makes sure that the optimal clustering satisfies $\gamma$-margin for $\gamma=1.5$\footnote{As mentioned earlier, this is not the case in the original Vattani's proof \cite{vattani2009hardness}}.
-
-%The proof constructs an instance $X$ in the Euclidean plane. The instance consists of $l$ different `rows' corresponding to the collection $\mc S$ and roughly $6n$ different `columns' corresponding to the set $U$. Now, the set $X$ and its parameters (distances between the points, number of clusters, etc.) are chosen such that in any clustering $C$ of cost $\le L$, the rows can be clustered only in two possible ways. One of them corresponds to the $S_i$ being included in the cover and the other corresponds to it being excluded from the cover. Hence, $U$ has a cover of size $n$ iff $X$ has a clustering of cost $\le L$. We choose the distances such that the optimal clustering satisfies $\gamma$-margin for $\gamma \le 1.5$ thereby completing the proof of the theorem. 
-  
-  
-  
-%\begin{figure}
-% \resizebox{.9\linewidth}{!}{\input{figures/lowerBdFig}}
-%\caption{Geometry of $H_{l,m}$. This figure is similar to Fig. 1 in \cite{vattani2009hardness}. The left hand side shows the complete design. Rows $R_i$ have $6m+1$ bullets and two circles. Rows $G_i$ have $3m$ circles. The bullets have weight $w$ while the circles have weight $2w$. The distance between the rows $R_i$ and $G_i$ is $> 2(h+\sqrt{h^2-1})$. Furthermore, the right side of the figure shows the distance between the points. %An enlarged view of the points $r_{i, j}$ and $m_{i,j}$ is shown in Fig. \ref{fig:ZFig}
-%}
-%\label{fig:lowerBoundComponent}
-%\end{figure}
-
-
-%\begin{figure}
-%\center
-%\input{figures/ZFig}
-%\caption{The geometry of $Z_i$. This figure is similar to Fig. 2 in \cite{vattani2009hardness}, and describes the position of the points $x_{i,j}$, $x_{i,j}'$, $y_{i,j}$ and $y_{i,j}'$ in the set $Z_i$. The points in bullet have weight $w$ while the points in circles have weight $2w$.}
-%\label{fig:ZFig}
-%\end{figure}
-
+We will show how to translate each instance of X3C, $(U,\mc S)$, to an instance of $k$-means clustering in the Euclidean plane, $X$. In particular, $X$ has a gridlike structure consisting of $l$ rows (one for each $S_i$) and roughly $6m$ columns (corresponding to $U$) which are embedded in the Euclidean plane. The special geometry of the embedding makes sure that any low-cost $k$-means clustering of the points (where $k$ is roughly $6ml$) exhibits a certain structure. In particular, any low-cost $k$-means clustering could cluster each row in only two ways; One of these corresponds to $S_i$ being included in the cover, while the other means it should be excluded. We will then show that $U$ has a cover of size $m$ if $X$ has a clustering of cost less than a specific value. Furthermore, our choice of embedding makes sure that the optimal clustering satisfies $\gamma$-margin for $\gamma=\sqrt{3.4} \approx 1.84$.
 
 \subsubsection{Reduction Design}
 Given an instance of X3C, that is the elements $U = \{1, \ldots, 3m\}$ and the collection $\mc S$, we construct a set of points $X$ in the Euclidean plane which we want to cluster. Particularly, $X$ consists of a set of points $H_{l,m}$, and the sets $Z_i$ corresponding to $S_i$. In other words, $X = H_{l,m} \cup (\cup_{i=1}^l Z_i)$. Also, these points are weighted, simply meaning that each point with weight $w$ is actually a set of $w$ points on the same location.
@@ -371,11 +347,16 @@ The proof is identical to the proof of Lemma 11 in \cite{vattani2009hardness}. L
 
 \begin{lemma}
 \label{lemma:gammaLower}
-Any clustering of $X = H_{l,n} \cup Z$ which has cost$\le L$ has the $\gamma$-margin property where $\gamma = 1.5$.
+Any clustering of $X = H_{l,n} \cup Z$ which has cost$\le L$ has the $\gamma$-margin property where $\gamma = \sqrt{\frac{17}{5}} \approx 1.84$.
 \end{lemma}
 \begin{proof}
-As argued before, any nice clustering has four different types of clusters. We will calculate the minimum ratio $r_i = \frac{d(y, \mu)}{d(x, \mu)}$ for each of these clusters $C_i$ (where $x \in C_i$, $y \not\in C_i$ and $\mu$ is mean of all the points in $C_i$.) Then, the minimum $r_i$ will give the desired $\gamma$. Any clustering of cost $\le L$ has the following different types of clusters. (1) $\{r_{i,2j-1}, r_{i, 2j}\}$. Then $x_{i,j}$ or $y_{i,j}$ is added to this cluster. The radius of this cluster is $\frac{2}{3}h$. The closest distance of any other point to this cluster is at least $h$. Hence, $\gamma = 1.5$. (2) $\{r_{i,2j}, r_{i, 2j+1}\}$. Then, $x_{i,j}$ or $y_{i,j}$ is added to this cluster, similar to the previous case. 
-(3) $\{r_{i,2j}, r_{i, 2j+1}\}$. Then, $x_{i,j}'$ or $y_{i,j}'$ is added to this cluster, same as case 1 and 2. (4) $\{m_{i,j}\}$. Then, $x_{i,j}$ or $y_{i,j}$ is added to this cluster. The radius is again $\frac{2}{3}h$. Any other point is at least $h$ away from the center. Hence, $y= 3/2$. The analysis of all the other cases is analogous.
+As argued before, any nice clustering has four different types of clusters. We will calculate the minimum ratio $a_i = \frac{d(y, \mu)}{d(x, \mu)}$ for each of these clusters $C_i$ (where $x \in C_i$, $y \not\in C_i$ and $\mu$ is mean of all the points in $C_i$.) Then, the minimum $a_i$ will give the desired $\gamma$. 
+\begin{enumerate}[label=(\arabic*),nolistsep,leftmargin=*]
+\item For Type E clusters $a_i = h/1 = \sqrt{5}$. 
+\item For Type F clusters. $a_i = \frac{\frac{\sqrt{4+16(h^2-1)}}{3}}{2h/3} = \sqrt{\frac{17}{5}} \approx 1.84$. 
+\item For Type I clusters, standard calculation show that $a_i > 2$.
+\item For Type J clusters $a_i = \frac{2+\frac{\sqrt{6}}{2}}{\frac{\sqrt{6}}{2}} > 2$.
+\end{enumerate}
 \end{proof}
 Lemmas \ref{lemma:kmeansEquivalenceX3C} and \ref{lemma:gammaLower} complete the proof of the main result (Thm. \ref{thm:gammaLower}). 
 
