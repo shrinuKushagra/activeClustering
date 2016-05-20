@@ -101,7 +101,7 @@ Before we explain those results, let us also mention a notion of clusterability 
 We focus on the effect of using queries on the computational complexity of clustering. We provide a probabilistic polynomial time (BPP) algorithm for clustering with queries, that has guaranteed success under the assumption that the input satisfies the $\gamma$-margin condition for $\gamma > 1$. This algorithm makes $O\big(k^2\log k + k\log n)$ same-cluster queries to the oracle and runs in $O\big(kn\log n)$ time, where $k$ is the number of clusters and $n$ is the size of the instance set.
 
 On the other hand, we show that without access to query answers, $k$-means clustering is NP-hard even even when the solution satisfies $\gamma$-margin property for $\gamma=leq 1.5$ and $k=\Theta(n^\epsilon)$ (for any $\epsilon\in (0,1)$). We further show that access to $\Omega(\log k + \log n)$ queries is needed to overcome the NP hardness in that case.
-These results, put together, show an interesting phenomenon. Assume that the oracle conforms to an optimal solution of $k$-means clustering and that it satisfies $\gamma$-margin property for some $1<\gamma \leq 1.5$. In this case, our lower bound means that without making queries $k$-means clustering is NP-hard, while the positive result shows that with a reasonable number of queries the problem becomes efficiently solvable.  
+These results, put together, show an interesting phenomenon. Assume that the oracle conforms to an optimal solution of $k$-means clustering and that it satisfies the $\gamma$-margin property for some $1<\gamma \leq 1.5$. In this case, our lower bound means that without making queries $k$-means clustering is NP-hard, while the positive result shows that with a reasonable number of queries the problem becomes efficiently solvable.  
 
 %In other words, both the data niceness (margin) condition and the access to query answers are essential to the feasiblity of $k$-means clustering.
 This indicates an interesting (and as far as we are aware, novel) tradeoff between query complexity and computational complexity in the clustering domain. 
@@ -194,7 +194,7 @@ We will consider families of such instances determined by niceness conditions on
 \section{An Efficient SSAC algorithm}
 \label{section:clusteringWithQuery}
 
-In this section we provide an efficient algorithm for clustering with queries. The setting is the one described in the previous section. In particular, it is assumed that the oracle has a $\gamma$-margin center-based clustering in his mind. The space is Euclidean and the center of each cluster is the center of mass of the instances in that cluster. The algorithm not only makes same-cluster queries, but also another type of query defined as below% queiries to the oracle, but this can be translated to binary same-cluster queries 
+In this section we provide an efficient algorithm for clustering with queries. The setting is the one described in the previous section. In particular, it is assumed that the oracle has a center-based clustering in his mind which satisfies the $\gamma$-margin property. The space is Euclidean and the center of each cluster is the center of mass of the instances in that cluster. The algorithm not only makes same-cluster queries, but also another type of query defined as below% queiries to the oracle, but this can be translated to binary same-cluster queries 
 
 
 \begin{definition}[Cluster-assignment Query]
@@ -275,7 +275,7 @@ $p = \argmax_t |Z_t|$\\
 
 \begin{lemma}
 \label{lemma:hasGammaMargin}
-Let $(\mc X, d, C)$ be a clustering instane, where $C$ is center-based and satisfies $\gamma$-margin property. Let $\mu$ be the set of centers corresponding to the centers of mass of $C$. Let $\mu_i'$ be such that $d(\mu_i, \mu_i') \le r(C_i)\epsilon$, where $r(C_i) = \max_{x\in C_i}d(x, \mu_i)$ . Then $\gamma \ge 1 + 2\epsilon$ implies that 
+Let $(\mc X, d, C)$ be a clustering instane, where $C$ is center-based and satisfies the $\gamma$-margin property. Let $\mu$ be the set of centers corresponding to the centers of mass of $C$. Let $\mu_i'$ be such that $d(\mu_i, \mu_i') \le r(C_i)\epsilon$, where $r(C_i) = \max_{x\in C_i}d(x, \mu_i)$ . Then $\gamma \ge 1 + 2\epsilon$ implies that 
 \begin{center}$\forall x \in C_i, \forall y \in {\mc X} \setminus C_i \Rightarrow d(x, \mu_i') < d(y, \mu_i')$\end{center}
 \end{lemma}
 
@@ -294,7 +294,7 @@ Define a uniform distribution $U$ over $C_p$. Then $\mu_p$ and $\mu_p^\prime$ ar
 
 \begin{theorem}
 \label{thm:steinerQueryPositive}
-Let $(\mc X, d, C)$ be a clustering instane, where $C$ is center-based and satisfies $\gamma$-margin property. Let $\mu_i$ be the center corresponding to the center of mass of $C_i$.
+Let $(\mc X, d, C)$ be a clustering instane, where $C$ is center-based and satisfies the $\gamma$-margin property. Let $\mu_i$ be the center corresponding to the center of mass of $C_i$.
 %Given a clustering instance $(\mc X, d)$ in some metric space $M$. Let $\mc C_{\mc X} = \{C_1, \ldots, C_k\}$ be a clustering of $\mc X$ induced by centers $\mu_1, \ldots, \mu_k \in M$ which satisfies $\gamma$-margin and $\mu_i$ is the mean of points in $C_i$. 
 Assume $\delta \in (0, 1)$ and $\gamma > 1$. Then with probability at least $1-\delta$, Algorithm \ref{alg:steinerQueryPositive} outputs $C$.
 \end{theorem}
@@ -317,7 +317,7 @@ In each iteration (i) the first phase of the algorithm takes $O(\eta)$ time and 
 \end{proof}
 
 \begin{corollary}
-The set of Euclidean clustering instances that satisfy $\gamma$-margin property for some $\gamma > 1$ admits query complexity $O\big(k\log n + k^2\frac{\log k + \log (1/\delta)}{(\gamma - 1)^4}\big)$. 
+The set of Euclidean clustering instances that satisfy the $\gamma$-margin property for some $\gamma > 1$ admits query complexity $O\big(k\log n + k^2\frac{\log k + \log (1/\delta)}{(\gamma - 1)^4}\big)$. 
 \end{corollary}
 
 \section{Hardness Results}
@@ -325,10 +325,10 @@ The set of Euclidean clustering instances that satisfy $\gamma$-margin property 
 
 \subsection{Hardness of Euclidean $k$-means with Margin}
 
-Finding $k$-means solution without the help of the oracle is generally computationally hard. In this section, we will show that solving $k$-means remains hard even if we know that the optimal solution satisfies $\gamma$-margin property for $\gamma=1.5$. In particular, we show the hardness for the case of $k=\Theta(n^\epsilon)$ for any $\epsilon\in (0,1)$. 
+Finding $k$-means solution without the help of the oracle is generally computationally hard. In this section, we will show that solving $k$-means remains hard even if we know that the optimal solution satisfies the $\gamma$-margin property for $\gamma=1.5$. In particular, we show the hardness for the case of $k=\Theta(n^\epsilon)$ for any $\epsilon\in (0,1)$. 
 %This is a critical result for our purpose, because it shows that our niceness assumption (i.e., the $\gamma$-margin property) is not too strong, and the use of oracle is necessary.
 
-In section \ref{section:clusteringWithQuery}, we proposed a polynomial-time algorithm that could recover the target clustering using $O(k^2\log k +k\log n)$ queries, assuming that the clustering satisfies $\gamma$-margin property for $\gamma>1$. Now assume that the oracle conforms to the optimal $k$-means clustering solution. In this case, for $1<\gamma\le 1.5$, solving $k$-means clustering would be NP-hard without query, while it becomes efficiently solvable with the help of an oracle \footnote{To be precise, note that the algorithm used for clustering with queries is probabilistic, while the lower bound that we provide is for deterministic algorithms. However, this implies a lower bound for randomized algorithms as well unless $BPP\neq P$}. 
+In section \ref{section:clusteringWithQuery}, we proposed a polynomial-time algorithm that could recover the target clustering using $O(k^2\log k +k\log n)$ queries, assuming that the clustering satisfies the $\gamma$-margin property for $\gamma>1$. Now assume that the oracle conforms to the optimal $k$-means clustering solution. In this case, for $1<\gamma\le 1.5$, solving $k$-means clustering would be NP-hard without query, while it becomes efficiently solvable with the help of an oracle \footnote{To be precise, note that the algorithm used for clustering with queries is probabilistic, while the lower bound that we provide is for deterministic algorithms. However, this implies a lower bound for randomized algorithms as well unless $BPP\neq P$}. 
 
 Given a set of instances $\mc X \subset \mb R ^d$, the $k$-means clustering problem is to find a clustering $\mc C = \{C_1, \ldots, C_k\}$ which minimizes $f(\mc C) = \sum\limits_{C_i} \min\limits_{\mu_i\in {\mb R}^d}\sum\limits_{x\in C_i} \|x - \mu_i \|_2^2$. The decision version of $k$-means is, givensome bound $L$, is there a clustering $\mc C$ with cost $\le L$?
 
@@ -336,7 +336,7 @@ The following theorem is the main result of this section. The following subsecti
 
 \begin{theorem}
 \label{thm:gammaLower}
-Finding the optimal solution to euclidean $k$-means objective function is NP-hard when $k=\Theta(n^\epsilon)$ for any $\epsilon \in (0,1)$, even when the optimal solution satisfies the $\gamma$-margin property for $\gamma = 1.5$.
+Finding the optimal solution to Euclidean $k$-means objective function is NP-hard when $k=\Theta(n^\epsilon)$ for any $\epsilon \in (0,1)$, even when the optimal solution satisfies the $\gamma$-margin property for $\gamma = 1.5$.
 \end{theorem}
 
 \subsubsection{Overview of the Proof}
@@ -408,12 +408,12 @@ In order to prove that such $\mc A^\prime$ exists, we use a `simulation' techniq
 
 
 \section{Conclusions and Future Directions}
-In this work we introduced a framework for semi-supervised active clustering (SSAC) with same-cluster queries. Those queries can be viewed as a natral way for a clustering mechanism to gain domain knowledge, without which clsutering is an under-defined task. The focus of our analysis was the computational and query complexity of clsutering in this  Then query complexity and computational complexity of such SSAC problems, when the input data set satisfies a clusterability condition - the $\gamma$-margin property.
+In this work we introduced a framework for semi-supervised active clustering (SSAC) with same-cluster queries. Those queries can be viewed as a natural way for a clustering mechanism to gain domain knowledge, without which clustering is an under-defined task. The focus of our analysis was the computational and query complexity of clustering in this  Then query complexity and computational complexity of such SSAC problems, when the input data set satisfies a clusterability condition - the $\gamma$-margin property.
 
 Our main result shows that access to a limited number of such query answers (logarithmic in the size of the data set and polynomial in the number of clusters) allows efficient successful clustering under conditions (margin parameter between 1 and 1.5) that render the problem NP-hard without the help of such a query mechanism.  
  We also provided a lower bound indicating that at least $\Omega(kn)$ queries are needed to make those NP hard problems feasibly solvable.
 
-With practical applications of clustering in mind, a natural extension of our model is to allow the oracle (i.e., the domain expert) to refrain from answering a certain fraction fo the queries, or to make a certain number of errors in its answers. It would be inetresting to analyze how the performance guarantees of SSAC algorithms behave as a function of such asbstensions and error rates.
+With practical applications of clustering in mind, a natural extension of our model is to allow the oracle (i.e., the domain expert) to refrain from answering a certain fraction of the queries, or to make a certain number of errors in its answers. It would be interesting to analyze how the performance guarantees of SSAC algorithms behave as a function of such asbstensions and error rates.
 
 
 \bibliographystyle{alpha}
