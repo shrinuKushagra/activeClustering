@@ -161,8 +161,8 @@ Similar notions have been considered before in the clustering literature. The cl
 
 %Here, let us just mention that the computational feasibility positive results obtained under $\alpha$-center proximity can also be obtained under $\gamma$-margin for `reasonably small' values of $\gamma$. 
  
-MAYBE ADD HERE A SHORT STATEMENT ABOUT THE "CORRESPONDENCE" BETWEEN THE TWO NOTIONS.
-IT MAY ALSO MAKE SENSE TO HAVE THE HARDNESS AND FEASIBILITY RESULTS FOR GAMMA MARGINS (JUST CITE TEH RESULTS AND SAY THE PROOFS FOLLOW FROM THOSE FOR ALPHA CENTEAR.
+%MAYBE ADD HERE A SHORT STATEMENT ABOUT THE "CORRESPONDENCE" BETWEEN THE TWO NOTIONS.
+%IT MAY ALSO MAKE SENSE TO HAVE THE HARDNESS AND FEASIBILITY RESULTS FOR GAMMA MARGINS (JUST CITE TEH RESULTS AND SAY THE PROOFS FOLLOW FROM THOSE FOR ALPHA CENTEAR.
 
  %Furthermore, we assume that the clustering instance $(\mc X, d, C^*)$ is center-based and admits a $\gamma$-margin property\footnote{Naturally, the larger the value of $\gamma$, the stronger this assumtion is.}.
 
@@ -212,7 +212,27 @@ We will consider families of such instances determined by niceness conditions on
 \section{An Efficient SSAC algorithm}
 \label{section:clusteringWithQuery}
 
-In this section we provide an efficient algorithm for clustering with queries. The setting is the one described in the previous section. In particular, it is assumed that the oracle has a $\gamma$-margin center-based clustering in his mind. The space is Euclidean and the center of each cluster is the center of mass of the instances in that cluster. The algorithm makes cluster-assignment queiries to the oracle, but this can be translated to binary same-cluster queries (see appendix \ref{appendix:diffQueryModels}). 
+In this section we provide an efficient algorithm for clustering with queries. The setting is the one described in the previous section. In particular, it is assumed that the oracle has a $\gamma$-margin center-based clustering in his mind. The space is Euclidean and the center of each cluster is the center of mass of the instances in that cluster. The algorithm not only makes same-cluster queries, but also another type of query defined as below% queiries to the oracle, but this can be translated to binary same-cluster queries 
+
+
+\begin{definition}[Cluster-assignment Query]
+A cluster-assignment query asks the cluster index that an instance $x$ belongs to. In other words ${\mc O_{C^*}}(x) = i$ if and only if $x \in C^*_i$.
+%$$Q(x, i) = \left\{
+%	\begin{array}{ll}
+%		\mbox{true }  & \mbox{if } x \in C^*_i   \\
+%		\mbox{false } & o.w. 
+%	\end{array}
+%\right. $$
+\end{definition}
+
+Note however that each cluster-assignment query can be replaced with $k$ same-cluster queries (see \ref{appendix:diffQueryModels}). Therefore, we can express everything in terms of the more natural notion of same-cluster queries, and the use of cluster-assignment query is just to make the representation of the algorithm simpler.
+
+%Same-cluster queries seem to be more natural, as the oracle (or the domain expert) will only need to respond to binary \emph{link/don't-link} questions. In appendix  we show that these two notions of query are equivalent, in the sense that they give the same power to the clustering algorithm (up to a constant in terms of number of queries and run time). This is useful for some of our proofs, since using cluster-assignment queries makes the analysis more transparent.
+
+
+
+
+%(see appendix \ref{appendix:diffQueryModels}). 
 
 %We will assume that the target clustering $\mc C_{\mc X} = \{C_1, \ldots, C_k\}$ induced by centers $\mu_1, \ldots, \mu_k$ has the following property. For all $i$, $\mu_i$ is the mean of all the points in cluster $C_i$, that is,
 %\begin{align}
@@ -220,15 +240,15 @@ In this section we provide an efficient algorithm for clustering with queries. T
 %\end{align}
 %Note that the optimal solution to the euclidean $k$-means cost has this property. Our algorithm is more general and works for any target clustering which has the above property (\ref{property:targetClust}).
 
-Intuitively, our algorithm (Algorithm  \ref{alg:steinerQueryPositive}) does the following. In the first phase, it tries to approximate the center of one of the clusters. It does this by querying points from $\mc X$ uniformly at random until it has a sufficient number of points from at least one cluster (say $C_p$). It uses the mean of these points, $\mu_p^\prime$, to approximate the cluster center. 
+Intuitively, our algorithm (Algorithm  \ref{alg:steinerQueryPositive}) does the following. In the first phase, it tries to approximate the center of one of the clusters. It does this by asking cluster-assignment queries about a set of randomly (uniformly) selected point, until it has a sufficient number of points from at least one cluster (say $C_p$). It uses the mean of these points, $\mu_p^\prime$, to approximate the cluster center. 
 
-In the second phase, the algorithm recovers all of the instances belonging to $C_p$. In order to do that, it first sorts all of the instances based on their distance to $\mu_p^\prime$. By showing that all of the points in $C_p$ lie inside a sphere centered at $\mu_p^\prime$ (which does not include points from any other cluster), it tries to find the radius of this sphere by doing binary search using cluster-assignment queries. After that, the elements in $C_p$ will be located and can be removed from the data set. The algorithm repeats this process $k$ times to recover all of the clusters.
+In the second phase, the algorithm recovers all of the instances belonging to $C_p$. In order to do that, it first sorts all of the instances based on their distance to $\mu_p^\prime$. By showing that all of the points in $C_p$ lie inside a sphere centered at $\mu_p^\prime$ (which does not include points from any other cluster), it tries to find the radius of this sphere by doing binary search using same-cluster queries. After that, the elements in $C_p$ will be located and can be removed from the data set. The algorithm repeats this process $k$ times to recover all of the clusters.
 
 %After finding the point in $C_p$ with the maximum distance to $\mu_p\prime$ (we call this point $b_{idx}$), it puts all of the points in the sphere
 
 %$\mu_p'$. Then, it clusters and deletes all points whose distance is $\le d(b_{idx}, \mu_p')$. We will show that this process guarantees that (as long as $\mu_p'$ is a good approximation of the actual center $\mu_p$) and $\gamma > 1$, all the points from $C_p$ are now recovered. We then repeat this process $k$ times to recover all the clusters.
 
-The details of our approach is stated precisely in Algorithm \ref{alg:steinerQueryPositive}. Note that $\beta$ is a small constant\footnote{It corresponds to the constant appeared in generalized Hoefding inequality bound, discussed in Theorem \ref{thm:genHoeff}}. Theorem \ref{thm:steinerQueryPositive} shows that if $\gamma > 1$ then our algorithm recovers the target clustering with high probability. Next, we give bounds on the time and query complexity of our algorithm. Theorem \ref{thm:steinerQueryPositiveComplexity} shows that our approach needs $O(k\log n)$ queries and runs with time complexity $O(kn\log n)$.
+The details of our approach is stated precisely in Algorithm \ref{alg:steinerQueryPositive}. Note that $\beta$ is a small constant\footnote{It corresponds to the constant appeared in generalized Hoefding inequality bound, discussed in Theorem \ref{thm:genHoeff} in appendix \ref{appendixsection:conIneq}}. Theorem \ref{thm:steinerQueryPositive} shows that if $\gamma > 1$ then our algorithm recovers the target clustering with high probability. Next, we give bounds on the time and query complexity of our algorithm. Theorem \ref{thm:steinerQueryPositiveComplexity} shows that our approach needs $O(k\log n)$ queries and runs with time complexity $O(kn\log n)$.
 
 \RestyleAlgo{boxruled} 
 \SetAlgoNoLine
@@ -244,7 +264,7 @@ The details of our approach is stated precisely in Algorithm \ref{alg:steinerQue
  	$l = k \eta + 1$\;
 	$Z \sim U^l[\mc S_i]$    \mbox{       } //   Draws $l$ independent elements from $\mc S_i$ uniformly at random\\
 	For $1 \le t \le i$,\\
-             \mbox{            } $Z_t = \{x \in Z : {\mc O}(x)= t\}.$ \mbox{    } //Queries the oracle about the members of $Z$\\
+             \mbox{            } $Z_t = \{x \in Z : {\mc O}(x)= t\}.$ \mbox{    } //Asks cluster-assignment queries about the members of $Z$\\
     % let $Z_t \subseteq \mc Z$ be the set of points with label $i$. That is, \begin{center}$A_t = \{x \in \mc Z : x \in C_t\}.$\end{center} 
 %	Choose any $Z_p$ such that $|Z_p| > \eta$.\\
 $p = \argmax_t |Z_t|$\\
@@ -255,7 +275,7 @@ $p = \argmax_t |Z_t|$\\
     // Therefore, $r_i$ can be found by simple binary search\\
     
 	$\widehat{\mc S_i}$ = Sorted$(\{\mc S_i\})$ \mbox{       }// Sorts elements of $\{x: x\in \mc S_i\}$ in increasing order of $d(x, \mu_p')$.\\    
-	 $r_i = $ BinarySearch$(\widehat{\mc S_i})$ \mbox{      } //This step takes up to $O(\log|{\mc S_i}|)$ queries\\
+	 $r_i = $ BinarySearch$(\widehat{\mc S_i})$ \mbox{      } //This step takes up to $O(\log|{\mc S_i}|)$ same-cluster queries\\
 
 
 %Binary search over $\widehat{\mc S_i}$, to find an index $idx$ such that $b_{idx} \in C_p$ and $b_{idx+1} \not\in C_p$. (This step involves making queries to the oracle $\mc O$).\\ %We will later prove that $d(b_{idx}, c_p') = \max_{x \in C_p}d(x, c_p')$.
@@ -302,7 +322,7 @@ Assume $\delta \in (0, 1)$ and $\gamma > 1$. Then with probability at least $1-\
 \end{theorem}
 
 \begin{proof}
-In the first phase of the algorithm we are making $l>k\eta$ queries. Therefore, using the pigeonhole principle, we know that there exists cluster index $p$ such that $|Z_p| > \eta$. Then Lemma \ref{lemma:phase1} implies that the algorithm chooses a center $\mu_p'$ such that with probability at least $1-\frac{\delta}{k}$ we have $d(\mu_p, \mu_p') \le r(C_p)\epsilon$. By Lemma \ref{lemma:hasGammaMargin}, this would mean that $d(x, \mu_p') < d(y, \mu_p')$ for all $x \in C_p$ and $y \not\in C_p$. Hence, the radius $r_i$ found in the phase two of Alg. \ref{alg:steinerQueryPositive} is such that $r_{i} = \max\limits_{x \in C_p} d(x, \mu_p')$. This implies that $C_p'$ (found in phase two) equals to $C_p$. Hence, with probability at least $1-\frac{\delta}{k}$ one iteration of the algorithm successfully finds all the points in a cluster $C_p$. Using union bound, we get that with probability at least $1-k\frac{\delta}{k} = 1-\delta$, the algorithm recovers the target clustering.
+In the first phase of the algorithm we are making $l>k\eta$ cluster-assignment queries. Therefore, using the pigeonhole principle, we know that there exists cluster index $p$ such that $|Z_p| > \eta$. Then Lemma \ref{lemma:phase1} implies that the algorithm chooses a center $\mu_p^\prime$ such that with probability at least $1-\frac{\delta}{k}$ we have $d(\mu_p, \mu_p^\prime) \le r(C_p)\epsilon$. By Lemma \ref{lemma:hasGammaMargin}, this would mean that $d(x, \mu_p^\prime) < d(y, \mu_p')$ for all $x \in C_p$ and $y \not\in C_p$. Hence, the radius $r_i$ found in the phase two of Alg. \ref{alg:steinerQueryPositive} is such that $r_{i} = \max\limits_{x \in C_p} d(x, \mu_p^\prime)$. This implies that $C_p^\prime$ (found in phase two) equals to $C_p$. Hence, with probability at least $1-\frac{\delta}{k}$ one iteration of the algorithm successfully finds all the points in a cluster $C_p$. Using union bound, we get that with probability at least $1-k\frac{\delta}{k} = 1-\delta$, the algorithm recovers the target clustering.
 \end{proof}
 
 \begin{theorem}
@@ -315,7 +335,9 @@ Let the framework be as in theorem \ref{thm:steinerQueryPositive}. Then Algorith
 \end{theorem}
 
 \begin{proof}
-The first phase of the algorithm takes $O(k\eta)$ time and makes $k\eta+1$ cluster-assignment queries to the oracle. The second phase takes $O(n\log n)$ times and makes $O(\log n)$ cluster-assignment queries to the oracle. Hence, in total the algorithm takes $O(kn\log n + k^2\eta)$ time and makes $O(k\log n + k^2\eta)$ cluster-assignment queries. Substituting $\eta = \beta\frac{\log k + \log(1/\delta)}{(\eta-1)^4}$ and using the fact that each cluster-assignment query can be substituted by $k$ same-cluster queries (see appendix \ref{appendix:diffQueryModels}) finishes the proof\footnote{It is actually possible to improve the $k^3$ term in query complexity to $k^2$, by noting that in the second phase of the algorithm we only need to use same-cluster queries rather than cluster-assignment queries.}.
+In each iteration (i) the first phase of the algorithm takes $O(\eta)$ time and makes $\eta+1$ cluster-assignment queries (ii) the second phase takes $O(n\log n)$ times and makes $O(\log n)$ same-cluster queries. Each cluster-assignment query can be replaced with $k$ same-cluster queries; therefore, each iteration runs in $O(k\eta + n\log n)$ and uses $O()$ same-cluster queries.
+
+Hence, in total the algorithm takes $O(kn\log n + k^2\eta)$ time and makes $O(k\log n + k^2\eta)$ cluster-assignment queries. Substituting $\eta = \beta\frac{\log k + \log(1/\delta)}{(\eta-1)^4}$ and using the fact that each cluster-assignment query can be substituted by $k$ same-cluster queries (see appendix \ref{appendix:diffQueryModels}) finishes the proof\footnote{It is actually possible to improve the $k^3$ term in query complexity to $k^2$, by noting that in the second phase of the algorithm we only need to use same-cluster queries rather than cluster-assignment queries.}.
 \end{proof}
 
 \begin{corollary}
