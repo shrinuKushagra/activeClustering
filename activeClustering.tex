@@ -317,14 +317,14 @@ In section \ref{section:clusteringWithQuery}, we proposed a polynomial-time algo
 
 Given a set of instances $\mc X \subset \mb R ^d$, the $k$-means clustering problem is to find a clustering $\mc C = \{C_1, \ldots, C_k\}$ which minimizes $f(\mc C) = \sum\limits_{C_i} \min\limits_{\mu_i\in {\mb R}^d}\sum\limits_{x\in C_i} \|x - \mu_i \|_2^2$. The decision version of $k$-means is, givensome bound $L$, is there a clustering $\mc C$ with cost $\le L$?
 
-The following theorem is the main result of this section, and the following subsections are devoted to proving this theorem. 
+The following theorem is the main result of this section. 
 
 \begin{theorem}
 \label{thm:gammaLower}
 Finding the optimal solution to Euclidean $k$-means objective function is NP-hard when $k=\Theta(n^\epsilon)$ for any $\epsilon \in (0,1)$, even when the optimal solution satisfies the $\gamma$-margin property for $\gamma = 1.5$.
 \end{theorem}
 
-Note that this is a novel result, as the lower bound established in \cite{ben2014data} is for the general metric spaces (and does not apply to the Euclidean case).
+Note that this is a novel result, as the lower bound established in \cite{ben2014data} does not apply to the Euclidean case. The following subsections are devoted to prove this theorem.
 
 \subsubsection{Overview of the Proof}
 
