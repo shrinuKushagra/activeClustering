@@ -21,7 +21,7 @@
 \usepackage[toc,page]{appendix}
 
 \usepackage{xr}
-\externaldocument[S-]{supplementary}
+\externaldocument[S-]{figures/supplementary}
 
 \usepackage{xspace}
 \usepackage[inline]{enumitem}
@@ -317,14 +317,14 @@ In section \ref{section:clusteringWithQuery}, we proposed a polynomial-time algo
 
 Given a set of instances $\mc X \subset \mb R ^d$, the $k$-means clustering problem is to find a clustering $\mc C = \{C_1, \ldots, C_k\}$ which minimizes $f(\mc C) = \sum\limits_{C_i} \min\limits_{\mu_i\in {\mb R}^d}\sum\limits_{x\in C_i} \|x - \mu_i \|_2^2$. The decision version of $k$-means is, givensome bound $L$, is there a clustering $\mc C$ with cost $\le L$?
 
-The following theorem is the main result of this section. 
+The following theorem is the main result of this section, and the following subsections are devoted to proving this theorem. 
 
 \begin{theorem}
 \label{thm:gammaLower}
 Finding the optimal solution to Euclidean $k$-means objective function is NP-hard when $k=\Theta(n^\epsilon)$ for any $\epsilon \in (0,1)$, even when the optimal solution satisfies the $\gamma$-margin property for $\gamma = 1.5$.
 \end{theorem}
 
-Note that this is a novel result, as the lower bound established in \cite{ben2014data} does not apply to the Euclidean case. The following subsections are devoted to prove this theorem.
+Note that this is athe lower bound establishedno lower bound for the Euclidean case has been established before.
 
 \subsubsection{Overview of the Proof}
 
@@ -377,7 +377,7 @@ The set $X = H_{l,n} \cup Z$ has a $k$-clustering of cost less or equal to $L$ i
 Any clustering of $X = H_{l,n} \cup Z$ with cost $\le L$ has the $\gamma$-margin property where $\gamma = 1.5$.
 \end{lemma}
 
-Lemmas \ref{lemma:kmeansEquivalenceX3C} and \ref{lemma:gammaLower} complete the proof of the main result (Thm. \ref{thm:gammaLower}). 
+Lemmas \ref{lemma:kmeansEquivalenceX3C} and \ref{lemma:gammaLower} together show that $X$ has a $k$-clustering of cost $\le L$ satisfying the $\gamma$-margin property (for $\gamma = 1.5$) if and only if there is an exact cover by $3$-sets for the X3C instance. This completes the proof of our main result (Thm. \ref{thm:gammaLower}). 
 
 \subsection{Lower Bound on the Number of Queries}
 
