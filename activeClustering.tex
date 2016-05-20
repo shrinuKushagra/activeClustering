@@ -314,8 +314,6 @@ Let the framework be as in theorem \ref{thm:steinerQueryPositive}. Then Algorith
 
 \begin{proof}
 In each iteration (i) the first phase of the algorithm takes $O(\eta)$ time and makes $\eta+1$ cluster-assignment queries (ii) the second phase takes $O(n\log n)$ times and makes $O(\log n)$ same-cluster queries. Each cluster-assignment query can be replaced with $k$ same-cluster queries; therefore, each iteration runs in $O(k\eta + n\log n)$ and uses $O(k\eta + \log n)$ same-cluster queries. By replacing $\eta = \beta\frac{\log k + \log(1/\delta)}{(\gamma-1)^4}$ and noting that there are $k$ iterations, the proof will be complete.
-
-%Hence, in total the algorithm takes $O(kn\log n + k^2\eta)$ time and makes $O(k\log n + k^2\eta)$ cluster-assignment queries. Substituting $\eta = \beta\frac{\log k + \log(1/\delta)}{(\eta-1)^4}$ and using the fact that each cluster-assignment query can be substituted by $k$ same-cluster queries (see appendix \ref{appendix:diffQueryModels}) finishes the proof\footnote{It is actually possible to improve the $k^3$ term in query complexity to $k^2$, by noting that in the second phase of the algorithm we only need to use same-cluster queries rather than cluster-assignment queries.}.
 \end{proof}
 
 \begin{corollary}
@@ -418,19 +416,13 @@ For large enough $w = poly(l, m)$, any non-nice clustering of $X = H_{l, m} \cup
 \end{lemma}
 
 \begin{proof}
-We will show that any non-nice clustering $C$ of $X$ costs atleast $w/3$ more than the cost of any nice clustering. This will prove our result. The following cases are possible.
+We will show that any non-nice clustering $C$ of $X$ costs atleast $w/3$ more than the cost of any nice clustering. We will prove by examining the various  scenarios that are possible.
 
-\begin{itemize}[nolistsep,leftmargin=*]
-\item $C$ contains a cluster $C_i$ of cardinality $t > 6$. Observe that any $x \in C_i$ has at least $t-5$ locations at a distance $\ge 4$ and $4$ locations at a distance atleast $2$. Hence, the cost of $C_i$ is atleast $8w(t-4)$. A cluster of size $t$ allows us to use atmost $t-2$ singletons. The cost of the nice cluster on these points is $\le \frac{16w}{9}2(t-1)$. While the non-nice clustering costs atleast $8w(t-4)$. For $t \ge 6.4 \implies 8(t-4) > \frac{32}{9}(t-1)$ and the claim follows. Note that in this case the difference in cost is atleast $\frac{8w}{3}$. 
+$C$ contains a cluster $C_i$ of cardinality $t > 6$. Observe that any $x \in C_i$ has at least $t-5$ locations at a distance $\ge 4$ and $4$ locations at a distance atleast $2$. Hence, the cost of $C_i$ is atleast $8w(t-4)$. A cluster of size $t$ allows us to use atmost $t-2$ singletons. The cost of the nice cluster on these points is $\le \frac{16w}{9}2(t-1)$. While the non-nice clustering costs atleast $8w(t-4)$. For $t \ge 6.4 \implies 8(t-4) > \frac{32}{9}(t-1)$ and the claim follows. Note that in this case the difference in cost is atleast $\frac{8w}{3}$. 
 
-\item Contains a cluster of cardinality $t = 6$. Simple arguments show that amongst all clusters of cardinality $6$, the following has the minimum cost. $C_i = \{r_{i, 2j-1}, r_{i, 2j}, x_{i,j}, y_{i-1, j}, r_{i, 2j+1}, r_{2j+2}\}$. The cost of this cluster is $\frac{176w}{6}$. Arguing as before, a nice cluster on these $10$ points costs atmost $\frac{160w}{9}$. The difference of cost is atleast $34w$.  
+$C$ contains a cluster of cardinality $t = 6$. Simple arguments show that amongst all clusters of cardinality $6$, the following has the minimum cost. $C_i = \{r_{i, 2j-1}, r_{i, 2j}, x_{i,j}, y_{i-1, j}, r_{i, 2j+1}, r_{2j+2}\}$. The cost of this cluster is $\frac{176w}{6}$. Arguing as before, a nice cluster on these $10$ points costs atmost $\frac{160w}{9}$. The difference of cost is atleast $34w$.  
 
-\item Contains a cluster of cardinality $t = 5$. Similar analysis as above shows that the difference of cost in this case is atleast $\frac{16w}{9}$.  
-
-\item Contains a cluster of cardinality $t = 4$. Similar analysis as above shows that the difference of cost in this case is atleast $\frac{w}{3}$.  
-
-\item All the clusters have cardinality $\le 3$. It is also simple to see that any non-nice clustering of size $2$ causes an increase in cost of atleast $w$.
-\end{itemize}
+Using the same argument as above, if $C$ contains a cluster of cardinality $t = 5$ or $t = 4$, the difference of cost is atleast $\frac{16w}{9}$ and $\frac{w}{3}$ respectively. If all the clusters have cardinality $\le 3$, it is also simple to see that any non-nice clustering causes an increase in cost of atleast $w$.
 \end{proof}
 
 \begin{lemma}
