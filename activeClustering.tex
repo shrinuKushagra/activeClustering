@@ -341,9 +341,10 @@ Finding the optimal solution to euclidean $k$-means objective function is NP-har
 
 \subsubsection{Overview of the Proof}
 
-Our method to prove Thm. \ref{thm:gammaLower} is based on the approach employed by \cite{vattani2009hardness}. However, the original construction proposed in \cite{vattani2009hardness} does not satisfy $\gamma$-margin property. Therefore, we have to modify the proof by setting up the parameters of the construction more carefully. 
+Our method to prove Thm. \ref{thm:gammaLower} is based on the approach employed by \cite{vattani2009hardness}. However, the original construction proposed in \cite{vattani2009hardness} does not satisfy the $\gamma$-margin property. Therefore, we have to modify the proof by setting up the parameters of the construction more carefully. 
 
-To prove the theorem, we will provide a reduction from the problem of Exact Cover by 3-Sets (X3C) which is NP-Complete \cite{garey2002computers}, to the decision version of $k$-means (which given a real value $L$, asks whether a clustering with cost $\le L$ exists).
+To prove the theorem, we will provide a reduction from the problem of Exact Cover by 3-Sets (X3C) which is NP-Complete \cite{garey2002computers}, to the decision version of $k$-means.
+%(which given a real value $L$, asks whether a clustering with cost $\le L$ exists).
 
 \begin{definition}[X3C]
 Given a set $U$ containing exactly $3m$ elements and a collection $\mc S = \{S_1, \ldots, S_l\}$ of subsets of $U$ such that each $S_i$ contains exactly three elements, does there exist $m$ elements in $\mc S$ such that their union is $U$? 
