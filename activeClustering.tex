@@ -329,23 +329,13 @@ The corollary is the immediate result of theorem \ref{thm:steinerQueryPositiveCo
 \section{Hardness Results}
 \label{section:lowerBounds}
 
-\subsection{Hardness of k-means with Margin}
+\subsection{Hardness of Euclidean $k$-means with Margin}
 
 Finding $k$-means solution without the help of the oracle is generally computationally hard. In this section, we will show that solving $k$-means remains hard even if we know that the optimal solution satisfies $\gamma$-margin property for $\gamma=1.5$. In particular, we show the hardness for the case of $k=\Theta(n^\epsilon)$ for any $\epsilon\in (0,1)$. This is a critical result for our purpose, because it shows that our niceness assumption (i.e., the $\gamma$-margin property) is not too strong, and the use of oracle is necessary.
 
-In section \ref{section:clusteringWithQuery}, we proposed a polynomial-time algorithm that could recover the target clustering using $O(k^2\log k \log n)$ queries, assuming that the clustering satisfies $\gamma$-margin property for $\gamma>1$. Now assume that the oracle conforms to the optimal $k$-means clustering solution. In this case, for $1<\gamma\le 1.5$, solving $k$-means clustering would be NP-hard without query, while it becomes efficiently solvable with the help of an oracle \footnote{To be precise, note that the algorithm used for clustering with queries is probabilistic. However, the lower bound that we provide is for deterministic algorithms. However, this means a lower bound for randomized algorithms as well unless $BPP\neq P$}. %Moreover, note that the lower bound holds for $k << n$. In this 
+In section \ref{section:clusteringWithQuery}, we proposed a polynomial-time algorithm that could recover the target clustering using $O(k^2\log k \log n)$ queries, assuming that the clustering satisfies $\gamma$-margin property for $\gamma>1$. Now assume that the oracle conforms to the optimal $k$-means clustering solution. In this case, for $1<\gamma\le 1.5$, solving $k$-means clustering would be NP-hard without query, while it becomes efficiently solvable with the help of an oracle \footnote{To be precise, note that the algorithm used for clustering with queries is probabilistic. However, the lower bound that we provide is for deterministic algorithms. However, this means a lower bound for randomized algorithms as well unless $BPP\neq P$}. 
 
-%This together with Theorem \ref{thm:steinerQueryPositive} and \ref{thm:steinerQueryPositiveComplexity} show that for , having access to queries makes the computationally hard problem of $k$-means clustering efficiently solvable
-
-%which for , makes  queries and in polynomial time finds the target clustering with very high probability. In this section, we want to give a lower bound for our problem setting. We will show that if $\gamma < 1.4$ then finding the optimal euclidean $k$-means clustering is NP-Hard without queries. Note that Thms. \ref{thm:steinerQueryPositive} and \ref{thm:steinerQueryPositiveComplexity} shows that we can overcome this lower bound using queries. Next, we also give a lower bound on the number of queries needed. We show that making `too few' (sublogarithmic in $k$) queries also doesn't help and the problem remains NP-Hard.
-
-%\subsection{Hardness of k-means Clustering with Margin}
-
-\subsubsection{Formal Setting}
-
-Given a set of instances $\mc X \subset \mb R ^d$, the $k$-means clustering problem is to find a clustering $\mc C = \{C_1, \ldots, C_k\}$ which minimizes the following objective function
-
-$$f(\mc C) = \sum\limits_{C_i} \min\limits_{\mu_i\in {\mb R}^d}\sum\limits_{x\in C_i} \|x - \mu_i \|_2^2$$
+Given a set of instances $\mc X \subset \mb R ^d$, the $k$-means clustering problem is to find a clustering $\mc C = \{C_1, \ldots, C_k\}$ which minimizes $f(\mc C) = \sum\limits_{C_i} \min\limits_{\mu_i\in {\mb R}^d}\sum\limits_{x\in C_i} \|x - \mu_i \|_2^2$
 
 
 %One can also consider a weighted version of the problem where every point $x$ has a weight $w(x)$. 
@@ -358,17 +348,12 @@ The following theorem is the main result of this section. The next subsections a
 
 \begin{theorem}
 \label{thm:gammaLower}
-Finding the optimal solution to $k$-means objective function is NP-hard when $k=\Theta(n^\epsilon)$ for any $\epsilon \in (0,1)$. Furthermore, this result holds even when the optimal solution satisfies $\gamma$-margin property for $\gamma = 1.5$.
-
-
+Finding the optimal solution to euclidean $k$-means objective function is NP-hard when $k=\Theta(n^\epsilon)$ for any $\epsilon \in (0,1)$ even when the optimal solution satisfies $\gamma$-margin property for $\gamma = 1.5$.
 \end{theorem}
 
 \subsubsection{Overview of the Proof}
 
-Our method to prove Theorem \ref{thm:gammaLower} is based on the approach employed by \cite{vattani2009hardness}. However, the original construction proposed in \cite{vattani2009hardness} does not satisfy $\gamma$-margin property. Therefore, we have to modify the proof by setting up the parameters of the construction more carefully. 
-
-%Hence, $U$ has a set cover of size $n$ iff $X$ has a clustering of cost $\le L$. We setup the distances such that the optimal clustering has $\gamma$-margin for $\gamma \le 1.5$. This completes the proof of the theorem.  
-
+Our method to prove Thm. \ref{thm:gammaLower} is based on the approach employed by \cite{vattani2009hardness}. However, the original construction proposed in \cite{vattani2009hardness} does not satisfy $\gamma$-margin property. Therefore, we have to modify the proof by setting up the parameters of the construction more carefully. 
 
 To prove the theorem, we will provide a reduction from the problem of Exact Cover by 3-Sets (X3C) which is NP-Complete \cite{garey2002computers}, to the decision version of $k$-means (which given a real value $L$, asks whether a clustering with cost $\le L$ exists).
 
@@ -376,51 +361,13 @@ To prove the theorem, we will provide a reduction from the problem of Exact Cove
 Given a set $U$ containing exactly $3m$ elements and a collection $\mc S = \{S_1, \ldots, S_l\}$ of subsets of $U$ such that each $S_i$ contains exactly three elements, does there exist $m$ elements in $\mc S$ such that their union is $U$? 
 \end{definition}
 
-We will show how to translate each instance of X3C, $(U,\mc S)$, to an instance of $k$-means clustering in the Euclidean plane, $X$. In particular, $X$ has a gridlike structure consisting of $l$ rows (one for each $S_i$) and roughly $6m$ columns (corresponding to $U$) which are embedded in the Euclidean plane. The special geometry of the embedding makes sure that any low-cost $k$-means clustering of the points (where $k$ is roughly $6ml$) exhibits a certain structure. In particular, any low-cost $k$-means clustering could cluster each row in only two ways; One of these corresponds to $S_i$ being included in the cover, while the other means it should be excluded. We will then show that $U$ has a cover of size $m$ if $X$ has a clustering of cost less than a specific value. Furthermore, our choice of embedding makes sure that the optimal clustering satisfies $\gamma$-margin for $\gamma=1.5$\footnote{As mentioned earlier, this is not the case in the original Vattani's proof \cite{vattani2009hardness}}.
-
-%The proof constructs an instance $X$ in the Euclidean plane. The instance consists of $l$ different `rows' corresponding to the collection $\mc S$ and roughly $6n$ different `columns' corresponding to the set $U$. Now, the set $X$ and its parameters (distances between the points, number of clusters, etc.) are chosen such that in any clustering $C$ of cost $\le L$, the rows can be clustered only in two possible ways. One of them corresponds to the $S_i$ being included in the cover and the other corresponds to it being excluded from the cover. Hence, $U$ has a cover of size $n$ iff $X$ has a clustering of cost $\le L$. We choose the distances such that the optimal clustering satisfies $\gamma$-margin for $\gamma \le 1.5$ thereby completing the proof of the theorem. 
-  
-  
-  
-%\begin{figure}
-% \resizebox{.9\linewidth}{!}{\input{figures/lowerBdFig}}
-%\caption{Geometry of $H_{l,m}$. This figure is similar to Fig. 1 in \cite{vattani2009hardness}. The left hand side shows the complete design. Rows $R_i$ have $6m+1$ bullets and two circles. Rows $G_i$ have $3m$ circles. The bullets have weight $w$ while the circles have weight $2w$. The distance between the rows $R_i$ and $G_i$ is $> 2(h+\sqrt{h^2-1})$. Furthermore, the right side of the figure shows the distance between the points. %An enlarged view of the points $r_{i, j}$ and $m_{i,j}$ is shown in Fig. \ref{fig:ZFig}
-%}
-%\label{fig:lowerBoundComponent}
-%\end{figure}
-
-
-%\begin{figure}
-%\center
-%\input{figures/ZFig}
-%\caption{The geometry of $Z_i$. This figure is similar to Fig. 2 in \cite{vattani2009hardness}, and describes the position of the points $x_{i,j}$, $x_{i,j}'$, $y_{i,j}$ and $y_{i,j}'$ in the set $Z_i$. The points in bullet have weight $w$ while the points in circles have weight $2w$.}
-%\label{fig:ZFig}
-%\end{figure}
+We will show how to translate each instance of X3C, $(U,\mc S)$, to an instance of $k$-means clustering in the Euclidean plane, $X$. In particular, $X$ has a grid-like structure consisting of $l$ rows (one for each $S_i$) and roughly $6m$ columns (corresponding to $U$) which are embedded in the Euclidean plane. The special geometry of the embedding makes sure that any low-cost $k$-means clustering of the points (where $k$ is roughly $6ml$) exhibits a certain structure. In particular, any low-cost $k$-means clustering could cluster each row in only two ways; One of these corresponds to $S_i$ being included in the cover, while the other means it should be excluded. We will then show that $U$ has a cover of size $m$ if and only if $X$ has a clustering of cost less than a specific value $L$. Furthermore, our choice of embedding makes sure that the optimal clustering satisfies $\gamma$-margin for $\gamma=1.5$\footnote{As mentioned earlier, this is not the case in the original Vattani's proof \cite{vattani2009hardness}}.
 
 
 \subsubsection{Reduction Design}
-Given an instance of X3C, that is the elements $U = \{1, \ldots, 3m\}$ and the collection $\mc S$, we construct a set of points $X$ in the Euclidean plane which we want to cluster. Particularly, $X$ consists of a set of points $H_{l,m}$, and the sets $Z_i$ corresponding to $S_i$. In other words, $X = H_{l,m} \cup (\cup_{i=1}^l Z_i)$. Also, these points are weighted, simply meaning that each point with weight $w$ is actually a set of $w$ points on the same location.
+The clustering instance $X = H_{l,m} \cup (\cup_{i=1}^l Z_i)$. The set $H_{l,m}$ is as described in Fig. \ref{fig:lowerBoundComponent}. The row $R_i$ is composed of $6m + 3$ points $\{s_i, r_{i, 1}, \ldots, r_{i, 6m+1}, f_i\}$. Row $G_i$ is composed of $3m$ points $\{g_{i,1}, \ldots, g_{i, 3m}\}$. The distances between the points are also shown in Fig. \ref{fig:lowerBoundComponent}. Also, all these points have weight $w$, simply meaning that each point is actually a set of $w$ points on the same location.
 
-%The set $X$ is described in Fig. \ref{fig:lowerBoundComponent} and the set $Z$ is described in Fig. \ref{fig:ZFig}.
-
-The set $H_{l,m}$ is as described in Fig. \ref{fig:lowerBoundComponent}. The row $R_i$ is composed of $6m + 3$ points $\{s_i, r_{i, 1}, \ldots, r_{i, 6m+1}, f_i\}$. The points $r_{i, j}$ have weight $w$, and the points $s_i$ and $f_i$ have weight $2w$. Row $G_i$ is composed of $3m$ points $\{g_{i,1}, \ldots, g_{i, 3m}\}$ of weight $2w$. The distances between the points are shown in Fig. \ref{fig:lowerBoundComponent}.
-
-
-
-Each set $Z_i$ is constructed based on $S_i$. In particular, $Z_i = \cup_{j\in [l]} B_{i,j}$ where 
-
-$$ B_{i,j} = \left\{
-	\begin{array}{ll}
-		\{ x_{i, j}, y_{i,j} \}  &              \mbox{if } j\notin S_i,j\notin S_{i+1} \\
-		\{ x_{i, j}^\prime, y_{i,j} \}  &       \mbox{if } \in S_i,j\notin S_{i+1} \\
-		\{ x_{i, j}, y_{i,j}^\prime \}  &       \mbox{if } \notin S_i,j\in S_{i+1} \\
-		\{ x_{i, j}^\prime, y_{i,j}^\prime \} & \mbox{if } \in S_i,j\in S_{i+1}	
-        \end{array}
-\right\}$$
-
-Furthermore, $x_{i, j}, x_{i,j}^\prime, y_{i,j}$ and $y_{i, j}^\prime$ are specific locations as depicted in Fig. \ref{fig:ZFig}. In other words, exactly one of the locations $x_{i,j}$ and $x_{i,j}^\prime$, and one of $y_{i,j}$ and $y_{i,j}^\prime$ will be occupied. We set the parameters as follows
-
-$$h = 2, d = \sqrt{6}, \epsilon = \frac{1}{w^2}, \lambda = \frac{2}{\sqrt{3}}h \text{ and }k = (l-1)3m + l(3m+2)$$
+Each set $Z_i$ is constructed based on $S_i$. In particular, $Z_i = \cup_{j\in [3m]} B_{i,j}$. The construction of $B_{i,j}$ is as follows. $x_{i,j} \in B_{i,j}$ iff $j \not\in S_i$ and $x_{i,j}' \in B_{i,j}$ iff $j \in S_i$. Similarly,  $y_{i,j} \in B_{i,j}$ iff $j \not\in S_{i+1}$ and $y_{i,j}' \in B_{i,j}$ iff $j \in S_{i+1}$. The locations, $x_{i, j}, x_{i,j}^\prime, y_{i,j}$ and $y_{i, j}^\prime$ are specific locations as depicted in Fig. \ref{fig:ZFig}. In other words, exactly one of the locations $x_{i,j}$ and $x_{i,j}^\prime$, and one of $y_{i,j}$ and $y_{i,j}^\prime$ will be occupied. We set the parameters as follows, $h = 2, d = \sqrt{6}, \epsilon = \frac{1}{w^2}, \lambda = \frac{2}{\sqrt{3}}h$ and $k = (l-1)3m + l(3m+2)$
 
 %$$k = (l-1)3m + l(3m+2) \text{ and the cost }L = L_1 + L_2 -m\alpha.$$
 %$$L_1 = (6m+3)w \text{ and } L_2 = 6m(l-1)\frac{2w\frac{w}{2}}{2w+\frac{w}{2}}h^2 = 6m(l-1)$$
@@ -441,10 +388,6 @@ $$h = 2, d = \sqrt{6}, \epsilon = \frac{1}{w^2}, \lambda = \frac{2}{\sqrt{3}}h \
     \label{fig:ZFig}
   \end{minipage}
 \end{figure}
-  
-
-
-
 
 \subsubsection{Properties of the Construction}
 
@@ -487,7 +430,6 @@ The cost of this cluster is $3w$ (or $3w-\alpha$) and we define the contribution
 Hence, observe that in a nice-clustering, any location contributes atmost $\le \frac{16}{9}w$ to the total clustering cost. This observation will be useful in the proof of the lemma below.
 
 \begin{lemma}
-<<<<<<< HEAD
 For large enough $w = poly(l, m)$, any non-nice clustering of $X = H_{l, m} \cup Z$ costs at least $L + cw$ for any $c < \frac{1}{3}$.
 \end{lemma}
 
@@ -668,6 +610,205 @@ Given a clustering instance $(\mc X, d)$ and the number of clusters $k$. For $\g
 \cite{awasthi2012center} proved the above claim but for $\alpha < 3$ instances. Note that the reduced instance in their proof, also satisfies $\gamma$-margin for $\gamma < 3$. 
 \end{proof}
 
+
+\section{Proofs of lemmas and theorems}
+\subsection{Hardness of Euclidean k-means with Margin}
+
+Finding $k$-means solution without the help of the oracle is generally computationally hard. In this section, we will show that solving $k$-means remains hard even if we know that the optimal solution satisfies $\gamma$-margin property for $\gamma=1.5$. In particular, we show the hardness for the case of $k=\Theta(n^\epsilon)$ for any $\epsilon\in (0,1)$. This is a critical result for our purpose, because it shows that our niceness assumption (i.e., the $\gamma$-margin property) is not too strong, and the use of oracle is necessary.
+
+In section \ref{section:clusteringWithQuery}, we proposed a polynomial-time algorithm that could recover the target clustering using $O(k^2\log k \log n)$ queries, assuming that the clustering satisfies $\gamma$-margin property for $\gamma>1$. Now assume that the oracle conforms to the optimal $k$-means clustering solution. In this case, for $1<\gamma\le 1.5$, solving $k$-means clustering would be NP-hard without query, while it becomes efficiently solvable with the help of an oracle \footnote{To be precise, note that the algorithm used for clustering with queries is probabilistic. However, the lower bound that we provide is for deterministic algorithms. However, this means a lower bound for randomized algorithms as well unless $BPP\neq P$}. 
+
+\subsubsection{Formal Setting}
+
+Given a set of instances $\mc X \subset \mb R ^d$, the $k$-means clustering problem is to find a clustering $\mc C = \{C_1, \ldots, C_k\}$ which minimizes the following objective function
+
+$$f(\mc C) = \sum\limits_{C_i} \min\limits_{\mu_i\in {\mb R}^d}\sum\limits_{x\in C_i} \|x - \mu_i \|_2^2$$
+
+
+%One can also consider a weighted version of the problem where every point $x$ has a weight $w(x)$. 
+
+%$$f(\mc C) = \sum\limits_{C_i}\frac{1}{\sum_{x \in C_i}w(x)} \sum_{x, y \in {C_i \choose 2}} w(x)w(y)d^2(x, y).$$ 
+
+%It is known that finding the optimal $k$-means solution is NP-hard even in the Euclidean plane \cite{vattani2009hardness,mahajan2009planar}. However, the $\gamma$-margin property is not satisfied in these constructions. Therefore, we still need to prove that even under the $\gamma$-margin property, the problem remains hard. The following is the main statement of this section.
+
+The following theorem is the main result of this section. The next subsections are devoted to proving this theorem.
+
+\begin{theorem}
+\label{thm:gammaLower}
+Finding the optimal solution to $k$-means objective function is NP-hard when $k=\Theta(n^\epsilon)$ for any $\epsilon \in (0,1)$. Furthermore, this result holds even when the optimal solution satisfies $\gamma$-margin property for $\gamma = 1.5$.
+
+
+\end{theorem}
+
+\subsubsection{Overview of the Proof}
+
+Our method to prove Theorem \ref{thm:gammaLower} is based on the approach employed by \cite{vattani2009hardness}. However, the original construction proposed in \cite{vattani2009hardness} does not satisfy $\gamma$-margin property. Therefore, we have to modify the proof by setting up the parameters of the construction more carefully. 
+
+%Hence, $U$ has a set cover of size $n$ iff $X$ has a clustering of cost $\le L$. We setup the distances such that the optimal clustering has $\gamma$-margin for $\gamma \le 1.5$. This completes the proof of the theorem.  
+
+
+To prove the theorem, we will provide a reduction from the problem of Exact Cover by 3-Sets (X3C) which is NP-Complete \cite{garey2002computers}, to the decision version of $k$-means (which given a real value $L$, asks whether a clustering with cost $\le L$ exists).
+
+\begin{definition}[X3C]
+Given a set $U$ containing exactly $3m$ elements and a collection $\mc S = \{S_1, \ldots, S_l\}$ of subsets of $U$ such that each $S_i$ contains exactly three elements, does there exist $m$ elements in $\mc S$ such that their union is $U$? 
+\end{definition}
+
+We will show how to translate each instance of X3C, $(U,\mc S)$, to an instance of $k$-means clustering in the Euclidean plane, $X$. In particular, $X$ has a gridlike structure consisting of $l$ rows (one for each $S_i$) and roughly $6m$ columns (corresponding to $U$) which are embedded in the Euclidean plane. The special geometry of the embedding makes sure that any low-cost $k$-means clustering of the points (where $k$ is roughly $6ml$) exhibits a certain structure. In particular, any low-cost $k$-means clustering could cluster each row in only two ways; One of these corresponds to $S_i$ being included in the cover, while the other means it should be excluded. We will then show that $U$ has a cover of size $m$ if $X$ has a clustering of cost less than a specific value. Furthermore, our choice of embedding makes sure that the optimal clustering satisfies $\gamma$-margin for $\gamma=1.5$\footnote{As mentioned earlier, this is not the case in the original Vattani's proof \cite{vattani2009hardness}}.
+
+%The proof constructs an instance $X$ in the Euclidean plane. The instance consists of $l$ different `rows' corresponding to the collection $\mc S$ and roughly $6n$ different `columns' corresponding to the set $U$. Now, the set $X$ and its parameters (distances between the points, number of clusters, etc.) are chosen such that in any clustering $C$ of cost $\le L$, the rows can be clustered only in two possible ways. One of them corresponds to the $S_i$ being included in the cover and the other corresponds to it being excluded from the cover. Hence, $U$ has a cover of size $n$ iff $X$ has a clustering of cost $\le L$. We choose the distances such that the optimal clustering satisfies $\gamma$-margin for $\gamma \le 1.5$ thereby completing the proof of the theorem. 
+  
+  
+  
+%\begin{figure}
+% \resizebox{.9\linewidth}{!}{\input{figures/lowerBdFig}}
+%\caption{Geometry of $H_{l,m}$. This figure is similar to Fig. 1 in \cite{vattani2009hardness}. The left hand side shows the complete design. Rows $R_i$ have $6m+1$ bullets and two circles. Rows $G_i$ have $3m$ circles. The bullets have weight $w$ while the circles have weight $2w$. The distance between the rows $R_i$ and $G_i$ is $> 2(h+\sqrt{h^2-1})$. Furthermore, the right side of the figure shows the distance between the points. %An enlarged view of the points $r_{i, j}$ and $m_{i,j}$ is shown in Fig. \ref{fig:ZFig}
+%}
+%\label{fig:lowerBoundComponent}
+%\end{figure}
+
+
+%\begin{figure}
+%\center
+%\input{figures/ZFig}
+%\caption{The geometry of $Z_i$. This figure is similar to Fig. 2 in \cite{vattani2009hardness}, and describes the position of the points $x_{i,j}$, $x_{i,j}'$, $y_{i,j}$ and $y_{i,j}'$ in the set $Z_i$. The points in bullet have weight $w$ while the points in circles have weight $2w$.}
+%\label{fig:ZFig}
+%\end{figure}
+
+
+\subsubsection{Reduction Design}
+Given an instance of X3C, that is the elements $U = \{1, \ldots, 3m\}$ and the collection $\mc S$, we construct a set of points $X$ in the Euclidean plane which we want to cluster. Particularly, $X$ consists of a set of points $H_{l,m}$, and the sets $Z_i$ corresponding to $S_i$. In other words, $X = H_{l,m} \cup (\cup_{i=1}^l Z_i)$. Also, these points are weighted, simply meaning that each point with weight $w$ is actually a set of $w$ points on the same location.
+
+%The set $X$ is described in Fig. \ref{fig:lowerBoundComponent} and the set $Z$ is described in Fig. \ref{fig:ZFig}.
+
+The set $H_{l,m}$ is as described in Fig. \ref{fig:lowerBoundComponent}. The row $R_i$ is composed of $6m + 3$ points $\{s_i, r_{i, 1}, \ldots, r_{i, 6m+1}, f_i\}$. The points $r_{i, j}$ have weight $w$, and the points $s_i$ and $f_i$ have weight $2w$. Row $G_i$ is composed of $3m$ points $\{g_{i,1}, \ldots, g_{i, 3m}\}$ of weight $2w$. The distances between the points are shown in Fig. \ref{fig:lowerBoundComponent}.
+
+
+
+Each set $Z_i$ is constructed based on $S_i$. In particular, $Z_i = \cup_{j\in [l]} B_{i,j}$ where 
+
+$$ B_{i,j} = \left\{
+	\begin{array}{ll}
+		\{ x_{i, j}, y_{i,j} \}  &              \mbox{if } j\notin S_i,j\notin S_{i+1} \\
+		\{ x_{i, j}^\prime, y_{i,j} \}  &       \mbox{if } \in S_i,j\notin S_{i+1} \\
+		\{ x_{i, j}, y_{i,j}^\prime \}  &       \mbox{if } \notin S_i,j\in S_{i+1} \\
+		\{ x_{i, j}^\prime, y_{i,j}^\prime \} & \mbox{if } \in S_i,j\in S_{i+1}	
+        \end{array}
+\right\}$$
+
+Furthermore, $x_{i, j}, x_{i,j}^\prime, y_{i,j}$ and $y_{i, j}^\prime$ are specific locations as depicted in Fig. \ref{fig:ZFig}. In other words, exactly one of the locations $x_{i,j}$ and $x_{i,j}^\prime$, and one of $y_{i,j}$ and $y_{i,j}^\prime$ will be occupied. We set the parameters as follows
+
+$$h = 2, d = \sqrt{6}, \epsilon = \frac{1}{w^2}, \lambda = \frac{2}{\sqrt{3}}h \text{ and }k = (l-1)3m + l(3m+2)$$
+
+%$$k = (l-1)3m + l(3m+2) \text{ and the cost }L = L_1 + L_2 -m\alpha.$$
+%$$L_1 = (6m+3)w \text{ and } L_2 = 6m(l-1)\frac{2w\frac{w}{2}}{2w+\frac{w}{2}}h^2 = 6m(l-1)$$
+%$$h = \sqrt{5}, d = \sqrt{4.5}, \epsilon = \frac{1}{w^2} \text{ and } \alpha = \frac{d}{w}-\frac{1}{2w^3}.$$
+
+
+  \begin{figure}[!tbp]
+  \centering
+  \begin{minipage}[b]{0.49\textwidth}
+    \resizebox{\linewidth}{!}{\input{figures/lowerBdFig}}
+    \caption{Geometry of $H_{l,m}$. This figure is similar to Fig. 1 in \cite{vattani2009hardness}. The left hand side shows the complete design. Rows $R_i$ have $6m+1$ bullets and two circles. Rows $G_i$ have $3m$ circles. The bullets have weight $w$ while the circles have weight $2w$. The distance between the rows $R_i$ and $G_i$ is $> 2(h+\sqrt{h^2-1})$.}
+    \label{fig:lowerBoundComponent}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[b]{0.49\textwidth}
+    \input{figures/ZFig}
+    \caption{The locations of $x_{i,j}$, $x_{i,j}'$, $y_{i,j}$ and $y_{i,j}'$ in the set $Z_i$. The points in bullet have weight $w$ while the points in circles have weight $2w$.}
+    \label{fig:ZFig}
+  \end{minipage}
+\end{figure}
+  
+
+
+
+
+\subsubsection{Properties of the Construction}
+
+In this section we show some properties of the construction that will ultimately enable us to prove Theorem \ref{thm:gammaLower}. These definitions will be useful throughout the section
+
+$$L_1 = (6m+3)w, L_2 = 6m(l-1), L=L_1 + L_2, \alpha = \frac{d}{w}-\frac{1}{2w^3}$$
+
+\begin{definition}[$A$- and $B$-Clustering of $R_i$]
+\label{defn:abclusteringVattani}
+
+An $A$-Clustering of row $R_i$ is a clustering in the form of $\{\{s_i\}, \{r_{i,1}, r_{i,2}\}, \{r_{i,3}, r_{i,4}\}, \ldots, \{r_{i,6m-1}, r_{i,6m}\},\{r_{i, 6m+1}, f_i\}\}$. A $B$-Clustering of row $R_i$ is a clustering in the form of $\{\{s_i, r_{i, 1}\}, \{r_{i,2}, r_{i,3}\}, \{r_{i,4}, r_{i,5}\}, \ldots, \{r_{i,6m}, r_{i,6m+1}\},\{f_i\}\}$. 
+\end{definition}
+
+\begin{definition}[Good point for a cluster]
+\label{defn:goodPointVattani}
+A cluster $C$ is good for a point $z \not\in C$ if adding $z$ to $C$ increases cost by exactly $\frac{2w}{3}h^2$ 
+\end{definition}
+
+Given the above definition, the following simple observations can be made. 
+\begin{itemize}[nolistsep,noitemsep]
+\item The clusters $\{r_{i,2j-1}, r_{i, 2j}\}$, $\{r_{i,2j}, r_{i, 2j+1}\}$ and $\{g_{i,j}\}$ are good for $x_{i,j}$ and $y_{i-1,j}$.
+\item The clusters $\{r_{i,2j}, r_{i, 2j+1}\}$ and $\{g_{i,j}\}$ are good for $x_{i,j}'$ and $y_{i-1,j}'$.
+\end{itemize}
+
+\begin{definition}[Nice Clustering]
+\label{defn:niceClustering}
+A $k$-clusteirng is nice if every $g_{i,j}$ is a singleton cluster, each $R_i$ is grouped in the form of either an $A$-clustering or a $B$-clustering and the points in $Z_i$ are added to a cluster which is good for it.
+\end{definition}
+
+It is straightforward to see that a row grouped in a $A$-clustering costs $(6m+3)w-\alpha$ while a row in $B$-clustering costs $(6m+3)w$. Hence, a nice clustering of $H_{l,m} \cup Z$ costs at most $L_1 + L_2$. More specifically, if $t$ rows are group in a $A$-clustering, the nice-clustering costs $L_1+L_2-t\alpha$. Also, observe that any nice clustering of $X$ has only the following four different types of clusters. \begin{enumerate}[label=(\arabic*),nolistsep,leftmargin=*]
+\item Type E - $\{r_{i,2j-1}, r_{i,2j+1}\}$ \\
+The cost of this cluster is $2w$ and we define the contribution of each location as  cost/no. of locations $ = \frac{2w}{2} = w$.
+\item Type F - $\{r_{i,2j-1}, r_{i, 2j}, x_{i, j}\}$ or $\{r_{i,2j-1}, r_{i, 2j}, y_{i-1, j}\}$ or $\{r_{i,2j}, r_{i, 2j+1}, x_{i, j}'\}$ or $\{r_{i,2j}, r_{i, 2j+1}, y_{i-1, j}'\}$\\
+The cost of any cluster of this type is $2w(1+\frac{h^2}{3})$ and the contribution of each location to is atmost $\frac{2w}{9}(h^2+3)$. For $h = \sqrt 5$, this equals $\frac{16}{9}w$.  
+\item Type I - $\{g_{i, j}, x_{i,j}\}$ or $\{g_{i, j}, x_{i,j}'\}$  or $\{g_{i, j}, y_{i,j}\}$  or $\{g_{i, j}, y_{i,j}'\}$\\
+The cost of any cluster of this type is $\frac{2}{3}wh^2$ and the contribution to cost of each location is $\frac{w}{3}h^2$. For our choice of $h$, the contribution is $\frac{5}{3}w$.
+\item Type J - $\{s_i, r_{i,1}\}$ or $\{r_{i,6m+1}, f_i\}$\\
+The cost of this cluster is $3w$ (or $3w-\alpha$) and we define the contribution of each location to cost is atmost $1.5w$. 
+\end{enumerate}
+Hence, observe that in a nice-clustering, any location contributes atmost $\le \frac{16}{9}w$ to the total clustering cost. This observation will be useful in the proof of the lemma below.
+
+\begin{lemma}
+For large enough $w = poly(l, m)$, any non-nice clustering of $X = H_{l, m} \cup Z$ costs at least $L + cw$ for any $c < \frac{1}{3}$.
+\end{lemma}
+
+\begin{proof}
+We will show that any non-nice clustering $C$ of $X$ costs atleast $w$ more than the cost of any nice clustering. This will prove our result. The following cases are possible.
+
+\begin{itemize}[nolistsep,leftmargin=*]
+\item $C$ contains a cluster $C_i$ of cardinality $t > 6$\\
+Observe that any $x \in C_i$ has at least $t-5$ locations at a distance $\ge 4$ and $4$ locations at a distance atleast $2$. Hence, the cost of $C_i$ is atleast $\frac{w}{2t}(4^2(t-5)+2^24)t = 8w(t-4)$. $C_i$ allows us to use atmost $t-2$ singletons. This is because a nice clustering of these $t+(t-2)$ points uses atmost $t-1$ clusters and the clustering $C$ uses  $1 + (t-2)$ clusters for these points. The cost of the nice cluster on these points is $\le \frac{16w}{9}2(t-1)$. While the non-nice clustering costs atleast $8w(t-4)$. For $t \ge 6.4 \implies 8(t-4) > \frac{32}{9}(t-1)$ and the claim follows. Note that in this case the difference in cost is atleast $\frac{8w}{3}$. 
+
+\item Contains a cluster of cardinality $t = 6$\\
+Simple arguments show that amongst all clusters of cardinality $6$, the following has the minimum cost. $C_i = \{r_{i, 2j-1}, r_{i, 2j}, x_{i,j}, y_{i-1, j}, r_{i, 2j+1}, r_{2j+2}\}$. The cost of this cluster is $\frac{176w}{6}$. Arguing as before, this allows us to use $4$ singletons. Hence, a nice cluster on these $10$ points costs atmost $\frac{160w}{9}$. The difference of cost is atleast $34w$.  
+
+\item Contains a cluster of cardinality $t = 5$\\
+Simple arguments show that amongst all clusters of cardinality $5$, the following has the minimum cost. $C_i = \{r_{i, 2j-1}, r_{i, 2j}, x_{i,j}, y_{i-1, j}, r_{i, 2j+1}\}$. The cost of this cluster is $16w$. Arguing as before, this allows us to use $3$ singletons. Hence, a nice cluster on these $8$ points costs atmost $16w\frac{8}{9}$. The difference of cost is atleast $\frac{16w}{9}$.  
+
+\item Contains a cluster of cardinality $t = 4$\\
+It is easy to see that amongst all clusters of cardinality $4$, the following has the minimum cost. $C_i = \{r_{i, 2j-1}, r_{i, 2j}, x_{i,j}, r_{i, 2j+1}\}$. The cost of this cluster is $11w$. Arguing as before, this allows us to use $2$ singletons. Hence, a nice cluster on these $6$ points costs atmost $\frac{32w}{3}$. The difference of cost is atleast $\frac{w}{3}$.
+
+\item All the clusters have cardinality $\le 3$ \\
+Observe that amongst all non-nice clusters of cardinality $3$, the following has the minimum cost. $C_i = \{r_{i, 2j-1}, r_{i, 2j}, r_{i, 2j+1}\}$. The cost of this cluster is $8w$. Arguing as before, this allows us to use atmost $1$ more singleton. Hence, a nice cluster on these $4$ points costs atmost $\frac{64w}{9}$. The difference of cost is atleast $\frac{8w}{9}$.
+
+It is also simple to see that any non-nice clustering of size $2$ causes an increase in cost of atleast $w$.
+
+\end{itemize}
+\end{proof}
+
+\begin{lemma}
+\label{lemma:kmeansEquivalenceX3C}
+The set $X = H_{l,n} \cup Z$ has a $k$-clustering of cost less or equal to $L$ if and only if there is an exact cover for the X3C instance.
+\end{lemma}
+\begin{proof}
+The proof is identical to the proof of Lemma 11 in \cite{vattani2009hardness}.
+\end{proof}
+
+\begin{lemma}
+\label{lemma:gammaLower}
+The clustering instance $X = H_{l,n} \cup Z$ has $\gamma$-margin where $\gamma = 1.5$.
+\end{lemma}
+\begin{proof}
+Any clustering of cost $\le L$ has the following different types of clusters. (1) $\{r_{i,2j-1}, r_{i, 2j}\}$. Then $x_{i,j}$ or $y_{i,j}$ is added to this cluster. The radius of this cluster is $\frac{2}{3}h$. The closest distance of any other point to this cluster is at least $h$. Hence, $\gamma = 1.5$. (2) $\{r_{i,2j}, r_{i, 2j+1}\}$. Then, $x_{i,j}$ or $y_{i,j}$ is added to this cluster, similar to the previous case. 
+(3) $\{r_{i,2j}, r_{i, 2j+1}\}$. Then, $x_{i,j}'$ or $y_{i,j}'$ is added to this cluster, same as case 1 and 2. (4) $\{m_{i,j}\}$. Then, $x_{i,j}$ or $y_{i,j}$ is added to this cluster. The radius is again $\frac{2}{3}h$. Any other point is at least $h$ away from the center. Hence, $y= 3/2$. The analysis of all the other cases is analogous.
+\end{proof}
+Lemmas \ref{lemma:kmeansEquivalenceX3C} and \ref{lemma:gammaLower} complete the proof of the main result (Thm. \ref{thm:gammaLower}). 
+
 \section{Concentration inequalities}
 \label{appendixsection:conIneq}
 
@@ -676,8 +817,6 @@ Given a clustering instance $(\mc X, d)$ and the number of clusters $k$. For $\g
 Let $X_1, \ldots. X_n$ be i.i.d random vectors in some Hilbert space such that for all $i$, $\|X_i\|_2 \le R$ and $E[X_i] = \mu$. If $n > c\frac{\log(1/\delta)}{\epsilon^2}$, then with probability atleast $1-\delta$, we have that
 $$\Big\|\mu - \frac{1}{n}\sum X_i\Big\|_2^2 \le R^2\epsilon$$ 
 \end{theorem}
-
-
 
 \section{Concentration inequalities}
 \label{appendixsection:proofs}
