@@ -461,13 +461,12 @@ In order to prove that such $\mc A^\prime$ exists, we use a `simulation' techniq
 
 
 \section{Conclusions and Future Directions}
-In this work we introduced a framework for clustering with the help of an oracle. Then query complexity and computational complexity of clustering with the help of this oracle was analysed. 
+In this work we introduced a framework for semi-supervised active clustering (SSAC) with same-cluster queries. Those queries can be viewed as a natral way for a clustering mechanism to gain domain knowledge, without which clsutering is an under-defined task. The focus of our analysis was the computational and query complexity of clsutering in this  Then query complexity and computational complexity of such SSAC problems, when the input data set satisfies a clusterability condition - the $\gamma$-margin property.
 
-In particular, a notion of niceness of data, i.e., $\gamma$-margin property, was introduced. For $\gamma>1$, a polynomial-time clustering algorithm was proposed that could recover the target clustering with queries (the number of queries is logarithmic in the size of the sample set and polynomial in the number of clusters). 
+Our main result shows that access to a limited number of such query answers (logarithmic in the size of the data set and polynomial in the number of clusters) allows efficient successful clustering under conditions (margin parameter between 1 and 1.5) that render the problem NP-hard without the help of such a query mechanism.  
+ We also provided a lower bound indicating that at least $\Omega(kn)$ queries are needed to make those NP hard problems feasibly solvable.
 
-On ther other hand, it was shown that without the use of an oracle, $k$-means clustering is NP-hard for $\gamma < 1.5$. This indicates that for $1<\gamma<1.5$, the use of query is critical, as it makes the computationaly hard problem easy. We also provided lower bounds on the number of queries that can make the hard problem easy, indicating that one would need at least $\Omega(kn)$ queries for this to happen.
-
-A possible future direction is to improve the upper bound presented for clustering with queries. While one way of improving this result is to provide an algorithm with better query/computational complexity, the other way is to see whether one can provide an algorithm which works for less restrictive settings, e.g., $\gamma < 1$. Another possible direction is to provide stronger lower bounds for query complexity.
+With practical applications of clustering in mind, a natural extension of our model is to allow the oracle (i.e., the domain expert) to
 
 \bibliographystyle{alpha}
 \bibliography{activeClustering}
