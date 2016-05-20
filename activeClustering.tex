@@ -273,15 +273,8 @@ $p = \argmax_t |Z_t|$\\
 \begin{lemma}
 \label{lemma:hasGammaMargin}
 Let $(\mc X, d, C)$ be a clustering instane, where $C$ is center-based and satisfies $\gamma$-margin property. Let $\mu$ be the set of centers corresponding to the centers of mass of $C$. Let $\mu_i'$ be such that $d(\mu_i, \mu_i') \le r(C_i)\epsilon$, where $r(C_i) = \max_{x\in C_i}d(x, \mu_i)$ . Then $\gamma \ge 1 + 2\epsilon$ implies that 
-
-$$\forall x \in C_i, \forall y \in {\mc X} \setminus C_i \Rightarrow d(x, \mu_i') < d(y, \mu_i')$$  
+\begin{center}$\forall x \in C_i, \forall y \in {\mc X} \setminus C_i \Rightarrow d(x, \mu_i') < d(y, \mu_i')$\end{center}
 \end{lemma}
-
-%\begin{lemma}
-%\label{lemma:hasGammaMargin}
-%Given a clustering instance $(\mc X, d)$ in some metric space $M$. Let $\mc C_{\mc X} = \{C_1, \ldots, C_k\}$ be a clustering of $\mc X$ induced by centers $\mu_1, \ldots, \mu_k \in M$ which satisfies $\gamma$-margin and $\mu_i$ is the mean of points in $C_i$. Let $\mu_i' \in M$ such that $d(\mu_i, \mu_i') \le r(C_i)\epsilon$. If $\gamma \ge 1 + 2\epsilon$, then for all $x \in C_i$ and for all $y \in C_j$
-%$$d(x, \mu_i') < d(y, \mu_i')$$  
-%\end{lemma}
 
 \begin{proof}
 Fix any $x \in C_i$ and $y \in C_j$. $d(x, \mu_i') \le d(x, \mu_i)+d(\mu_i, \mu_i') \le r(C_i) (1+\epsilon)$. Similarly, $d(y, \mu_i') \ge d(y, \mu_i) - d(\mu_i, \mu_i') > (\gamma -\epsilon)r(C_i)$. Combining the two, we get that $d(x, \mu_i') < \frac{1+\epsilon}{\gamma-\epsilon}d(y, \mu_i')$. 
