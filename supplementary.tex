@@ -17,6 +17,9 @@
 \usepackage{graphicx}
 \usepackage{hyperref}
 
+\usepackage{xr}
+\externaldocument[A-]{activeClustering}
+
 \usepackage{color}
 \usepackage[toc,page]{appendix}
 \usepackage{xspace}
@@ -181,7 +184,7 @@ Given a clustering instance $(\mc X, d)$ and the number of clusters $k$. For $\g
 
 Finding $k$-means solution without the help of the oracle is generally computationally hard. In this section, we will show that solving $k$-means remains hard even if we know that the optimal solution satisfies $\gamma$-margin property for $\gamma=1.5$. In particular, we show the hardness for the case of $k=\Theta(n^\epsilon)$ for any $\epsilon\in (0,1)$. This is a critical result for our purpose, because it shows that our niceness assumption (i.e., the $\gamma$-margin property) is not too strong, and the use of oracle is necessary.
 
-In section \ref{section:clusteringWithQuery}, we proposed a polynomial-time algorithm that could recover the target clustering using $O(k^2\log k \log n)$ queries, assuming that the clustering satisfies $\gamma$-margin property for $\gamma>1$. Now assume that the oracle conforms to the optimal $k$-means clustering solution. In this case, for $1<\gamma\le 1.5$, solving $k$-means clustering would be NP-hard without query, while it becomes efficiently solvable with the help of an oracle \footnote{To be precise, note that the algorithm used for clustering with queries is probabilistic. However, the lower bound that we provide is for deterministic algorithms. However, this means a lower bound for randomized algorithms as well unless $BPP\neq P$}. 
+In section \ref{A-section:clusteringWithQuery}, we proposed a polynomial-time algorithm that could recover the target clustering using $O(k^2\log k \log n)$ queries, assuming that the clustering satisfies $\gamma$-margin property for $\gamma>1$. Now assume that the oracle conforms to the optimal $k$-means clustering solution. In this case, for $1<\gamma\le 1.5$, solving $k$-means clustering would be NP-hard without query, while it becomes efficiently solvable with the help of an oracle \footnote{To be precise, note that the algorithm used for clustering with queries is probabilistic. However, the lower bound that we provide is for deterministic algorithms. However, this means a lower bound for randomized algorithms as well unless $BPP\neq P$}. 
 
 \subsubsection{Formal Setting}
 
@@ -383,12 +386,13 @@ Let $X_1, \ldots. X_n$ be i.i.d random vectors in some Hilbert space such that f
 $$\Big\|\mu - \frac{1}{n}\sum X_i\Big\|_2^2 \le R^2\epsilon$$ 
 \end{theorem}
 
-\section{Concentration inequalities}
-\label{appendixsection:proofs}
 
-It is easy to see that in the optimal solution of $k$-means objective function, $\mu_i$ is the center of mass of $C_i$, i.e., $\mu_i = \frac{1}{|C_i|}\sum_{x\in C_i}x$. Also, the objective function can be rewritten in the following form (E.g., see \cite{inaba1994applications})
+%\section{Concentration inequalities}
+%\label{appendixsection:proofs}
 
-$$f(\mc C) = \sum\limits_{C_i}\frac{1}{|C_i|} \sum_{x, y \in C_i} d^2(x, y).$$
+%It is easy to see that in the optimal solution of $k$-means objective function, $\mu_i$ is the center of mass of $C_i$, i.e., $\mu_i = \frac{1}{|C_i|}\sum_{x\in C_i}x$. Also, the objective function can be rewritten in the following form (E.g., see \cite{inaba1994applications})
+
+%$$f(\mc C) = \sum\limits_{C_i}\frac{1}{|C_i|} \sum_{x, y \in C_i} d^2(x, y).$$
 
 \bibliographystyle{alpha}
 \bibliography{activeClustering}
