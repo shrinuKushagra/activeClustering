@@ -317,7 +317,9 @@ The following theorem is the main result of this section.
 Finding the optimal solution to Euclidean $k$-means objective function is NP-hard when $k=\Theta(n^\epsilon)$ for any $\epsilon \in (0,1)$, even when the optimal solution satisfies the $\gamma$-margin property for $\gamma = \sqrt{3.4}$.
 \end{theorem}
 
-Note that this is the first lower bound established for the Euclidean case.
+This results extends the hardness result of \cite{ben2014data} to the case of Euclidean 
+metric, rather than arbitrary one, and to the $\gamma$-margin condition (instead of the $\alpha$-center proximity there). The full proof is rather technical and is deferred to the supplementary material. In the next sections, we provide an outline of the proof. 
+
 \subsubsection{Overview of the Proof}
 
 Our method to prove Thm. \ref{thm:gammaLower} is based on the approach employed by \cite{vattani2009hardness}. However, the original construction proposed in \cite{vattani2009hardness} does not satisfy the $\gamma$-margin property. Therefore, we have to modify the proof by setting up the parameters of the construction more carefully. 
