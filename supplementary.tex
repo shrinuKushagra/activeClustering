@@ -1,5 +1,5 @@
 \documentclass{article}
-\usepackage[nonatbib]{nips_2016}
+\usepackage[final,nonatbib]{nips_2016}
 
 \def\COMPLETE{}
 \usepackage[boxruled]{algorithm2e}
@@ -89,15 +89,36 @@ If the clustering algorithm has access to an instance from each of $k$ clusters 
 \end{proof}
 
 
+%-----------------------------------------------------------
+%-----------------------------------------------------------
+%-----------------------------------------------------------
+
+
 \section{Comparison of $\gamma$-Margin and $\alpha$-Center Proximity}
 \label{appendix:gammaMrginVsAlphaCenter}
 
+In this paper, we introduced the notion of $\gamma$-margin niceness property. We further showed upper and lower bounds on the computational complexity of clustering under this assumption. It is therefore important to compare this notion with other previously-studied clusterability notions.
+
+%, and provided upper (with query) and lower bounds on $\gamma$, when the metric space $M$ is Euclidean and the centers are allowed to be points in the metric space. 
+
+An important notion of niceness of data for clustering is $\alpha$-center proximity property.
+
 \begin{definition}[$\alpha$-center proximity \cite{awasthi2012center}]
 \label{defn:alphacp}
-Given a clustering instance $(\mc X, d)$ in some metric space $M$ and the number of clusters $k$. We say that a clustering $\mc C_{\mc X} = \{C_1, \ldots, C_k\}$ induced by centers $c_1, \ldots, c_k \in M$ has $\alpha$-center proximity w.r.t $\mc X$ and $k$ if the following holds. For all $x \in C_i$ and $i\neq j$, 
-$$\alpha d(x, c_i) < d(x, c_j)$$
+Let $(\mc X, d)$ be a clustering instance in some metric space $M$, and let $k$ be the number of clusters. We say that a center-based clustering $\mc C_{\mc X} = \{C_1, \ldots, C_k\}$ induced by centers $c_1, \ldots, c_k \in M$ satisfies the $\alpha$-center proximity property (with respect to  $\mc X$ and $k$) if the following holds 
+$$\forall x \in C_i, i\neq j, \alpha d(x, c_i) < d(x, c_j)$$
 \end{definition}
-In this paper, we introduced a notion of $\gamma$-margin. We gave upper (with query) and lower bounds on $\gamma$, when the metric space $M$ is euclidean and the centers are allowed be points in the metric space. Another notion of niceness of clusterability is $\alpha$-center proximity. This notion has been considered in the past in various works \cite{balcan2012clustering,awasthi2012center}. However, the problem setting in these works was different from our current setting. While in the current work, we were focussed on the euclidean metric space, these works considered arbitrary metric space. 
+
+
+ This property has been considered in the past in various studies \cite{balcan2012clustering,awasthi2012center}. In this appendix we will show some connections between $\gamma$-margin and $\alpha$-center proximity properties.
+ 
+ 
+  It is important to note that throughout this paper we considered clustering in Euclidean spaces. Furthermore, the centers were not restricted to be selected from the data points. 
+  However, this is not necessarily the case in other studies.
+
+
+
+
 
 \begin{table}[]
 \centering
@@ -105,15 +126,17 @@ In this paper, we introduced a notion of $\gamma$-margin. We gave upper (with qu
 \label{table:alphacp}
 \begin{tabular}{lll}
 \cline{2-3}
-\multicolumn{1}{l|}{} & \multicolumn{1}{l|}{Euclidean} & \multicolumn{1}{l|}{Non-euclidean} \\ \hline
-\multicolumn{1}{|l|}{\begin{tabular}[c]{@{}l@{}}Centers \\ from data\end{tabular}} & \multicolumn{1}{l|}{?} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Upper bound \cite{balcan2012clustering} - $\sqrt{2}+1$\\ Lower bound \cite{ben2014data} - 2\end{tabular}} \\ \hline
-\multicolumn{1}{|l|}{\begin{tabular}[c]{@{}l@{}}Centers from\\ metric space\end{tabular}} & \multicolumn{1}{l|}{?} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Upper bound - $2+\sqrt{3}$\\ Lower bound - 3\\ \cite{awasthi2012center}\end{tabular}} \\ \hline
+\multicolumn{1}{l|}{} & \multicolumn{1}{l|}{Euclidean} & \multicolumn{1}{l|}{General Metric} \\ \hline
+\multicolumn{1}{|l|}{\begin{tabular}[c]{@{}l@{}}Centers \\ from data\end{tabular}} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Upper bound : $\sqrt{2}+1$  \cite{balcan2012clustering}\\ Lower bound : ?\end{tabular}} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Upper bound : $\sqrt{2}+1$  \cite{balcan2012clustering}\\ Lower bound : 2 \cite{ben2014data}\end{tabular}} \\ \hline
+\multicolumn{1}{|l|}{\begin{tabular}[c]{@{}l@{}}Unrestricted \\ Centers \end{tabular}} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Upper bound : $2+\sqrt{3}$ \cite{awasthi2012center}\\ Lower bound : ?\end{tabular}} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Upper bound : $2+\sqrt{3}$ \cite{awasthi2012center}\\ Lower bound : 3 \cite{awasthi2012center}\end{tabular}} \\ \hline
  &  & 
 \label{table:alphacenter}
 \end{tabular}
 \end{table}
 
-An overview of the known results under $\alpha$-center proximity is provided in Table \ref{table:alphacenter}. We will show that using the same techniques as used in the above proofs we can get upper and lower bounds for $\alpha$-center proximity. It is important to note that the upper and lower bounds under $\gamma$-margin are matching. Hence, there is no hope to furthur improve our upper bounds unless P=NP. A summary of our results is provided in \ref{table:gammamargin}.  
+An overview of the known results under $\alpha$-center proximity is provided in Table \ref{table:alphacenter}. The results are provided for the case that the centers are restricted to be selected from the training set, and also the unrestricted case (where the centers can be arbitrary points from the metric space). Note that any upper bound that works for general metric spaces also works for the Euclidean space. 
+
+We will show that using the same techniques one can prove upper and lower bounds for $\gamma$-margin property. It is important to note that for $\gamma$-margin property, in some cases the upper and lower bounds match. Hence, there is no hope to further improve those bounds unless P=NP. A summary of our results is provided in \ref{table:gammamargin}.  
 
 \begin{table}[]
 \centering
@@ -121,9 +144,9 @@ An overview of the known results under $\alpha$-center proximity is provided in 
 \label{table:gammamargin}
 \begin{tabular}{lll}
 \cline{2-3}
-\multicolumn{1}{l|}{}                                                                     & \multicolumn{1}{l|}{Euclidean} & \multicolumn{1}{l|}{Non-euclidean}                                                                         \\ \hline
-\multicolumn{1}{|l|}{\begin{tabular}[c]{@{}l@{}}Centers \\ from data\end{tabular}}        & \multicolumn{1}{l|}{?}         & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Upper bound (Thm. \ref{thm:upperCenterData}) - 2\\ Lower bound (Thm. \ref{thm:lowerCenterData}) - 2\end{tabular}}           \\ \hline
-\multicolumn{1}{|l|}{\begin{tabular}[c]{@{}l@{}}Centers from\\ metric space\end{tabular}} & \multicolumn{1}{l|}{}         & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Upper bound (Thm. \ref{thm:upperCenterMetric}) - 3\\ Lower bound (Thm. \ref{thm:lowerCenterMetric}) - 3\\ Awasthi\end{tabular}} \\ \hline
+\multicolumn{1}{l|}{}                                                                     & \multicolumn{1}{l|}{Euclidean} & \multicolumn{1}{l|}{General Metric}                                                                         \\ \hline
+\multicolumn{1}{|l|}{\begin{tabular}[c]{@{}l@{}}Centers \\ from data\end{tabular}}        & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Upper bound : 2 (Thm. \ref{thm:upperCenterData})\\ Lower bound : ? \end{tabular}}    &       \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Upper bound : 2 (Thm. \ref{thm:upperCenterData})\\ Lower bound : 2 (Thm. \ref{thm:lowerCenterData})\end{tabular}}           \\ \hline
+\multicolumn{1}{|l|}{\begin{tabular}[c]{@{}l@{}}Unrestricted \\Centers \end{tabular}} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Upper bound : 3 (Thm. \ref{thm:upperCenterMetric})\\ Lower bound : 1.84 (Thm. \ref{A-thm:gammaLower})\\ \end{tabular}}         & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Upper bound : 3 (Thm. \ref{thm:upperCenterMetric})\\ Lower bound : 3 (Thm. \ref{thm:lowerCenterMetric})\\ Awasthi\end{tabular}} \\ \hline
                                                                                           &                       &    
 \label{table:gammamargin}                                                                                                                                                                                                 
 \end{tabular}
@@ -132,9 +155,10 @@ An overview of the known results under $\alpha$-center proximity is provided in 
 \subsection{Centers from data}
 \begin{theorem}
 \label{thm:upperCenterData}
-Given a clustering instance $(X , d)$. For all $\gamma \ge 2$, Alg. 1 in \cite{balcan2012clustering} outputs a tree $\mc T$ with the following property. For all $k$ and for all $k$-clusterings $\mc C^* = \{C_1^*, \ldots, C_k^* \}$ which satisfy $\gamma$-margin and the cluster centers $\mu_1, \ldots, \mu_k \in X$, the following holds.
+Let $(X , d)$ be a clustering instance and $\gamma \ge 2$. Then, Algorithm 1 in \cite{balcan2012clustering} outputs a tree $\mc T$ with the following property: 
 
-For every $1 \le i \le k$, there exists a node $N_i$ in the tree $T$ such that $C_i^* = N_i$. In other words, there exists a pruning of the tree $T$ such that the corresponding clustering equals $C^*$. 
+
+Any $k$-clustering $\mc C^* = \{C_1^*, \ldots, C_k^* \}$ which satisfies the $\gamma$-margin property and its cluster centers $\mu_1, \ldots, \mu_k$ are in $X$, is a pruning of the tree $T$. In other words, for every $1 \le i \le k$, there exists a node $N_i$ in the tree $T$ such that $C_i^* = N_i$.
 \end{theorem}
 
 \begin{proof}
@@ -151,134 +175,51 @@ Let $r = \max_{x \in C_i^*} d(x, \mu_i)$. Observe that $d(p, \mu_i) < r$. Also, 
 
 \begin{theorem}
 \label{thm:lowerCenterData}
-Given a clustering instance $(\mc X, d)$ and the number of clusters $k$. For $\gamma < 2$, finding a clustering which satisfies $\gamma$-margin and where the centers $\mu_1, \ldots, \mu_k \in \mc X$ is NP-Hard.
+Let $(\mc X, d)$ be a clustering instance and $k$ be the number of clusters. For $\gamma < 2$, finding a $k$-clustering of $X$ which satisfies the $\gamma$-margin property and where the corresponding centers $\mu_1, \ldots, \mu_k$ belong to $\mc X$ is NP-Hard.
 \end{theorem}
 \begin{proof}
-\cite{ben2014data} proved that for $\alpha < 2$, finding a clustering which satisfies $\alpha$-margin and where the centers $\mu_1, \ldots, \mu_k \in \mc X$ is NP-Hard. Note that the reduced instance in their proof, also satisfies $\gamma$-margin for $\gamma < 2$. 
+For $\alpha < 2$, \cite{ben2014data} proved that in general metric spaces, finding a clustering which satisfies the $\alpha$-center proximity and where the centers $\mu_1, \ldots, \mu_k \in \mc X$ is NP-Hard. Note that the reduced instance in their proof, also satisfies $\gamma$-margin for $\gamma < 2$. 
 \end{proof}
 
 \subsection{Centers from metric space}
 \begin{theorem}
 \label{thm:upperCenterMetric}
-Given a clustering instance $(X , d)$. For all $\gamma \ge 3$, the standard single-linkage algorithm outputs a tree $\mc T$ with the following property. For all $k$ and for all $k$-clusterings $\mc C^* = \{C_1^*, \ldots, C_k^* \}$ which satisfy $\gamma$-margin, the following holds.
+Let $(X , d)$ be a clustering instance and $\gamma \ge 3$. Then, the standard single-linkage algorithm outputs a tree $\mc T$ with the following property:
 
-For every $1 \le i \le k$, there exists a node $N_i$ in the tree $T$ such that $C_i^* = N_i$. In other words, there exists a pruning of the tree $T$ such that the corresponding clustering equals $C^*$. 
+
+Any $k$-clustering $\mc C^* = \{C_1^*, \ldots, C_k^* \}$ which satisfies the $\gamma$-margin property is a pruning of $T$. In other words, for every $1 \le i \le k$, there exists a node $N_i$ in the tree $T$ such that $C_i^* = N_i$. 
 \end{theorem}
 
 \begin{proof}
-\cite{balcan2008discriminative} showed that if a clustering $C^*$ has strong stability property, then single-linkage outputs a tree such that pruning equals $C^*$. It is a simple exercise to see that $\gamma > 3$ instances have strong-stability and the claim follows.  
+\cite{balcan2008discriminative} showed that if a clustering $C^*$ has the strong stability property, then single-linkage outputs a tree with the required property. It is simple to see that if $\gamma > 3$ then instances have strong-stability and the claim follows.  
 \end{proof}
 
 
 \begin{theorem}
 \label{thm:lowerCenterMetric}
-Given a clustering instance $(\mc X, d)$ and the number of clusters $k$. For $\gamma < 3$, finding a clustering which satisfies $\gamma$-margin is NP-Hard.
+Let $(\mc X, d)$ be a clustering instance and $\gamma < 3$. Then, finding a $k$-clustering of $X$ which satisfies the $\gamma$-margin is NP-Hard.
 \end{theorem}
 \begin{proof}
-\cite{awasthi2012center} proved the above claim but for $\alpha < 3$ instances. Note that the reduced instance in their proof, also satisfies $\gamma$-margin for $\gamma < 3$. 
+\cite{awasthi2012center} proved the above claim but for $\alpha < 3$ instances. Note however that the construction in their proof satisfies $\gamma$-margin for $\gamma < 3$. 
 \end{proof}
 
 
-\section{Proofs of lemmas and theorems}
+
+%-----------------------------------------------------------
+%-----------------------------------------------------------
+%-----------------------------------------------------------
+
+\section{Proofs of Lemmas \ref{A-lemma:kmeansEquivalenceX3C} and \ref{A-lemma:gammaLower}}
 \label{appendix:lowerBoundProof}
-\subsection{Hardness of Euclidean k-means with Margin}
 
-Finding $k$-means solution without the help of the oracle is generally computationally hard. In this section, we will show that solving $k$-means remains hard even if we know that the optimal solution satisfies $\gamma$-margin property for $\gamma=\sqrt{3.4} \approx 1.84$. In particular, we show the hardness for the case of $k=\Theta(n^\epsilon)$ for any $\epsilon\in (0,1)$. This is a critical result for our purpose, because it shows that our niceness assumption (i.e., the $\gamma$-margin property) is not too strong, and the use of oracle is necessary.
+In Section \ref{A-section:lowerBounds} we proved Theorem \ref{A-thm:gammaLower} based on two technical results (i.e., lemma \ref{A-lemma:kmeansEquivalenceX3C} and \ref{A-lemma:gammaLower}). In this appendix we provide the proofs for these lemmas. In order to start, we first need to establish some properties about the Euclidean embedding of $X$ proposed in Section \ref{A-section:lowerBounds}.
 
-In section \ref{A-section:clusteringWithQuery}, we proposed a polynomial-time algorithm that could recover the target clustering using $O(k^2\log k \log n)$ queries, assuming that the clustering satisfies $\gamma$-margin property for $\gamma>1$. Now assume that the oracle conforms to the optimal $k$-means clustering solution. In this case, for $1<\gamma\le \sqrt{3.4} \approx 1.84$, solving $k$-means clustering would be NP-hard without query, while it becomes efficiently solvable with the help of an oracle \footnote{To be precise, note that the algorithm used for clustering with queries is probabilistic. However, the lower bound that we provide is for deterministic algorithms. However, this means a lower bound for randomized algorithms as well unless $BPP\neq P$}. 
-
-\subsubsection{Formal Setting}
-
-Given a set of instances $\mc X \subset \mb R ^d$, the $k$-means clustering problem is to find a clustering $\mc C = \{C_1, \ldots, C_k\}$ which minimizes the following objective function
-
-$$f(\mc C) = \sum\limits_{C_i} \min\limits_{\mu_i\in {\mb R}^d}\sum\limits_{x\in C_i} \|x - \mu_i \|_2^2$$
-
-
-%One can also consider a weighted version of the problem where every point $x$ has a weight $w(x)$. 
-
-%$$f(\mc C) = \sum\limits_{C_i}\frac{1}{\sum_{x \in C_i}w(x)} \sum_{x, y \in {C_i \choose 2}} w(x)w(y)d^2(x, y).$$ 
-
-%It is known that finding the optimal $k$-means solution is NP-hard even in the Euclidean plane \cite{vattani2009hardness,mahajan2009planar}. However, the $\gamma$-margin property is not satisfied in these constructions. Therefore, we still need to prove that even under the $\gamma$-margin property, the problem remains hard. The following is the main statement of this section.
-
-The following theorem is the main result of this section. The next subsections are devoted to proving this theorem.
-
-\begin{theorem}
-\label{thm:gammaLower}
-Finding the optimal solution to $k$-means objective function is NP-hard when $k=\Theta(n^\epsilon)$ for any $\epsilon \in (0,1)$. Furthermore, this result holds even when the optimal solution satisfies $\gamma$-margin property for $\gamma = \sqrt{3.4} \approx 1.84$.
-
-
-\end{theorem}
-
-\subsubsection{Overview of the Proof}
-
-Our method to prove Theorem \ref{thm:gammaLower} is based on the approach employed by \cite{vattani2009hardness}. However, the original construction proposed in \cite{vattani2009hardness} does not satisfy $\gamma$-margin property. Therefore, we have to modify the proof by setting up the parameters of the construction more carefully. 
-
-To prove the theorem, we will provide a reduction from the problem of Exact Cover by 3-Sets (X3C) which is NP-Complete \cite{garey2002computers}, to the decision version of $k$-means (which given a real value $L$, asks whether a clustering with cost $\le L$ exists).
-
-\begin{definition}[X3C]
-Given a set $U$ containing exactly $3m$ elements and a collection $\mc S = \{S_1, \ldots, S_l\}$ of subsets of $U$ such that each $S_i$ contains exactly three elements, does there exist $m$ elements in $\mc S$ such that their union is $U$? 
-\end{definition}
-
-We will show how to translate each instance of X3C, $(U,\mc S)$, to an instance of $k$-means clustering in the Euclidean plane, $X$. In particular, $X$ has a gridlike structure consisting of $l$ rows (one for each $S_i$) and roughly $6m$ columns (corresponding to $U$) which are embedded in the Euclidean plane. The special geometry of the embedding makes sure that any low-cost $k$-means clustering of the points (where $k$ is roughly $6ml$) exhibits a certain structure. In particular, any low-cost $k$-means clustering could cluster each row in only two ways; One of these corresponds to $S_i$ being included in the cover, while the other means it should be excluded. We will then show that $U$ has a cover of size $m$ if $X$ has a clustering of cost less than a specific value. Furthermore, our choice of embedding makes sure that the optimal clustering satisfies $\gamma$-margin for $\gamma=\sqrt{3.4} \approx 1.84$.
-
-\subsubsection{Reduction Design}
-Given an instance of X3C, that is the elements $U = \{1, \ldots, 3m\}$ and the collection $\mc S$, we construct a set of points $X$ in the Euclidean plane which we want to cluster. Particularly, $X$ consists of a set of points $H_{l,m}$, and the sets $Z_i$ corresponding to $S_i$. In other words, $X = H_{l,m} \cup (\cup_{i=1}^{l-1} Z_i)$. Also, these points are weighted, simply meaning that each point with weight $w$ is actually a set of $w$ points on the same location.
-
-%The set $X$ is described in Fig. \ref{fig:lowerBoundComponent} and the set $Z$ is described in Fig. \ref{fig:ZFig}.
-
-The set $H_{l,m}$ is as described in Fig. \ref{fig:lowerBoundComponent}. The row $R_i$ is composed of $6m + 3$ points $\{s_i, r_{i, 1}, \ldots, r_{i, 6m+1}, f_i\}$. The points $r_{i, j}$ have weight $w$, and the points $s_i$ and $f_i$ have weight $2w$. Row $G_i$ is composed of $3m$ points $\{g_{i,1}, \ldots, g_{i, 3m}\}$ of weight $2w$. The distances between the points are shown in Fig. \ref{fig:lowerBoundComponent}.
-
-
-
-Each set $Z_i$ is constructed based on $S_i$. In particular, $Z_i = \cup_{j\in [l]} B_{i,j}$ where 
-
-$$ B_{i,j} = \left\{
-	\begin{array}{ll}
-		\{ x_{i, j}, y_{i,j} \}  &              \mbox{if } j\notin S_i,j\notin S_{i+1} \\
-		\{ x_{i, j}^\prime, y_{i,j} \}  &       \mbox{if } \in S_i,j\notin S_{i+1} \\
-		\{ x_{i, j}, y_{i,j}^\prime \}  &       \mbox{if } \notin S_i,j\in S_{i+1} \\
-		\{ x_{i, j}^\prime, y_{i,j}^\prime \} & \mbox{if } \in S_i,j\in S_{i+1}	
-        \end{array}
-\right\}$$
-
-Furthermore, $x_{i, j}, x_{i,j}^\prime, y_{i,j}$ and $y_{i, j}^\prime$ are specific locations as depicted in Fig. \ref{fig:ZFig}. In other words, exactly one of the locations $x_{i,j}$ and $x_{i,j}^\prime$, and one of $y_{i,j}$ and $y_{i,j}^\prime$ will be occupied. We set the parameters as follows
-
-$$h = 2, d = \sqrt{6}, \epsilon = \frac{1}{w^2}, \lambda = \frac{2}{\sqrt{3}}h \text{ and }k = (l-1)3m + l(3m+2)$$
-
-%$$k = (l-1)3m + l(3m+2) \text{ and the cost }L = L_1 + L_2 -m\alpha.$$
-%$$L_1 = (6m+3)w \text{ and } L_2 = 6m(l-1)\frac{2w\frac{w}{2}}{2w+\frac{w}{2}}h^2 = 6m(l-1)$$
-%$$h = \sqrt{5}, d = \sqrt{4.5}, \epsilon = \frac{1}{w^2} \text{ and } \alpha = \frac{d}{w}-\frac{1}{2w^3}.$$
-
-
-  \begin{figure}[!tbp]
-  \centering
-  \begin{minipage}[b]{0.49\textwidth}
-    \resizebox{\linewidth}{!}{\input{figures/lowerBdFig}}
-    \caption{Geometry of $H_{l,m}$. This figure is similar to Fig. 1 in \cite{vattani2009hardness}. The left hand side shows the complete design. Rows $R_i$ have $6m+1$ bullets and two circles. Rows $G_i$ have $3m$ circles. The bullets have weight $w$ while the circles have weight $2w$. The distance between the rows $R_i$ and $G_i$ is $> 2(h+\sqrt{h^2-1})$.}
-    \label{fig:lowerBoundComponent}
-  \end{minipage}
-  \hfill
-  \begin{minipage}[b]{0.49\textwidth}
-    \input{figures/ZFig}
-    \caption{The locations of $x_{i,j}$, $x_{i,j}'$, $y_{i,j}$ and $y_{i,j}'$ in the set $Z_i$. The points in bullet have weight $w$ while the points in circles have weight $2w$.}
-    \label{fig:ZFig}
-  \end{minipage}
-\end{figure}
-  
-
-
-
-
-\subsubsection{Properties of the Construction}
-
-In this section we show some properties of the construction that will ultimately enable us to prove Theorem \ref{thm:gammaLower}. These definitions will be useful throughout the section
-
-$$L_1 = (6m+3)wl, L_2 = 3m(l-1)w, L=L_1 + L_2 -m\alpha, \alpha = \frac{d}{w}-\frac{1}{2w^3}$$
+%$$L_1 = (6m+3)w, L_2 = 6m(l-1), L=L_1 + L_2, \alpha = \frac{d}{w}-\frac{1}{2w^3}$$
 
 \begin{definition}[$A$- and $B$-Clustering of $R_i$]
 \label{defn:abclusteringVattani}
 
-An $A$-Clustering of row $R_i$ is a clustering in the form of $\{\{s_i\}, \{r_{i,1}, r_{i,2}\}, \{r_{i,3}, r_{i,4}\}, \ldots, \{r_{i,6m-1}, r_{i,6m}\},\{r_{i, 6m+1}, f_i\}\}$. A $B$-Clustering of row $R_i$ is a clustering in the form of $\{\{s_i, r_{i, 1}\}, \{r_{i,2}, r_{i,3}\}, \{r_{i,4}, r_{i,5}\}, \ldots, \{r_{i,6m}, r_{i,6m+1}\},\{f_i\}\}$. 
+An $A$-Clustering of row $R_i$ is a clustering in the form of $\{\{s_i\}, \{r_{i,1}, r_{i,2}\}, \{r_{i,3}, r_{i,4}\}, \ldots,$ $ \{r_{i,6m-1}, r_{i,6m}\},\{r_{i, 6m+1}, f_i\}\}$. A $B$-Clustering of row $R_i$ is a clustering in the form of $\{\{s_i, r_{i, 1}\}, \{r_{i,2}, r_{i,3}\}, \{r_{i,4}, r_{i,5}\}, \ldots,$ $ \{r_{i,6m}, r_{i,6m+1}\},\{f_i\}\}$. 
 \end{definition}
 
 \begin{definition}[Good point for a cluster]
@@ -294,63 +235,67 @@ Given the above definition, the following simple observations can be made.
 
 \begin{definition}[Nice Clustering]
 \label{defn:niceClustering}
-A $k$-clusteirng is nice if every $g_{i,j}$ is a singleton cluster, each $R_i$ is grouped in the form of either an $A$-clustering or a $B$-clustering and the points in $Z_i$ are added to a cluster which is good for it.
+A $k$-clusteirng is nice if every $g_{i,j}$ is a singleton cluster, each $R_i$ is grouped in the form of either an $A$-clustering or a $B$-clustering, and each point in $Z_i$ is added to a cluster which is good for it.
 \end{definition}
 
 It is straightforward to see that a row grouped in a $A$-clustering costs $(6m+3)w-\alpha$ while a row in $B$-clustering costs $(6m+3)w$. Hence, a nice clustering of $H_{l,m} \cup Z$ costs at most $L_1 + L_2$. More specifically, if $t$ rows are group in a $A$-clustering, the nice-clustering costs $L_1+L_2-t\alpha$. Also, observe that any nice clustering of $X$ has only the following four different types of clusters. \begin{enumerate}[label=(\arabic*),nolistsep,leftmargin=*]
 \item Type E - $\{r_{i,2j-1}, r_{i,2j+1}\}$ \\
-The cost of this cluster is $2w$ and we define the contribution of each location as  cost/no. of locations $ = \frac{2w}{2} = w$.
+The cost of this cluster is $2w$ and the contribution of each location to the cost (i.e., $\frac{cost}{\#locations}$) is $ \frac{2w}{2} = w$.
 \item Type F - $\{r_{i,2j-1}, r_{i, 2j}, x_{i, j}\}$ or $\{r_{i,2j-1}, r_{i, 2j}, y_{i-1, j}\}$ or $\{r_{i,2j}, r_{i, 2j+1}, x_{i, j}'\}$ or $\{r_{i,2j}, r_{i, 2j+1}, y_{i-1, j}'\}$\\
-The cost of any cluster of this type is $2w(1+\frac{h^2}{3})$ and the contribution of each location to is atmost $\frac{2w}{9}(h^2+3)$. For $h = \sqrt 5$, this equals $\frac{16}{9}w$.  
+The cost of any cluster of this type is $2w(1+\frac{h^2}{3})$ and the contribution of each location to the cost is at most $\frac{2w}{9}(h^2+3)$. This is equal to $\frac{16}{9}w$ because we had set $h = \sqrt 5$.
 \item Type I - $\{g_{i, j}, x_{i,j}\}$ or $\{g_{i, j}, x_{i,j}'\}$  or $\{g_{i, j}, y_{i,j}\}$  or $\{g_{i, j}, y_{i,j}'\}$\\
-The cost of any cluster of this type is $\frac{2}{3}wh^2$ and the contribution to cost of each location is $\frac{w}{3}h^2$. For our choice of $h$, the contribution is $\frac{5}{3}w$.
+The cost of any cluster of this type is $\frac{2}{3}wh^2$ and the contribution to the cost of each location is $\frac{w}{3}h^2$. For our choice of $h$, the contribution is $\frac{5}{3}w$.
 \item Type J - $\{s_i, r_{i,1}\}$ or $\{r_{i,6m+1}, f_i\}$\\
-The cost of this cluster is $3w$ (or $3w-\alpha$) and we define the contribution of each location to cost is atmost $1.5w$. 
+The cost of this cluster is $3w$ (or $3w-\alpha$) and the contribution of each location to the cost is at most $1.5w$. 
 \end{enumerate}
-Hence, observe that in a nice-clustering, any location contributes atmost $\le \frac{16}{9}w$ to the total clustering cost. This observation will be useful in the proof of the lemma below.
+Hence, observe that in a nice-clustering, any location contributes at most $\le \frac{16}{9}w$ to the total clustering cost. This observation will be useful in the proof of the lemma below.
 
 \begin{lemma}
 \label{lemma:costNonNice}
-For large enough $w = poly(l, m)$, any non-nice clustering of $X = H_{l, m} \cup Z$ costs at least $L + cw$ for any $c < \frac{1}{3}$.
+For large enough $w = poly(l, m)$, any non-nice clustering of $X = H_{l, m} \cup Z$ costs at least $L + \frac{w}{3}$.
 \end{lemma}
 
 \begin{proof}
-We will show that any non-nice clustering $C$ of $X$ costs atleast $w$ more than the cost of any nice clustering. This will prove our result. The following cases are possible.
+We will show that any non-nice clustering $C$ of $X$ costs at least $\frac{w}{3}$ more than any nice clustering. This will prove our result. The following cases are possible.
 
 \begin{itemize}[nolistsep,leftmargin=*]
-\item $C$ contains a cluster $C_i$ of cardinality $t > 6$\\
-Observe that any $x \in C_i$ has at least $t-5$ locations at a distance $\ge 4$ and $4$ locations at a distance atleast $2$. Hence, the cost of $C_i$ is atleast $\frac{w}{2t}(4^2(t-5)+2^24)t = 8w(t-4)$. $C_i$ allows us to use atmost $t-2$ singletons. This is because a nice clustering of these $t+(t-2)$ points uses atmost $t-1$ clusters and the clustering $C$ uses  $1 + (t-2)$ clusters for these points. The cost of the nice cluster on these points is $\le \frac{16w}{9}2(t-1)$. While the non-nice clustering costs atleast $8w(t-4)$. For $t \ge 6.4 \implies 8(t-4) > \frac{32}{9}(t-1)$ and the claim follows. Note that in this case the difference in cost is atleast $\frac{8w}{3}$. 
+\item $C$ contains a cluster $C_i$ of cardinality $t > 6$ (i.e., contains $t$ weighted points)\\
+Observe that any $x \in C_i$ has at least $t-5$ locations at a distance greater than 4 to it, and $4$ locations at a distance at least $2$ to it. Hence, the cost of $C_i$ is at least $\frac{w}{2t}(4^2(t-5)+2^24)t = 8w(t-4)$. $C_i$ allows us to use at most $t-2$ singletons. This is because a nice clustering of these $t+(t-2)$ points uses at most $t-1$ clusters and the clustering $C$ uses  $1 + (t-2)$ clusters for these points. The cost of the nice cluster on these points is $\le \frac{16w}{9}2(t-1)$. While the non-nice clustering costs at least $8w(t-4)$. For $t \ge 6.4 \implies 8(t-4) > \frac{32}{9}(t-1)$ and the claim follows. Note that in this case the difference in cost is at least $\frac{8w}{3}$. 
 
 \item Contains a cluster of cardinality $t = 6$\\
-Simple arguments show that amongst all clusters of cardinality $6$, the following has the minimum cost. $C_i = \{r_{i, 2j-1}, r_{i, 2j}, x_{i,j}, y_{i-1, j}, r_{i, 2j+1}, r_{2j+2}\}$. The cost of this cluster is $\frac{176w}{6}$. Arguing as before, this allows us to use $4$ singletons. Hence, a nice cluster on these $10$ points costs atmost $\frac{160w}{9}$. The difference of cost is atleast $34w$.  
+Simple arguments show that amongst all clusters of cardinality $6$, the following has the minimum cost. $C_i = \{r_{i, 2j-1}, r_{i, 2j}, x_{i,j}, y_{i-1, j}, r_{i, 2j+1}, r_{2j+2}\}$. The cost of this cluster is $\frac{176w}{6}$. Arguing as before, this allows us to use $4$ singletons. Hence, a nice cluster on these $10$ points costs at most $\frac{160w}{9}$. The difference of cost is at least $34w$.  
 
 \item Contains a cluster of cardinality $t = 5$\\
-Simple arguments show that amongst all clusters of cardinality $5$, the following has the minimum cost. $C_i = \{r_{i, 2j-1}, r_{i, 2j}, x_{i,j}, y_{i-1, j}, r_{i, 2j+1}\}$. The cost of this cluster is $16w$. Arguing as before, this allows us to use $3$ singletons. Hence, a nice cluster on these $8$ points costs atmost $16w\frac{8}{9}$. The difference of cost is atleast $\frac{16w}{9}$.  
+Simple arguments show that amongst all clusters of cardinality $5$, the following has the minimum cost. $C_i = \{r_{i, 2j-1}, r_{i, 2j}, x_{i,j}, y_{i-1, j}, r_{i, 2j+1}\}$. The cost of this cluster is $16w$. Arguing as before, this allows us to use $3$ singletons. Hence, a nice cluster on these $8$ points costs at most $16w\frac{8}{9}$. The difference of cost is at least $\frac{16w}{9}$.  
 
 \item Contains a cluster of cardinality $t = 4$\\
-It is easy to see that amongst all clusters of cardinality $4$, the following has the minimum cost. $C_i = \{r_{i, 2j-1}, r_{i, 2j}, x_{i,j}, r_{i, 2j+1}\}$. The cost of this cluster is $11w$. Arguing as before, this allows us to use $2$ singletons. Hence, a nice cluster on these $6$ points costs atmost $\frac{32w}{3}$. The difference of cost is atleast $\frac{w}{3}$.
+It is easy to see that amongst all clusters of cardinality $4$, the following has the minimum cost. $C_i = \{r_{i, 2j-1}, r_{i, 2j}, x_{i,j}, r_{i, 2j+1}\}$. The cost of this cluster is $11w$. Arguing as before, this allows us to use $2$ singletons. Hence, a nice cluster on these $6$ points costs at most $\frac{32w}{3}$. The difference of cost is at least $\frac{w}{3}$.
 
 \item All the clusters have cardinality $\le 3$ \\
-Observe that amongst all non-nice clusters of cardinality $3$, the following has the minimum cost. $C_i = \{r_{i, 2j-1}, r_{i, 2j}, r_{i, 2j+1}\}$. The cost of this cluster is $8w$. Arguing as before, this allows us to use atmost $1$ more singleton. Hence, a nice cluster on these $4$ points costs atmost $\frac{64w}{9}$. The difference of cost is atleast $\frac{8w}{9}$.
+Observe that amongst all non-nice clusters of cardinality $3$, the following has the minimum cost. $C_i = \{r_{i, 2j-1}, r_{i, 2j}, r_{i, 2j+1}\}$. The cost of this cluster is $8w$. Arguing as before, this allows us to use at most $1$ more singleton. Hence, a nice cluster on these $4$ points costs at most $\frac{64w}{9}$. The difference of cost is at least $\frac{8w}{9}$.
 
-It is also simple to see that any non-nice clustering of size $2$ causes an increase in cost of atleast $w$.
+It is also simple to see that any non-nice clustering of size $2$ causes an increase in cost of at least $w$.
 
 \end{itemize}
 \end{proof}
 
-\begin{lemma}
-\label{lemma:kmeansEquivalenceX3C}
-The set $X = H_{l,n} \cup Z$ has a $k$-clustering of cost less or equal to $L$ if and only if there is an exact cover for the X3C instance.
-\end{lemma}
-\begin{proof}
-The proof is identical to the proof of Lemma 11 in \cite{vattani2009hardness}. Lemma 11 in Vattani's paper uses Lemma 10 to argue why the only nice clusterings of $X$ cost $\le L$. We use Lemma \ref{lemma:costNonNice} to argue the same. Note that since the parameters are much different that those considered in Vattani's original construction, we need to argue much more carefully to prove Lemma \ref{lemma:costNonNice}. 
+%\begin{lemma}
+%\label{lemma:kmeansEquivalenceX3C}
+%The set $X = H_{l,n} \cup Z$ has a $k$-clustering %of cost less or equal to $L$ if and only if there %is an exact cover for the X3C instance.
+%\end{lemma}
+\begin{proof}[Proof of lemma \ref{A-lemma:kmeansEquivalenceX3C}]
+The proof is identical to the proof of Lemma 11 in \cite{vattani2009hardness}. Note that the parameters that we use are different with those utilized by \cite{vattani2009hardness}; however, this is not an issue, because we can invoke our lemma \ref{lemma:costNonNice} instead of the analogous result in Vattani (i.e., lemma 10 in Vattani's paper). The sketch of the proof is that based on lemma \ref{lemma:costNonNice}, only nice clusterings of $X$ cost $\le L$. On the other hand, a nice clustering corresponds to an exact 3-set cover. Therefore, if there exists a clustering of $X$ of cost $\le L$, then there is an exact 3-set cover. The other way is simpler to proof; assume that there exists an exact 3-set cover. Then, the corresponding construction of $X$ makes sure that it will be clustered \emph{nicely}, and therefore will cost $\le L$.  
+
+
+
+ %argue why the only nice clusterings of $X$ cost $\le L$. We use Lemma \ref{lemma:costNonNice} to argue the same. Note that since the parameters are much different that those considered in Vattani's original construction, we need to argue much more carefully to prove Lemma \ref{lemma:costNonNice}. 
 \end{proof}
 
-\begin{lemma}
-\label{lemma:gammaLower}
-Any clustering of $X = H_{l,n} \cup Z$ which has cost$\le L$ has the $\gamma$-margin property where $\gamma = \sqrt{\frac{17}{5}} \approx 1.84$.
-\end{lemma}
-\begin{proof}
+%\begin{lemma}
+%\label{lemma:gammaLower}
+%Any clustering of $X = H_{l,n} \cup Z$ which has %cost$\le L$ has the $\gamma$-margin property where %$\gamma = \sqrt{\frac{17}{5}} \approx 1.84$.
+%\end{lemma}
+\begin{proof}[Proof of lemma \ref{A-lemma:gammaLower}]
 As argued before, any nice clustering has four different types of clusters. We will calculate the minimum ratio $a_i = \frac{d(y, \mu)}{d(x, \mu)}$ for each of these clusters $C_i$ (where $x \in C_i$, $y \not\in C_i$ and $\mu$ is mean of all the points in $C_i$.) Then, the minimum $a_i$ will give the desired $\gamma$. 
 \begin{enumerate}[label=(\arabic*),nolistsep,leftmargin=*]
 \item For Type E clusters $a_i = h/1 = \sqrt{5}$. 
@@ -358,8 +303,14 @@ As argued before, any nice clustering has four different types of clusters. We w
 \item For Type I clusters, standard calculation show that $a_i > 2$.
 \item For Type J clusters $a_i = \frac{2+\frac{\sqrt{6}}{2}}{\frac{\sqrt{6}}{2}} > 2$.
 \end{enumerate}
+
+\noindent Furthurmore, $|\mc X| = (12lm + 3l -6m)w$ and $k = 6lm + 2l - 3m$. Hence for $w = $poly$(l, m)$ our hardness result holds for $k = |\mc X|^{\epsilon}$ for any $0 < \epsilon < 1$.
 \end{proof}
-Lemmas \ref{lemma:kmeansEquivalenceX3C} and \ref{lemma:gammaLower} complete the proof of the main result (Thm. \ref{thm:gammaLower}). 
+\noindent Lemmas \ref{A-lemma:kmeansEquivalenceX3C} and \ref{A-lemma:gammaLower} complete the proof of the main result (Thm. \ref{A-thm:gammaLower}). 
+
+%================================================
+%================================================
+%================================================
 
 \section{Concentration inequalities}
 \label{appendixsection:conIneq}
@@ -369,14 +320,6 @@ Lemmas \ref{lemma:kmeansEquivalenceX3C} and \ref{lemma:gammaLower} complete the 
 Let $X_1, \ldots. X_n$ be i.i.d random vectors in some Hilbert space such that for all $i$, $\|X_i\|_2 \le R$ and $E[X_i] = \mu$. If $n > c\frac{\log(1/\delta)}{\epsilon^2}$, then with probability atleast $1-\delta$, we have that
 $$\Big\|\mu - \frac{1}{n}\sum X_i\Big\|_2^2 \le R^2\epsilon$$ 
 \end{theorem}
-
-
-%\section{Concentration inequalities}
-%\label{appendixsection:proofs}
-
-%It is easy to see that in the optimal solution of $k$-means objective function, $\mu_i$ is the center of mass of $C_i$, i.e., $\mu_i = \frac{1}{|C_i|}\sum_{x\in C_i}x$. Also, the objective function can be rewritten in the following form (E.g., see \cite{inaba1994applications})
-
-%$$f(\mc C) = \sum\limits_{C_i}\frac{1}{|C_i|} \sum_{x, y \in C_i} d^2(x, y).$$
 
 \bibliographystyle{alpha}
 \bibliography{activeClustering}
