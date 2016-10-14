@@ -222,7 +222,7 @@ Given a set $U$ containing exactly $3m$ elements and a collection $\mc S = \{S_1
 We will show how to translate each instance of X3C, $(U,\mc S)$, to an instance of $k$-means clustering in the Euclidean plane, $X$. In particular, $X$ has a gridlike structure consisting of $l$ rows (one for each $S_i$) and roughly $6m$ columns (corresponding to $U$) which are embedded in the Euclidean plane. The special geometry of the embedding makes sure that any low-cost $k$-means clustering of the points (where $k$ is roughly $6ml$) exhibits a certain structure. In particular, any low-cost $k$-means clustering could cluster each row in only two ways; One of these corresponds to $S_i$ being included in the cover, while the other means it should be excluded. We will then show that $U$ has a cover of size $m$ if $X$ has a clustering of cost less than a specific value. Furthermore, our choice of embedding makes sure that the optimal clustering satisfies $\gamma$-margin for $\gamma=\sqrt{3.4} \approx 1.84$.
 
 \subsubsection{Reduction Design}
-Given an instance of X3C, that is the elements $U = \{1, \ldots, 3m\}$ and the collection $\mc S$, we construct a set of points $X$ in the Euclidean plane which we want to cluster. Particularly, $X$ consists of a set of points $H_{l,m}$, and the sets $Z_i$ corresponding to $S_i$. In other words, $X = H_{l,m} \cup (\cup_{i=1}^l Z_i)$. Also, these points are weighted, simply meaning that each point with weight $w$ is actually a set of $w$ points on the same location.
+Given an instance of X3C, that is the elements $U = \{1, \ldots, 3m\}$ and the collection $\mc S$, we construct a set of points $X$ in the Euclidean plane which we want to cluster. Particularly, $X$ consists of a set of points $H_{l,m}$, and the sets $Z_i$ corresponding to $S_i$. In other words, $X = H_{l,m} \cup (\cup_{i=1}^{l-1} Z_i)$. Also, these points are weighted, simply meaning that each point with weight $w$ is actually a set of $w$ points on the same location.
 
 %The set $X$ is described in Fig. \ref{fig:lowerBoundComponent} and the set $Z$ is described in Fig. \ref{fig:ZFig}.
 
@@ -273,7 +273,7 @@ $$h = 2, d = \sqrt{6}, \epsilon = \frac{1}{w^2}, \lambda = \frac{2}{\sqrt{3}}h \
 
 In this section we show some properties of the construction that will ultimately enable us to prove Theorem \ref{thm:gammaLower}. These definitions will be useful throughout the section
 
-$$L_1 = (6m+3)w, L_2 = 6m(l-1), L=L_1 + L_2, \alpha = \frac{d}{w}-\frac{1}{2w^3}$$
+$$L_1 = (6m+3)wl, L_2 = 3m(l-1)w, L=L_1 + L_2 -m\alpha, \alpha = \frac{d}{w}-\frac{1}{2w^3}$$
 
 \begin{definition}[$A$- and $B$-Clustering of $R_i$]
 \label{defn:abclusteringVattani}

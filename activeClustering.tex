@@ -335,7 +335,7 @@ We will show how to translate each instance of X3C, $(U,\mc S)$, to an instance 
 
 
 \subsubsection{Reduction Design}
-Given an instance of X3C, that is the elements $U = \{1, \ldots, 3m\}$ and the collection $\mc S$, we construct a set of points $X$ in the Euclidean plane which we want to cluster. Particularly, $X$ consists of a set of points $H_{l,m}$ in a grid-like manner, and the sets $Z_i$ corresponding to $S_i$. In other words, $X = H_{l,m} \cup (\cup_{i=1}^l Z_i)$. 
+Given an instance of X3C, that is the elements $U = \{1, \ldots, 3m\}$ and the collection $\mc S$, we construct a set of points $X$ in the Euclidean plane which we want to cluster. Particularly, $X$ consists of a set of points $H_{l,m}$ in a grid-like manner, and the sets $Z_i$ corresponding to $S_i$. In other words, $X = H_{l,m} \cup (\cup_{i=1}^{l-1} Z_i)$. 
 
 The set $H_{l,m}$ is as described in Fig. \ref{fig:lowerBoundComponent}. The row $R_i$ is composed of $6m + 3$ points $\{s_i, r_{i, 1}, \ldots, r_{i, 6m+1}, f_i\}$. Row $G_i$ is composed of $3m$ points $\{g_{i,1}, \ldots, g_{i, 3m}\}$. The distances between the points are also shown in Fig. \ref{fig:lowerBoundComponent}. Also, all these points have weight $w$, simply meaning that each point is actually a set of $w$ points on the same location.
 
@@ -343,7 +343,7 @@ Each set $Z_i$ is constructed based on $S_i$. In particular, $Z_i = \cup_{j\in [
 \vspace{-0.1in}
 \begin{align*}
 &h = \sqrt{5}, d = \sqrt{6}, \epsilon = \frac{1}{w^2}, \lambda = \frac{2}{\sqrt{3}}h, k = (l-1)3m + l(3m+2)\\
-& L_1 = (6m+3)w, L_2 = 6m(l-1), L = L_1 + L_2, \alpha = \frac{d}{w}-\frac{1}{2w^3}
+& L_1 = (6m+3)wl, L_2 = 3m(l-1)w, L = L_1 + L_2 -m\alpha, \alpha = \frac{d}{w}-\frac{1}{2w^3}
 \end{align*}
 
 
